@@ -1,0 +1,201 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "group": "Infrastructure Configuration",
+                "description": "The region to deploy the resources into. Only change if resources need to be deployed to a different location than the resource group."
+            }
+          },
+          "vmName": {
+            "type": "string",
+            "metadata": {
+                "group": "Infrastructure Configuration",
+                "description": "Specify the name of the VM meeting the Caltex naming standards."
+            }
+          },
+          "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_DS3_v2",
+            "metadata": {
+                "group": "Infrastructure Configuration",
+                "description": "Specify the size of the VM required."
+            }
+          },
+          "networkAccess": {
+            "type": "string",
+            "allowedValues": [
+                "External",
+                "Internal"
+            ],
+            "metadata": {
+                "group": "Network Configuration",
+                "description": ""
+            }
+          },
+          "adminUsername": {
+            "type": "string",
+            "defaultValue": "caladmin",
+            "metadata": {
+                "group": "Infrastructure Configuration",
+                "description": "The name of the administrator account of the new VMs and Domain."
+            }
+          },
+          "adminPassword": {
+            "type": "securestring",
+            "defaultValue": "yT3iNC0Bz7QSQupO",
+            "metadata": {
+                "group": "Infrastructure Configuration",
+                "description": "The password for the administrator account of the new VMs and Domain."
+            }
+          },
+          "virtualNetworkName": {
+           "type": "string",
+           "defaultValue": "ASECALVNET01",
+           "metadata": {
+            "group": "Network Configuration",
+            "description": ""
+           }
+          },
+          "virtualNetworkRGName": {
+           "type": "string",
+           "defaultValue": "ASEDRDPDEMO",
+           "metadata": {
+            "group": "Network Configuration",
+            "description": ""
+           }
+          },
+          "subnetName": {
+           "type": "string",
+           "defaultValue": "SecuredZone",
+           "metadata": {
+               "group": "Network Configuration",
+               "description": ""
+           }
+          },
+          "tagCostCentre": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "Tag - Cost Cnetre"
+            }
+          },
+          "tagApplication": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "Tag - Application"
+            }
+          },
+          "tagITOwner": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "Tag - IT Owner"
+            }
+          },
+          "tagEnvironment": {
+            "type": "string",
+            "allowedValues": [
+                "Production",
+                "Development",
+                "Test"
+            ],
+            "metadata": {
+                "group": "Infrastructure Configuration",
+                "description": "Specify the environment which best describes the deployment."
+            }
+        }
+    },
+    "variables": {
+        "templateLink": "https://raw.githubusercontent.com/sarquiss/azure-arm/master",
+        "nicName": "[concat(parameters('vmName'),'-NIC')]",
+        "pipName": "[concat(parameters('vmName'),'-PIP')]",
+        "tags": {
+            "CostCentre": "[parameters('tagCostCentre')]",
+            "Application": "[parameters('tagApplication')]",
+            "ITOwner": "[parameters('tagITOwner')]",
+            "Environment": "[parameters('tagEnvironment')]"
+        }
+    },
+    "resources": [
+        {
+            "name": "provisionNetworkInterface",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [],
+            "properties": {
+              "mode": "Incremental",
+              "templateLink": {
+                "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionNIC',parameters('networkAccess'),'.json')]",
+                "contentVersion": "1.0.0.0"
+              },
+              "parameters": {
+                "location": {
+                  "value": "[parameters('location')]"
+                },
+                "tags": {
+                    "value":"[variables('tags')]"
+                },
+                "pipName": {
+                    "value": "[variables('pipName')]"
+                },
+                "nicName": {
+                  "value": "[variables('nicName')]"
+                },
+                "virtualNetworkName": {
+                  "value": "[parameters('virtualNetworkName')]"
+                },
+                "virtualNetworkRGName": {
+                  "value": "[parameters('virtualNetworkRGName')]"
+                },
+                "subnetName": {
+                  "value": "[parameters('subnetName')]"
+                }
+              }
+            }
+          },
+        {
+            "name": "provisionCompute",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2015-01-01",
+            "dependsOn": [
+                "Microsoft.Resources/deployments/ProvisionNetworkInterface"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionServer.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "vmName": {
+                        "value": "[parameters('vmName')]"
+                    },
+                    "vmSize": {
+                        "value": "[parameters('vmSize')]"
+                    },
+                    "tags": {
+                        "value":"[variables('tags')]"
+                    },
+                    "nicName": {
+                        "value": "[variables('nicName')]"
+                      },
+                    "adminUsername": {
+                        "value": "[parameters('adminUsername')]"
+                    },
+                    "adminPassword": {
+                        "value": "[parameters('adminPassword')]"
+                    }
+              }
+            }
+        }
+    ],
+    "outputs": {}
+}
