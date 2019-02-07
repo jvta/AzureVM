@@ -1,0 +1,361 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+        "type": "string",
+        "metadata": {
+            "description": "Location to create the resource"
+        }
+    },
+    "vmName": {
+          "type": "String",
+          "metadata": {
+              "description": "Specify the name of the VM to be provisioned"
+          }
+      },
+      "vmSize": {
+          "defaultValue": "Small",
+          "allowedValues": [
+              "Small",
+              "Medium",
+              "Large",
+              "XLarge"
+          ],
+          "type": "String",
+          "metadata": {
+              "description": "Size of the VM"
+          }
+      },
+      "tags": {
+        "type": "array",
+        "metadata": {
+            "description": "Tags to attach to resource"
+          }
+      },
+      "nicName": {
+        "type": "String",
+        "metadata": {
+            "description": "Name of the NIC object to attach to the VM"
+        }
+      },
+      "computeApiVersion": {
+        "defaultValue": "2017-03-30",
+        "type": "String",
+        "metadata": {
+            "description": "Compute API version to be used"
+        }
+      },
+      "extensionApiVersion": {
+        "defaultValue": "2015-06-15",
+        "type": "String",
+        "metadata": {
+            "description": "VM Extentsion API version to be used"
+        }
+      },
+        "adminUsername": {
+          "defaultValue": "caladmin",
+          "type": "String",
+          "metadata": {
+              "description": "Specify the username of the Administrator account"
+          }
+      },
+      "avSetRequired": {
+        "type": "string",
+        "defaultValue": "No",
+        "metadata": {
+            "description": "Whether this server should belong to an Availability Set. Allowed values are Yes or No"
+          },
+          "allowedValues": [
+            "Yes",
+            "No"
+        ]
+      },
+      "avSetName": {
+        "defaultValue": "None",
+        "type": "String",
+        "metadata": {
+            "description": "Specify the name of the Availability Set, if required. Specify None if not required"
+        }
+      },
+       "platform": {
+          "allowedValues": [
+              "Windows",
+              "Linux"
+          ],
+          "type": "String",
+          "metadata": {
+              "description": "Select the OS type to be provisioned"
+          }
+      },
+      "authenticationType": {
+          "defaultValue": "Password",
+          "allowedValues": [
+              "Password",
+              "SSH-Public-Key"
+          ],
+          "type": "String",
+          "metadata": {
+              "description": "Authentication type for the deployment"
+          }
+      },
+      "adminPasswordOrKey": {
+          "type": "SecureString",
+          "metadata": {
+              "description": "OS Admin password or SSH Key depending on value of authentication type"
+          }
+      },
+      "bootDiagnosticsStorage": {
+        "type": "String",
+        "metadata": {
+            "description": "Storage Account for storing boot diagnostics data"
+        }
+      },
+      "useDomainJoinExtension": {
+        "type": "string",
+        "defaultValue": "No",
+        "metadata": {
+            "description": "Whether this server should be domain joined"
+          },
+          "allowedValues": [
+            "Yes",
+            "No"
+        ]
+      },
+      "domainToJoin": {
+        "type": "string",
+        "metadata": {
+          "description": "The domain to which this server should be joined"
+        }
+      },
+      "ouPath": {
+        "type": "string",
+        "metadata": {
+          "description": "The Organisational Unit into which server should be placed in the chosen domain"
+        }
+      },
+      "domainJoinAccount": {
+        "type": "string",
+        "metadata": {
+          "description": "The domain account to use for joining the domain"
+        }
+      },
+      "domainJoinAccountPassword": {
+        "type": "string",
+        "metadata": {
+          "description": "The domain account password for domain join"
+        }
+      },
+      "useDSCExtension": {
+        "type": "string",
+        "defaultValue": "Yes",
+        "metadata": {
+            "description": "Whether this server should use PowerShell DSC Extension"
+          },
+          "allowedValues": [
+            "Yes",
+            "No"
+        ]
+      },
+      "dscExtensionUpdateTagVersion": {
+        "type": "string",
+        "metadata": {
+          "description": "The current extension revision number. Increment by one with each update to ensure targets refresh their DSC settings"
+        }
+      },
+      "dscFunction": {
+        "type": "string",
+        "metadata": {
+            "description": "Calls function to execute within DSC configuration file"
+        }
+      },
+      "_artifactsLocationSasToken": {
+        "type": "string",
+        "metadata": {
+          "description": "SAS token for access to the DSC extension file"
+        }
+      },
+      "_artifactsLocation": {
+        "type": "string",
+        "metadata": {
+          "description": "URI of DSC artifacts required"
+        }
+      },
+      "storageUserName": {
+        "type": "string",
+        "metadata": {
+          "description": "The storage account where the DSC related tools downloads are saved for this environment"
+        }
+      },
+      "storagePassword": {
+        "type": "string",
+        "metadata": {
+          "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
+        }
+      },
+      "localAccountUserName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of additional local user account to be added to local Administrators Group"
+        }
+      },
+      "localAccountUserPassword": {
+        "type": "securestring",
+        "metadata": {
+          "description": "Password of additional local user account to be added to local Administrators Group"
+        }
+      }
+  },
+  "variables": {
+    "domainJoinOptions": "3",
+    "DscExtensionArchiveFolder": "windows-powershell-dsc",
+    "DscExtensionArchiveFileName": "configuration.ps1.zip",
+    "vmSize": "[if(equals(parameters('vmSize'), 'Small'), 'Standard_DS2_v2', if(equals(parameters('vmSize'), 'Medium'), 'Standard_DS3_v2', if(equals(parameters('vmSize'), 'Large'), 'Standard_DS4_v2', 'Standard_DS2_v2')))]",
+    "vmOSDisk": "[if(equals(parameters('vmSize'), 'Small'), 128, if(equals(parameters('vmSize'), 'Medium'), 256, if(equals(parameters('vmSize'), 'Large'), 512, 1024)))]",
+    "avSetId": "[resourceId('Microsoft.Compute/availabilitySets', parameters('avSetName'))]",
+    "windowsConfiguration": {
+        "provisionVmAgent": "true"
+    },
+    "linuxConfiguration": {
+        "disablePasswordAuthentication": true,
+        "ssh": {
+            "publicKeys": [
+                {
+                    "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
+                    "keyData": "[parameters('adminPasswordOrKey')]"
+                }
+            ]
+        }
+    },
+    "imageReference": {
+        "Linux": {
+            "publisher": "RedHat",
+            "offer": "RHEL",
+            "sku": "7.4",
+            "version": "latest"
+        },
+        "Windows": {
+            "publisher": "MicrosoftWindowsServer",
+            "offer": "WindowsServer",
+            "sku": "2016-Datacenter",
+            "version": "latest"
+        }
+    }
+  },
+  "resources": [
+      {
+        "type": "Microsoft.Compute/virtualMachines",
+        "name": "[parameters('vmName')]",
+        "apiVersion": "[parameters('computeApiVersion')]",
+        "location": "[parameters('location')]",
+        "tags": "[parameters('tags')]",
+        "identity": {
+            "type": "SystemAssigned"
+        },
+        "dependsOn": [],
+        "properties": {
+            "availabilitySet": "[if(equals(parameters('avSetRequired'),'yes'), variables('avSetId'), json('null'))]",
+            "hardwareProfile": {
+              "vmSize": "[variables('vmSize')]"
+            },
+            "osProfile": {
+                "computerName": "[parameters('vmName')]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPasswordOrKey')]",
+                "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
+                "windowsConfiguration": "[if(equals(parameters('platform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
+            },
+            "storageProfile": {
+                "imageReference": "[variables('imageReference')[parameters('platform')]]",
+                "osdisk": {
+                    "name": "[concat(parameters('vmName'), '-osDisk')]",
+                    "diskSizeGB": "[variables('vmOSDisk')]",
+                    "createOption": "FromImage",
+                    "managedDisk": {
+                      "storageAccountType": "Standard_LRS"
+                    },
+                    "caching": "ReadWrite"
+                }
+            },
+            "diagnosticsProfile": {
+                "bootDiagnostics": {
+                  "enabled": "true",
+                  "storageUri": "[concat('https://',parameters('bootDiagnosticsStorage'),'.blob.core.windows.net')]"
+                }
+              },
+            "networkProfile": {
+                "networkInterfaces": [
+                    {
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces/',parameters('nicName'))]"
+                    }
+                ]
+            }
+        },
+        "resources": [
+          {
+            "condition": "[equals(parameters('useDomainJoinExtension'),'Yes')]",
+            "apiVersion": "[parameters('extensionApiVersion')]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'),'/joindomain')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Compute",
+              "type": "JsonADDomainExtension",
+              "typeHandlerVersion": "1.0",
+              "settings": {
+                "Name": "[parameters('domainToJoin')]",
+                "OUPath": "[parameters('ouPath')]",
+                "User": "[parameters('domainJoinAccount')]",
+                "Restart": "true",
+                "Options": "[variables('domainJoinOptions')]"
+              },
+              "protectedsettings": {
+                "Password": "[parameters('domainJoinAccountPassword')]"
+              }
+            }
+          },
+          {
+            "condition": "[equals(parameters('useDSCExtension'),'Yes')]",
+            "apiVersion": "[parameters('extensionApiVersion')]",
+            "type": "extensions",
+            "name": "Microsoft.Powershell.DSC",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Powershell",
+              "type": "DSC",
+              "typeHandlerVersion": "2.26",
+              "autoUpgradeMinorVersion": false,
+              "forceUpdateTag": "[parameters('dscExtensionUpdateTagVersion')]",
+              "settings": {
+                "configuration": {
+                  "url": "[concat(parameters('_artifactsLocation'),'/',variables('DscExtensionArchiveFolder'), '/', variables('DscExtensionArchiveFileName'))]",
+                  "script": "configuration.ps1",
+                  "function": "[parameters('dscFunction')]"
+                }
+              },
+              "protectedSettings": {
+                "configurationArguments": {
+                  "storageCredential": {
+                    "userName": "[parameters('storageUserName')]",
+                    "password": "[parameters('storagePassword')]"
+                  },
+                  "adminCredential": {
+                    "userName": "[parameters('localAccountUserName')]",
+                    "password": "[parameters('localAccountUserPassword')]"
+                  }
+                },
+                "configurationUrlSasToken": "[parameters('_artifactsLocationSasToken')]"
+              }
+            }
+          }
+        ]
+      }
+    ],
+  "outputs": {}
+}

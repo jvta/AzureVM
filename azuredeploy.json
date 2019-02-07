@@ -25,56 +25,219 @@
                 "description": "Specify the size of the VM required."
             }
           },
-          "networkAccess": {
+          "avSetRequired": {
             "type": "string",
-            "allowedValues": [
-                "External",
-                "Internal"
-            ],
+            "defaultValue": "No",
+            "metadata": {
+                "description": "Whether this server should belong to an Availability Set. Allowed values are Yes or No"
+              },
+              "allowedValues": [
+                "Yes",
+                "No"
+            ]
+          },
+          "avSetName": {
+            "defaultValue": "None",
+            "type": "String",
+            "metadata": {
+                "description": "Specify the name of the Availability Set, if required. Specify None if not required"
+            }
+          },
+          "networkInterfaceType": {
+            "type": "string",
+            "defaultValue": "Private",
             "metadata": {
                 "group": "Network Configuration",
-                "description": ""
-            }
+                "description": "Whether this server should attach a Public IP to the primary NIC or only use a Private IP"
+              },
+              "allowedValues": [
+                "Public",
+                "Private"
+            ]
+          },
+          "publicIpAllocationType": {
+            "defaultValue": "Dynamic",
+            "type": "String",
+            "metadata": {
+                "description": "Specify whether the public IP should be Static or Dynamic"
+            },
+            "allowedValues": [
+                "Static",
+                "Dynamic"
+              ]
+            },
+            "privateIpAllocationType": {
+                "defaultValue": "Static",
+                "type": "String",
+                "metadata": {
+                    "description": "Specify whether the private IP should be Static or Dynamic"
+                },
+                "allowedValues": [
+                    "Static",
+                    "Dynamic"
+                ]
+            },
+            "privateIpAddress": {
+                "defaultValue": "None",
+                "type": "string",
+                "metadata": {
+                    "description": "A static private IP address to be used"
+                }
+            },
+          "platform": {
+              "allowedValues": [
+                  "Windows",
+                  "Linux"
+              ],
+              "type": "String",
+              "metadata": {
+                  "description": "Select the OS type to be provisioned"
+              }
           },
           "adminUsername": {
+            "type": "String",
+            "metadata": {
+                "description": "Specify the username of the Administrator account"
+            }
+        },
+        "authenticationType": {
+            "defaultValue": "Password",
+            "allowedValues": [
+                "Password",
+                "SSH-Public-Key"
+            ],
+            "type": "String",
+            "metadata": {
+                "description": "Authentication type for the deployment"
+            }
+        },
+        "adminPasswordOrKey": {
+            "type": "SecureString",
+            "metadata": {
+                "description": "OS Admin password or SSH Key depending on value of authentication type"
+            }
+        },
+        "virtualNetworkName": {
+            "type": "String",
+            "metadata": {
+                "group": "Network Configuration",
+                "description": "Name of the Virtual Network"
+            }
+        },
+        "virtualNetworkRGName": {
+            "type": "String",
+            "metadata": {
+                "group": "Network Configuration",
+                "description": "Specify the name of the Resource Group where the vNet resides"
+            }
+        },
+        "subnetName": {
+            "type": "String",
+            "metadata": {
+                "group": "Network Configuration",
+                "description": "Specify the name of the Subnet"
+            }
+        },
+        "bootDiagnosticsStorage": {
+          "type": "String",
+          "metadata": {
+            "group": "Infrastructure Configuration",
+            "description": "Storage Account for storing boot diagnostics data"
+          }
+        },
+        "useDomainJoinExtension": {
             "type": "string",
-            "defaultValue": "caladmin",
+            "defaultValue": "No",
             "metadata": {
-                "group": "Infrastructure Configuration",
-                "description": "The name of the administrator account of the new VMs and Domain."
+                "description": "Whether this server should be domain joined"
+              },
+              "allowedValues": [
+                "Yes",
+                "No"
+            ]
+          },
+          "domainToJoin": {
+            "type": "string",
+            "metadata": {
+              "description": "The domain to which this server should be joined"
             }
           },
-          "adminPassword": {
+          "ouPath": {
+            "type": "string",
+            "metadata": {
+              "description": "The Organisational Unit into which server should be placed in the chosen domain"
+            }
+          },
+          "domainJoinAccount": {
+            "type": "string",
+            "metadata": {
+              "description": "The domain account to use for joining the domain"
+            }
+          },
+          "domainJoinAccountPassword": {
+            "type": "string",
+            "metadata": {
+              "description": "The domain account password for domain join"
+            }
+          },
+          "useDSCExtension": {
+            "type": "string",
+            "defaultValue": "Yes",
+            "metadata": {
+                "description": "Whether this server should use PowerShell DSC Extension"
+              },
+              "allowedValues": [
+                "Yes",
+                "No"
+            ]
+          },
+          "dscExtensionUpdateTagVersion": {
+            "type": "string",
+            "metadata": {
+              "description": "The current extension revision number. Increment by one with each update to ensure targets refresh their DSC settings"
+            }
+          },
+          "dscFunction": {
+            "type": "string",
+            "metadata": {
+                "description": "Calls function to execute within DSC configuration file"
+            }
+          },
+          "_artifactsLocationSasToken": {
+            "type": "string",
+            "metadata": {
+              "description": "SAS token for access to the DSC extension file"
+            }
+          },
+          "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+              "description": "URI of DSC artifacts required"
+            }
+          },
+          "storageUserName": {
+            "type": "string",
+            "metadata": {
+              "description": "The storage account where the DSC related tools downloads are saved for this environment"
+            }
+          },
+          "storagePassword": {
+            "type": "string",
+            "metadata": {
+              "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
+            }
+          },
+          "localAccountUserName": {
+            "type": "string",
+            "metadata": {
+              "description": "Name of additional local user account to be added to local Administrators Group"
+            }
+          },
+          "localAccountUserPassword": {
             "type": "securestring",
-            "defaultValue": "yT3iNC0Bz7QSQupO",
             "metadata": {
-                "group": "Infrastructure Configuration",
-                "description": "The password for the administrator account of the new VMs and Domain."
+              "description": "Password of additional local user account to be added to local Administrators Group"
             }
-          },
-          "virtualNetworkName": {
-           "type": "string",
-           "defaultValue": "ASECALVNET01",
-           "metadata": {
-            "group": "Network Configuration",
-            "description": ""
-           }
-          },
-          "virtualNetworkRGName": {
-           "type": "string",
-           "defaultValue": "ASEDRDPDEMO",
-           "metadata": {
-            "group": "Network Configuration",
-            "description": ""
-           }
-          },
-          "subnetName": {
-           "type": "string",
-           "defaultValue": "SecuredZone",
-           "metadata": {
-               "group": "Network Configuration",
-               "description": ""
-           }
           },
           "tagCostCentre": {
             "type": "string",
@@ -97,6 +260,18 @@
                 "description": "Tag - IT Owner"
             }
           },
+          "tagProvisionedBy": {
+            "type": "string",
+            "metadata": {
+              "description": "Tag - Provisioned By"
+            }
+          },
+          "tagProvisionDate": {
+            "type": "string",
+            "metadata": {
+              "description": "Tag - Provision Date"
+            }
+          },
           "tagEnvironment": {
             "type": "string",
             "allowedValues": [
@@ -111,26 +286,90 @@
         }
     },
     "variables": {
-        "templateLink": "https://raw.githubusercontent.com/sarquiss/azure-arm/master",
-        "nicName": "[concat(parameters('vmName'),'-NIC')]",
+        "networkApiVersion": "2018-07-01",
+        "computeApiVersion": "2017-03-30",
+        "extensionApiVersion": "2015-06-15",
+        "deploymentApiVersion": "2015-01-01",
+        "templateLink": "https://raw.githubusercontent.com/jvta/azurevm/master",
+        "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "pipName": "[concat(parameters('vmName'),'-PIP')]",
         "tags": {
             "CostCentre": "[parameters('tagCostCentre')]",
             "Application": "[parameters('tagApplication')]",
             "ITOwner": "[parameters('tagITOwner')]",
+            "provisionedBy": "[parameters('tagProvisionedBy')]",
+            "provisionDate": "[parameters('tagProvisionDate')]",
             "Environment": "[parameters('tagEnvironment')]"
         }
     },
     "resources": [
         {
+            "condition": "[equals(parameters('avSetRequired'),'Yes')]",
+            "type":"Microsoft.Resources/deployments",
+            "name":"provisionAvSet",
+            "apiVersion":"[variables('deploymentApiVersion')]",
+            "dependsOn":[],
+            "properties":{
+                "mode":"Incremental",
+                "templateLink":{
+                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates/provisionAVSet.json')]",
+                    "contentVersion":"1.0.0.0"
+                },
+                "parameters":{
+                    "location": {
+                        "value": "[parameters('location')]"
+                      },
+                    "apiVersion":{
+                        "value":"[variables('computeApiVersion')]"
+                    },
+                    "name":{
+                        "value":"[parameters('avSetName')]"
+                    },
+                    "tags": {
+                        "value": "[variables('tags')]"
+                    }
+                }
+            }
+        },
+        {
+            "condition": "[equals(parameters('networkInterfaceType'),'Public')]",
+            "type":"Microsoft.Resources/deployments",
+            "name":"provisionPublicIp",
+            "apiVersion":"[variables('deploymentApiVersion')]",
+            "dependsOn":[],
+            "properties":{
+                "mode":"Incremental",
+                "templateLink":{
+                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates/provisionPIP.json')]",
+                    "contentVersion":"1.0.0.0"
+                },
+                "parameters":{
+                    "apiVersion":{
+                        "value":"[variables('networkApiVersion')]"
+                    },
+                    "name":{
+                        "value":"[variables('pipName')]"
+                    },
+                    "publicIpAllocationType":{
+                        "value":"[parameters('publicIpAllocationType')]"
+                    },
+                    "tags": {
+                        "value": "[variables('tags')]"
+                    }
+                }
+            }
+        },
+        {
             "name": "provisionNetworkInterface",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
-            "dependsOn": [],
+            "apiVersion": "[variables('deploymentApiVersion')]",
+            "dependsOn": [
+                "[if(equals(parameters('networkInterfaceType'),'Public'), 'provisionPublicIp', json('null'))]"
+            ],
             "properties": {
               "mode": "Incremental",
               "templateLink": {
-                "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionNIC',parameters('networkAccess'),'.json')]",
+                "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionNIC',parameters('networkInterfaceType'),'.json')]",
                 "contentVersion": "1.0.0.0"
               },
               "parameters": {
@@ -140,12 +379,15 @@
                 "tags": {
                     "value":"[variables('tags')]"
                 },
-                "pipName": {
-                    "value": "[variables('pipName')]"
+                "pipId": {
+                    "value": "[if(equals(parameters('networkInterfaceType'),'Public'), reference('provisionPublicIp').outputs.resourceID.value, json('null'))]"
                 },
                 "nicName": {
                   "value": "[variables('nicName')]"
                 },
+                "networkApiVersion": {
+                    "value": "[variables('networkApiVersion')]"
+                  },
                 "virtualNetworkName": {
                   "value": "[parameters('virtualNetworkName')]"
                 },
@@ -154,21 +396,28 @@
                 },
                 "subnetName": {
                   "value": "[parameters('subnetName')]"
+                },
+                "privateIpAddress": {
+                    "value": "[parameters('privateIpAddress')]"
+                },
+                "privateIpAllocationType": {
+                  "value": "[parameters('privateIpAllocationType')]"
                 }
               }
             }
           },
-        {
+          {
             "name": "provisionCompute",
             "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-01-01",
+            "apiVersion": "[variables('deploymentApiVersion')]",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ProvisionNetworkInterface"
+                "Microsoft.Resources/deployments/ProvisionNetworkInterface",
+                "[if(equals(parameters('avSetRequired'),'Yes'), 'provisionAvSet', json('null'))]"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionServer.json')]",
+                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionVM.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -186,12 +435,75 @@
                     },
                     "nicName": {
                         "value": "[variables('nicName')]"
-                      },
+                    },
+                    "computeApiVersion": {
+                        "value": "[variables('computeApiVersion')]"
+                    },
+                    "extensionApiVersion": {
+                        "value": "[variables('extensionApiVersion')]"
+                    },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
                     },
-                    "adminPassword": {
-                        "value": "[parameters('adminPassword')]"
+                    "avSetRequired": {
+                      "value": "[parameters('avSetRequired')]"
+                    },
+                    "avSetName": {
+                      "value": "[parameters('avSetName')]"
+                    },
+                    "platform": {
+                      "value": "[parameters('platform')]"
+                    },
+                    "authenticationType": {
+                      "value": "[parameters('authenticationType')]"
+                    },
+                    "adminPasswordOrKey": {
+                      "value": "[parameters('adminPasswordOrKey')]"
+                    },
+                    "bootDiagnosticsStorage": {
+                      "value": "[parameters('bootDiagnosticsStorage')]"
+                    },
+                    "useDomainJoinExtension": {
+                      "value": "[parameters('useDomainJoinExtension')]"
+                    },
+                    "domainToJoin": {
+                      "value": "[parameters('domainToJoin')]"
+                    },
+                    "ouPath": {
+                      "value": "[parameters('ouPath')]"
+                    },
+                    "domainJoinAccount": {
+                      "value": "[parameters('domainJoinAccount')]"
+                    },
+                    "domainJoinAccountPassword": {
+                      "value": "[parameters('domainJoinAccountPassword')]"
+                    },
+                    "useDSCExtension": {
+                      "value": "[parameters('useDSCExtension')]"
+                    },
+                    "dscExtensionUpdateTagVersion": {
+                      "value": "[parameters('dscExtensionUpdateTagVersion')]"
+                    },
+                    "dscFunction": {
+                      "value": "[parameters('dscFunction')]"
+                    },
+                    "_artifactsLocationSasToken": {
+                      "value": "[parameters('_artifactsLocationSasToken')]"
+                    },
+                    "_artifactsLocation": {
+                      "value": "[parameters('_artifactsLocation')]"
+                    },
+                    "storageUserName": {
+                      "value": "[parameters('storageUserName')]"
+                    },
+                    "storagePassword": {
+                      "value": "[parameters('storagePassword')]"
+                    },
+                    "localAccountUserName": {
+                      "value": "[parameters('localAccountUserName')]"
+                    },
+                    "localAccountUserPassword": {
+                      "value": "[parameters('localAccountUserPassword')]"
                     }
               }
             }

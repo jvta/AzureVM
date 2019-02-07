@@ -1,0 +1,108 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for the deployment"
+              }
+          },
+          "tags": {
+            "type": "array",
+            "metadata": {
+                "description": "Tags to attach to resource"
+              }
+          },
+          "pipId": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource ID of PIP object"
+              }
+          },
+          "nicName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of NIC object"
+              }
+          },
+          "networkApiVersion": {
+            "type": "string",
+            "metadata": {
+                "description": "API version for this resource"
+              }
+          },
+          "virtualNetworkName": {
+            "type": "string",
+            "metadata": {
+                "description": "VNet name where NIC will reside"
+              }
+          },
+          "virtualNetworkRGName": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource Group of VNet"
+              }
+          },
+          "subnetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Subnet name where NIC will reside"
+              }
+          },
+          "privateIpAddress": {
+            "type": "string",
+            "metadata": {
+                "description": "IP address of server"
+              }
+          },
+          "privateIpAllocationType": {
+            "type": "string",
+            "metadata": {
+                "description": "Whether IP should be set statically or dynamically"
+              }
+          }
+    },
+    "variables": {
+        "vnetID": "[resourceId(parameters('virtualNetworkRGName'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/networkInterfaces",
+            "name": "[parameters('nicName')]",
+            "apiVersion": "[parameters('networkApiVersion')]",
+            "location": "[parameters('location')]",
+            "tags": "[parameters('tags')]",
+            "properties": {
+              "ipConfigurations": [
+                  {
+                      "name": "ipconfig1",
+                      "properties": {
+                          "privateIPAllocationMethod": "[parameters('privateIpAllocationType')]",
+                          "privateIpAddress": "[if(equals(parameters('privateIpAllocationType'),'Static'), parameters('privateIpAddress'), json('null'))]",
+                          "subnet": {
+                              "id": "[variables('subnetRef')]"
+                          },
+                          "publicIPAddress": {
+                            "id": "[parameters('pipId')]"
+                          },
+                          "primary": true,
+                          "loadBalancerBackendAddressPools": [
+                          ]
+                      }
+                  }
+              ]
+            },
+            "enableAcceleratedNetworking": false,
+            "enableIPForwarding": false,
+            "primary": true
+          }
+    ],
+    "outputs": {
+        "resourceID": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
+        }
+    }
+}

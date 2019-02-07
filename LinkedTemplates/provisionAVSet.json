@@ -14,10 +14,10 @@
                 "description": "Name of the resource"
               }
         },
-        "publicIpAllocationType": {
+        "location": {
             "type": "string",
             "metadata": {
-                "description": "Whether IP is Static or Dynamic"
+                "description": "Location to create the resource"
               }
         },
         "tags": {
@@ -30,23 +30,22 @@
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.Network/publicIPAddresses",
+            "type": "Microsoft.Compute/availabilitySets",
+            "sku": {
+                "name": "Aligned"
+            },
             "name": "[parameters('name')]",
             "apiVersion": "[parameters('apiVersion')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": "[parameters('tags')]",
             "properties": {
-                "publicIPAddressVersion": "IPv4",
-                "publicIPAllocationMethod": "[parameters('publicIpAllocationType')]",
-                "idleTimeoutInMinutes": 4
-            },
-            "dependsOn": []
+                "platformUpdateDomainCount": 5,
+                "platformFaultDomainCount": 2
+            }
         }
     ],
     "outputs": {
         "resourceID": {
-            "type": "string",
-            "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('name'))]"
         }
     }
 }
