@@ -20,6 +20,13 @@
                 "description": "Whether IP is Static or Dynamic"
               }
         },
+        "sku": {
+            "type": "string",
+            "defaultValue": "Standard",
+            "metadata": {
+                "description": "SKU of Public IP to create"
+              }
+        },
         "tags": {
             "type": "object",
             "metadata": {
@@ -35,6 +42,9 @@
             "apiVersion": "[parameters('apiVersion')]",
             "location": "[resourceGroup().location]",
             "tags": "[parameters('tags')]",
+            "sku": {
+                "name": "[parameters('sku')]"
+            },
             "properties": {
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "[parameters('publicIpAllocationType')]",

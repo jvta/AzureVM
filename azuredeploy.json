@@ -38,7 +38,7 @@
           },
           "avSetName": {
             "defaultValue": "None",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Specify the name of the Availability Set, if required. Specify None if not required"
             }
@@ -57,7 +57,7 @@
           },
           "publicIpAllocationType": {
             "defaultValue": "Dynamic",
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Specify whether the public IP should be Static or Dynamic"
             },
@@ -66,9 +66,20 @@
                 "Dynamic"
               ]
             },
+            "publicIpSku": {
+                "defaultValue": "Standard",
+                "type": "string",
+                "metadata": {
+                    "description": "Specify the SKU of the public IP address"
+                },
+                "allowedValues": [
+                    "Standard",
+                    "Basic"
+                ]
+            },
             "privateIpAllocationType": {
                 "defaultValue": "Static",
-                "type": "String",
+                "type": "string",
                 "metadata": {
                     "description": "Specify whether the private IP should be Static or Dynamic"
                 },
@@ -89,13 +100,13 @@
                   "Windows",
                   "Linux"
               ],
-              "type": "String",
+              "type": "string",
               "metadata": {
                   "description": "Select the OS type to be provisioned"
               }
           },
           "adminUsername": {
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Specify the username of the Administrator account"
             }
@@ -106,7 +117,7 @@
                 "Password",
                 "SSH-Public-Key"
             ],
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "Authentication type for the deployment"
             }
@@ -118,28 +129,28 @@
             }
         },
         "virtualNetworkName": {
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "group": "Network Configuration",
                 "description": "Name of the Virtual Network"
             }
         },
         "virtualNetworkRGName": {
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "group": "Network Configuration",
                 "description": "Specify the name of the Resource Group where the vNet resides"
             }
         },
         "subnetName": {
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "group": "Network Configuration",
                 "description": "Specify the name of the Subnet"
             }
         },
         "bootDiagnosticsStorage": {
-          "type": "String",
+          "type": "string",
           "metadata": {
             "group": "Infrastructure Configuration",
             "description": "Storage Account for storing boot diagnostics data"
@@ -353,6 +364,9 @@
                     "publicIpAllocationType":{
                         "value":"[parameters('publicIpAllocationType')]"
                     },
+                    "sku": {
+                        "value": "[parameters('publicIpSku')]"
+                    },
                     "tags": {
                         "value": "[variables('tags')]"
                     }
@@ -447,8 +461,8 @@
                     "avSetRequired": {
                       "value": "[parameters('avSetRequired')]"
                     },
-                    "avSetName": {
-                      "value": "[parameters('avSetName')]"
+                    "avSetId": {
+                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), reference('provisionAvSet').outputs.resourceID.value, json('null'))]"
                     },
                     "platform": {
                       "value": "[parameters('platform')]"

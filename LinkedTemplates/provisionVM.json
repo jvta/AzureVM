@@ -64,11 +64,11 @@
             "No"
         ]
       },
-      "avSetName": {
+      "avSetId": {
         "defaultValue": "None",
         "type": "string",
         "metadata": {
-            "description": "Specify the name of the Availability Set, if required. Specify None if not required"
+            "description": "The Resource ID of the Availability Set, if required. Specify None if not required"
         }
       },
        "platform": {
@@ -205,7 +205,6 @@
     "DscExtensionArchiveFileName": "configuration.ps1.zip",
     "vmSize": "[parameters('vmSize')]",
     "vmOSDisk": "128",
-    "avSetId": "[resourceId('Microsoft.Compute/availabilitySets', parameters('avSetName'))]",
     "windowsConfiguration": {
         "provisionVmAgent": "true"
     },
@@ -247,7 +246,7 @@
         },
         "dependsOn": [],
         "properties": {
-            "availabilitySet": "[if(equals(parameters('avSetRequired'),'yes'), variables('avSetId'), json('null'))]",
+            "availabilitySet": "[if(equals(parameters('avSetRequired'),'yes'), parameters('avSetId'), json('null'))]",
             "hardwareProfile": {
               "vmSize": "[variables('vmSize')]"
             },

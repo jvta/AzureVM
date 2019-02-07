@@ -46,6 +46,8 @@
     ],
     "outputs": {
         "resourceID": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Compute/availabilitySets', parameters('name'))]"
         }
     }
 }
