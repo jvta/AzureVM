@@ -19,7 +19,7 @@
           },
           "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_DS3_v2",
+            "defaultValue": "Standard_DS2_v2",
             "metadata": {
                 "group": "Infrastructure Configuration",
                 "description": "Specify the size of the VM required."

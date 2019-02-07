@@ -9,20 +9,14 @@
         }
     },
     "vmName": {
-          "type": "String",
+          "type": "string",
           "metadata": {
               "description": "Specify the name of the VM to be provisioned"
           }
       },
       "vmSize": {
-          "defaultValue": "Small",
-          "allowedValues": [
-              "Small",
-              "Medium",
-              "Large",
-              "XLarge"
-          ],
-          "type": "String",
+          "defaultValue": "Standard_DS2_v2",
+          "type": "string",
           "metadata": {
               "description": "Size of the VM"
           }
@@ -34,28 +28,27 @@
           }
       },
       "nicName": {
-        "type": "String",
+        "type": "string",
         "metadata": {
             "description": "Name of the NIC object to attach to the VM"
         }
       },
       "computeApiVersion": {
         "defaultValue": "2017-03-30",
-        "type": "String",
+        "type": "string",
         "metadata": {
             "description": "Compute API version to be used"
         }
       },
       "extensionApiVersion": {
         "defaultValue": "2015-06-15",
-        "type": "String",
+        "type": "string",
         "metadata": {
             "description": "VM Extentsion API version to be used"
         }
       },
         "adminUsername": {
-          "defaultValue": "caladmin",
-          "type": "String",
+          "type": "string",
           "metadata": {
               "description": "Specify the username of the Administrator account"
           }
@@ -73,7 +66,7 @@
       },
       "avSetName": {
         "defaultValue": "None",
-        "type": "String",
+        "type": "string",
         "metadata": {
             "description": "Specify the name of the Availability Set, if required. Specify None if not required"
         }
@@ -83,7 +76,7 @@
               "Windows",
               "Linux"
           ],
-          "type": "String",
+          "type": "string",
           "metadata": {
               "description": "Select the OS type to be provisioned"
           }
@@ -94,7 +87,7 @@
               "Password",
               "SSH-Public-Key"
           ],
-          "type": "String",
+          "type": "string",
           "metadata": {
               "description": "Authentication type for the deployment"
           }
@@ -106,7 +99,7 @@
           }
       },
       "bootDiagnosticsStorage": {
-        "type": "String",
+        "type": "string",
         "metadata": {
             "description": "Storage Account for storing boot diagnostics data"
         }
@@ -210,8 +203,8 @@
     "domainJoinOptions": "3",
     "DscExtensionArchiveFolder": "windows-powershell-dsc",
     "DscExtensionArchiveFileName": "configuration.ps1.zip",
-    "vmSize": "[if(equals(parameters('vmSize'), 'Small'), 'Standard_DS2_v2', if(equals(parameters('vmSize'), 'Medium'), 'Standard_DS3_v2', if(equals(parameters('vmSize'), 'Large'), 'Standard_DS4_v2', 'Standard_DS2_v2')))]",
-    "vmOSDisk": "[if(equals(parameters('vmSize'), 'Small'), 128, if(equals(parameters('vmSize'), 'Medium'), 256, if(equals(parameters('vmSize'), 'Large'), 512, 1024)))]",
+    "vmSize": "[parameters('vmSize')]",
+    "vmOSDisk": "128",
     "avSetId": "[resourceId('Microsoft.Compute/availabilitySets', parameters('avSetName'))]",
     "windowsConfiguration": {
         "provisionVmAgent": "true"
