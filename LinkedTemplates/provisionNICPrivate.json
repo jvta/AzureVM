@@ -90,11 +90,11 @@
                           ]
                       }
                   }
-              ]
-            },
-            "enableAcceleratedNetworking": false,
-            "enableIPForwarding": false,
-            "primary": true
+              ],
+              "enableAcceleratedNetworking": false,
+              "enableIPForwarding": false,
+              "primary": true
+            }
           }
     ],
     "outputs": {
