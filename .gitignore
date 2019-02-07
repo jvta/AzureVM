@@ -1,0 +1,2 @@
+# Exclude template parameter files
+*.param.json
