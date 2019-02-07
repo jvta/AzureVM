@@ -9,7 +9,7 @@
               }
           },
           "tags": {
-            "type": "array",
+            "type": "object",
             "metadata": {
                 "description": "Tags to attach to resource"
               }

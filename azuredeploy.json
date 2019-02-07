@@ -290,7 +290,7 @@
         "computeApiVersion": "2017-03-30",
         "extensionApiVersion": "2015-06-15",
         "deploymentApiVersion": "2015-01-01",
-        "templateLink": "https://raw.githubusercontent.com/jvta/azurevm/master",
+        "templateLink": "https://raw.githubusercontent.com/jvta/AzureVM/master",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "pipName": "[concat(parameters('vmName'),'-PIP')]",
         "tags": {
@@ -312,7 +312,7 @@
             "properties":{
                 "mode":"Incremental",
                 "templateLink":{
-                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates/provisionAVSet.json')]",
+                    "uri": "[concat(variables('templateLink'),'/','LinkedTemplates/provisionAVSet.json')]",
                     "contentVersion":"1.0.0.0"
                 },
                 "parameters":{
@@ -340,7 +340,7 @@
             "properties":{
                 "mode":"Incremental",
                 "templateLink":{
-                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates/provisionPIP.json')]",
+                    "uri": "[concat(variables('templateLink'),'/','LinkedTemplates/provisionPIP.json')]",
                     "contentVersion":"1.0.0.0"
                 },
                 "parameters":{
@@ -369,7 +369,7 @@
             "properties": {
               "mode": "Incremental",
               "templateLink": {
-                "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionNIC',parameters('networkInterfaceType'),'.json')]",
+                "uri": "[concat(variables('templateLink'),'/LinkedTemplates/','provisionNIC',parameters('networkInterfaceType'),'.json')]",
                 "contentVersion": "1.0.0.0"
               },
               "parameters": {
@@ -411,13 +411,12 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('deploymentApiVersion')]",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ProvisionNetworkInterface",
-                "[if(equals(parameters('avSetRequired'),'Yes'), 'provisionAvSet', json('null'))]"
+                "Microsoft.Resources/deployments/ProvisionNetworkInterface"
             ],
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('templateLink'),'/','linkedTemplates','/','provisionVM.json')]",
+                    "uri": "[concat(variables('templateLink'),'/LinkedTemplates/','provisionVM.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
