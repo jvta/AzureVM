@@ -71,6 +71,50 @@
             "description": "The Resource ID of the Availability Set, if required. Specify None if not required"
         }
       },
+      "vmOSDiskSize": {
+        "defaultValue": "None",
+        "type": "int",
+        "metadata": {
+            "description": "The size of the VM OS Disk in GB"
+        }
+      },
+      "numDataDisks": {
+        "defaultValue": "None",
+        "type": "int",
+        "metadata": {
+            "description": "The number of data disks to attach"
+        }
+      },
+      "sizeOfDataDisksInGB": {
+        "defaultValue": "None",
+        "type": "int",
+        "metadata": {
+            "description": "The size of the data disks to attach in GB"
+        }
+      },
+      "storageType": {
+        "type": "string",
+        "defaultValue": "Standard_LRS",
+        "metadata": {
+            "description": "The type of disk storage to use. Accepted values are Standard_LRS or Premium_LRS"
+          },
+          "allowedValues": [
+            "Standard_LRS",
+            "Premium_LRS"
+        ]
+      },
+      "dataDiskCaching": {
+        "type": "string",
+        "defaultValue": "None",
+        "metadata": {
+            "description": "The type of data disk caching to use. Accepted values are None, ReadOnly or ReadWrite"
+          },
+          "allowedValues": [
+            "None",
+            "ReadOnly",
+            "ReadWrite"
+        ]
+      },
        "platform": {
           "allowedValues": [
               "Windows",
@@ -246,7 +290,9 @@
         },
         "dependsOn": [],
         "properties": {
-            "availabilitySet": "[if(equals(parameters('avSetRequired'),'yes'), parameters('avSetId'), json('null'))]",
+            "availabilitySet": {
+                "id": "[if(equals(parameters('avSetRequired'),'yes'), parameters('avSetId'), json('null'))]"
+            },
             "hardwareProfile": {
               "vmSize": "[variables('vmSize')]"
             },
@@ -261,13 +307,26 @@
                 "imageReference": "[variables('imageReference')[parameters('platform')]]",
                 "osdisk": {
                     "name": "[concat(parameters('vmName'), '-osDisk')]",
-                    "diskSizeGB": "[variables('vmOSDisk')]",
+                    "diskSizeGB": "[parameters('vmOSDiskSize')]",
                     "createOption": "FromImage",
                     "managedDisk": {
-                      "storageAccountType": "Standard_LRS"
+                      "storageAccountType": "[parameters('storageType')]"
                     },
                     "caching": "ReadWrite"
-                }
+                },
+                "copy": [
+                    {
+                    "name": "dataDisks",
+                    "count": "[parameters('numDataDisks')]",
+                    "input": {
+                    "caching": "[parameters('dataDiskCaching')]",
+                    "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
+                    "lun": "[copyIndex('dataDisks')]",
+                    "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
+                    "createOption": "Empty"
+                        }
+                    }
+                ]
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
