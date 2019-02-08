@@ -36,6 +36,17 @@
                 "No"
             ]
           },
+          "avSetCreateNew": {
+            "type": "string",
+            "defaultValue": "No",
+            "metadata": {
+                "description": "Whether a new AV Set should be created"
+              },
+              "allowedValues": [
+                "Yes",
+                "No"
+            ]
+          },
           "avSetName": {
             "defaultValue": "None",
             "type": "string",
@@ -350,6 +361,7 @@
         "templateLink": "https://raw.githubusercontent.com/jvta/AzureVM/master",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "pipName": "[concat(parameters('vmName'),'-PIP')]",
+        "avSetId": "[resourceId('Microsoft.Compute/availabilitySets', parameters('avSetName'))]",
         "tags": {
             "CostCentre": "[parameters('tagCostCentre')]",
             "Application": "[parameters('tagApplication')]",
@@ -361,7 +373,7 @@
     },
     "resources": [
         {
-            "condition": "[equals(parameters('avSetRequired'),'Yes')]",
+            "condition": "[equals(parameters('avSetCreateNew'),'Yes')]",
             "type":"Microsoft.Resources/deployments",
             "name":"provisionAvSet",
             "apiVersion":"[variables('deploymentApiVersion')]",
@@ -508,7 +520,7 @@
                       "value": "[parameters('avSetRequired')]"
                     },
                     "avSetId": {
-                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), reference('provisionAvSet').outputs.resourceID.value, json('null'))]"
+                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), variables('avSetId'), json('null'))]"
                     },
                     "vmOsDiskSize": {
                         "value": "[parameters('vmOsDiskSize')]"

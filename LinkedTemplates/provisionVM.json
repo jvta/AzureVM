@@ -248,7 +248,6 @@
     "DscExtensionArchiveFolder": "windows-powershell-dsc",
     "DscExtensionArchiveFileName": "configuration.ps1.zip",
     "vmSize": "[parameters('vmSize')]",
-    "vmOSDisk": "128",
     "windowsConfiguration": {
         "provisionVmAgent": "true"
     },
