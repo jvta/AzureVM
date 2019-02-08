@@ -436,7 +436,6 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('deploymentApiVersion')]",
             "dependsOn": [
-                "[if(equals(parameters('networkInterfaceType'),'Public'), 'provisionPublicIp', json('null'))]"
             ],
             "properties": {
               "mode": "Incremental",
