@@ -290,7 +290,7 @@
         "dependsOn": [],
         "properties": {
             "availabilitySet": {
-                "id": "[if(equals(parameters('avSetRequired'),'yes'), parameters('avSetId'), json('null'))]"
+                "id": "[if(equals(parameters('avSetRequired'),'Yes'), parameters('avSetId'), json('null'))]"
             },
             "hardwareProfile": {
               "vmSize": "[variables('vmSize')]"
