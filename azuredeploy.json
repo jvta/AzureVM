@@ -452,7 +452,7 @@
                     "value":"[variables('tags')]"
                 },
                 "pipId": {
-                    "value": "[if(equals(parameters('networkInterfaceType'),'Public'), reference('provisionPublicIp').outputs.resourceID.value, json('null'))]"
+                    "value": "[if(equals(parameters('networkInterfaceType'),'Public'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
                 },
                 "nicName": {
                   "value": "[variables('nicName')]"
