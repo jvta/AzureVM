@@ -26,11 +26,13 @@ The following script can be used to deploy the master template as is from the cu
 ```PowerShell
 # Deploy a VM from this master template in GitHub
 New-AzDeployment -Location <Azure location> `
+                      -ResourceGroupName <Name of your Resource Group> `
+                      -Name <A descriptive name for this deployment> `
                       -TemplateUri https://raw.githubusercontent.com/jvta/AzureVM/master/azuredeploy.json `
                       -TemplateParameterFile <path to your local azuredeploy.network.parameters.json file> `
                       -Verbose
-# Substitute New-AzDeployment with New-AzureRmDeployment if you are
-# running the old AzureRm module instead of the Az module
+# Substitute New-AzDeployment with New-AzureRmDeployment if you are running the old AzureRm PowerShell module
+# instead of the Az module
 ```
 
 You can also copy the azuredeploy.json template into a new Template Deployment resource within the portal and supply parameters manually or by selecting your preconfigured parameter file.
@@ -39,8 +41,10 @@ If you clone or download this solution locally to insert your own edits you will
 
 ```PowerShell
 # Deploy a VM from your local copy of the azuredeploy.json master template
-# Note: you will still need to publish the linked templates in a public location
+# Note: you will still need to publish the linked templates to a public location
 New-AzDeployment -Location <Azure location> `
+                      -ResourceGroupName <Name of your Resource Group> `
+                      -Name <A descriptive name for this deployment> `
                       -TemplateFile <path to your local copy of the azuredeploy.json file> `
                       -TemplateParameterFile <path to your local azuredeploy.parameters.json file> `
                       -Verbose
@@ -75,20 +79,26 @@ For example, provisionVM.json creates a VM that requires two sensitive inputs by
 ```
 
 ## VM Extensions
-ProvisionVM.json is also set to optionally permit a domain join or PowerShell DSC extension. Simply set parameters for useDomainJoinExtension or useDSCExtension to "No" if you do not wish to use these. Alternatively, review the parameters required by each extension and edit to suit.
+ProvisionVM.json is also set to optionally permit a domain join or PowerShell DSC extension. Simply set parameters for useDomainJoinExtension or useDSCExtension to "No" if you do not wish to use these. Alternatively, review the parameters required by each extension below and edit your copy of the templates to suit.
 
 ### Domain Join
 The domain join extension requires you specify:
 * domainToJoin (specify FQDN of AD domain e.g. company.local)
-* ouPath
+* ouPath (Canonical format e.g. OU=Servers,DC=domain,DC=local)
 * domainJoinAccount
 * domainJoinAccountPassword
-Server will restart upon successful domain join and depends on VM provision completing
+Server will restart upon successful domain join and has dependency on VM provision completing
 
 ### PowerShell DSC
-The PowerShell DSC extension requires you specify several configuration related settings common to all configurations, and protected settings that will be specific to your particular PowerShell DSC configuration file and what it does.
+To use the PowerShell DSC extension you will need to write your own DSC config file and publish it to a storage account blob then adjust any settings here to provide the appropriate inputs - these parameters will vary from what you create. DSC content creation is not covered here.
 
-You will need to write your own DSC config file and publish it to a storage account blob then adjust any settings here to provide the appropriate inputs - these parameters will vary from what you create. DSC contention creation not covered here.
+For further reference start with:
+* https://docs.microsoft.com/en-us/powershell/dsc/configurations/configurations
+
+For DSC configuration publication to Azure blob storage:
+* https://docs.microsoft.com/en-us/powershell/module/azurerm.compute/publish-azurermvmdscconfiguration?view=azurermps-6.13.0
+
+The PowerShell DSC extension requires you specify several configuration related settings common to all configurations, as well as protected settings that will be specific to your particular PowerShell DSC configuration file and what it does.
 
 Common parameters:
 * dscExtensionUpdateTagVersion (Default '1'. Increment and redeploy to force an updated configuration)
