@@ -29,7 +29,8 @@ New-AzDeployment -Location <Azure location> `
                       -TemplateUri https://raw.githubusercontent.com/jvta/AzureVM/master/azuredeploy.json `
                       -TemplateParameterFile <path to your local azuredeploy.network.parameters.json file> `
                       -Verbose
-# Substitute New-AzDeployment with New-AzureRmDeployment if you are running the old AzureRm module instead of the Az module
+# Substitute New-AzDeployment with New-AzureRmDeployment if you are
+# running the old AzureRm module instead of the Az module
 ```
 
 You can also copy the azuredeploy.json template into a new Template Deployment resource within the portal and supply parameters manually or by selecting your preconfigured parameter file.
@@ -53,6 +54,7 @@ Create a local parameter file for each VM to be built and store it as appropriat
 For example, provisionVM.json creates a VM that requires two sensitive inputs by default: adminUsername and adminPasswordOrKey. These should be stored in a Key Vault as distinct Secrets and referenced within a parameter file as follows:
 
 ```JSON
+{
     "adminUsername": {
         "reference": {
             "keyVault": {
@@ -68,7 +70,8 @@ For example, provisionVM.json creates a VM that requires two sensitive inputs by
             },
             "secretName": "vmWindowsLocalAdminPassword"
         }
-    },
+    }
+}
 ```
 
 ## VM Extensions
@@ -86,14 +89,17 @@ Server will restart upon successful domain join and depends on VM provision comp
 The PowerShell DSC extension requires you specify several configuration related settings common to all configurations, and protected settings that will be specific to your particular PowerShell DSC configuration file and what it does.
 
 You will need to write your own DSC config file and publish it to a storage account blob then adjust any settings here to provide the appropriate inputs - these parameters will vary from what you create. DSC contention creation not covered here.
+
 Common parameters:
 * dscExtensionUpdateTagVersion (Default '1'. Increment and redeploy to force an updated configuration)
 * _artifactsLocation (storage account where your DSC blob is stored e.g. "https://mydscacc.blob.core.windows.net")
 * dscFunction (your name for a DSC "configuration" block to apply e.g. 'StandardAzureServer')
+
 Default variables:
 * DscExtensionArchiveFolder (uses the default of 'windows-powershell-dsc')
 * DscExtensionArchiveFileName (uses the default of 'configuration.ps1.zip')
 * extensionApiVersion (uses a default of '2015-06-15' set in azuredeploy.json)
+
 Example-specific parameters:
 * storageUserName (e.g. provide a storage account name for use with Azure Files share to store SOE installation files)
 * storagePassword (storage account password for above - SAS tokens don't work for this)
