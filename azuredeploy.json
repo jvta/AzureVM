@@ -75,15 +75,29 @@
                 "description": "The size of the data disks to attach in GB"
             }
           },
-          "storageType": {
+          "osDiskStorageType": {
             "type": "string",
             "defaultValue": "Standard_LRS",
             "metadata": {
                 "group": "Infrastructure Configuration",
-                "description": "The type of disk storage to use. Accepted values are Standard_LRS or Premium_LRS"
+                "description": "The type of disk storage to use for OS Disk. Accepted values are Standard_LRS, StandardSSD_LRS or Premium_LRS"
               },
               "allowedValues": [
                 "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ]
+          },
+          "dataDiskStorageType": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "metadata": {
+                "group": "Infrastructure Configuration",
+                "description": "The type of disk storage to use for all Data Disks. Accepted values are Standard_LRS, StandardSSD_LRS or Premium_LRS"
+              },
+              "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
                 "Premium_LRS"
             ]
           },
@@ -530,8 +544,11 @@
                     "sizeOfDataDisksInGB": {
                         "value": "[parameters('sizeOfDataDisksInGB')]"
                     },
-                    "storageType": {
-                        "value": "[parameters('storageType')]"
+                    "osDiskStorageType": {
+                        "value": "[parameters('osDiskStorageType')]"
+                    },
+                    "dataDiskStorageType": {
+                        "value": "[parameters('dataDiskStorageType')]"
                     },
                     "dataDiskCaching": {
                         "value": "[parameters('dataDiskCaching')]"
