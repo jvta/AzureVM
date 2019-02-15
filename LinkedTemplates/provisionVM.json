@@ -94,12 +94,13 @@
       },
       "storageType": {
         "type": "string",
-        "defaultValue": "Standard_LRS",
+        "defaultValue": "StandardSSD_LRS",
         "metadata": {
             "description": "The type of disk storage to use. Accepted values are Standard_LRS or Premium_LRS"
           },
           "allowedValues": [
             "Standard_LRS",
+            "StandardSSD_LRS",
             "Premium_LRS"
         ]
       },
@@ -117,7 +118,8 @@
       },
        "platform": {
           "allowedValues": [
-              "Windows",
+              "WindowsSrv",
+              "Windows10",
               "Linux"
           ],
           "type": "string",
@@ -137,7 +139,7 @@
           }
       },
       "adminPasswordOrKey": {
-          "type": "SecureString",
+          "type": "securestring",
           "metadata": {
               "description": "OS Admin password or SSH Key depending on value of authentication type"
           }
@@ -269,12 +271,18 @@
             "sku": "7.4",
             "version": "latest"
         },
-        "Windows": {
+        "WindowsSrv": {
             "publisher": "MicrosoftWindowsServer",
             "offer": "WindowsServer",
             "sku": "2016-Datacenter",
             "version": "latest"
-        }
+        },
+        "Windows10": {
+          "publisher": "MicrosoftWindowsDesktop",
+          "offer": "Windows-10",
+          "sku": "rs5-pro",
+          "version": "latest"
+      }
     }
   },
   "resources": [
