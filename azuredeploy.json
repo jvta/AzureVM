@@ -416,7 +416,7 @@
     },
     "variables": {
         "networkApiVersion": "2018-07-01",
-        "computeApiVersion": "2017-03-30",
+        "computeApiVersion": "2018-04-01",
         "extensionApiVersion": "2015-06-15",
         "deploymentApiVersion": "2015-01-01",
         "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
