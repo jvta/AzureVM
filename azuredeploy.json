@@ -461,7 +461,6 @@
             "name": "provisionNetworkInterface",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('deploymentApiVersion')]",
-            "dependsOn": "[if(equals(parameters('networkInterfaceType'),'Public'),variables('dependsOnPublicIp'),variables('emptyArray'))]",
             "properties": {
               "mode": "Incremental",
               "templateLink": {
