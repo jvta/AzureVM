@@ -267,6 +267,35 @@
             "description": "Storage Account for storing boot diagnostics data"
           }
         },
+        "backupRequired": {
+          "type": "string",
+          "defaultValue": "No",
+          "metadata": {
+              "description": "Whether this server should be added to a Recovery Services Vault for Azure backup"
+            },
+            "allowedValues": [
+              "Yes",
+              "No"
+          ]
+        },
+        "vaultName": {
+          "type": "string",
+          "metadata": {
+            "description": "The Recovery Services Vault to which this server should be joined"
+          }
+        },
+        "vaultResourceGroup": {
+          "type": "string",
+          "metadata": {
+            "description": "The Resource Group containing the Recovery Services Vault to which this server should be joined"
+          }
+        },
+        "backupPolicyName": {
+          "type": "string",
+          "metadata": {
+            "description": "The Backup Policy that should be applied to this server"
+          }
+        },
         "useDomainJoinExtension": {
             "type": "string",
             "defaultValue": "No",
@@ -418,6 +447,7 @@
         "networkApiVersion": "2018-07-01",
         "computeApiVersion": "2018-04-01",
         "extensionApiVersion": "2015-06-15",
+        "vaultApiVersion": "2016-06-01",
         "deploymentApiVersion": "2015-01-01",
         "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
         "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('branch'))]",
@@ -594,6 +624,9 @@
                     "extensionApiVersion": {
                         "value": "[variables('extensionApiVersion')]"
                     },
+                    "vaultApiVersion": {
+                      "value": "[variables('vaultApiVersion')]"
+                  },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
                     },
@@ -632,6 +665,18 @@
                     },
                     "bootDiagnosticsStorage": {
                       "value": "[parameters('bootDiagnosticsStorage')]"
+                    },
+                    "backupRequired": {
+                      "value": "[parameters('backupRequired')]"
+                    },
+                    "vaultName": {
+                      "value": "[parameters('vaultName')]"
+                    },
+                    "vaultResourceGroup": {
+                      "value": "[parameters('vaultResourceGroup')]"
+                    },
+                    "backupPolicyName": {
+                      "value": "[parameters('backupPolicyName')]"
                     },
                     "useDomainJoinExtension": {
                       "value": "[parameters('useDomainJoinExtension')]"
