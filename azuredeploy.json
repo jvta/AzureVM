@@ -449,10 +449,14 @@
         "extensionApiVersion": "2015-06-15",
         "vaultApiVersion": "2016-06-01",
         "deploymentApiVersion": "2015-01-01",
+        "mainResourceGroup": "[resourceGroup().name]",
         "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
         "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('branch'))]",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "pipName": "[concat(parameters('vmName'),'-PIP')]",
+        "backupFabric": "Azure",
+        "protectionContainer": "[concat('iaasvmcontainer;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]",
+        "protectedItem": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]",
         "emptyString": "",
         "emptyArray": [],
         "dependsOnPublicIp": [
@@ -722,7 +726,36 @@
                     }
               }
             }
-        }
+        },
+        {
+          "condition": "[equals(parameters('backupRequired'),'Yes')]",
+          "apiVersion": "[variables('deploymentApiVersion')]",
+          "type": "Microsoft.Resources/deployments",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+          ],
+          "resourceGroup": "[parameters('vaultResourceGroup')]",
+          "properties": {
+            "mode": "incremental",
+            "template": {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+              "contentVersion": "1.0.0.0",
+              "parameters": {},
+              "variables": {},
+              "resources": [
+                {
+                  "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
+                  "name": "[concat(parameters('vaultName'), '/', variables('backupFabric'), '/', variables('protectionContainer'), '/', variables('protectedItem'))]",
+                  "properties": {
+                    "protectedItemType": "Microsoft.Compute/virtualMachines",
+                    "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies', parameters('vaultName'), parameters('backupPolicyName'))]",
+                    "sourceResourceId": "[resourceId(variables('mainResourceGroup'),'Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+                  }
+                }
+              ]
+            }
+          }
+      }
     ],
     "outputs": {}
 }
