@@ -168,35 +168,6 @@
             "description": "Storage Account for storing boot diagnostics data"
         }
       },
-      "backupRequired": {
-        "type": "string",
-        "defaultValue": "No",
-        "metadata": {
-            "description": "Whether this server should be added to a Recovery Services Vault for Azure backup"
-          },
-          "allowedValues": [
-            "Yes",
-            "No"
-        ]
-      },
-      "vaultName": {
-        "type": "string",
-        "metadata": {
-          "description": "The Recovery Services Vault to which this server should be joined"
-        }
-      },
-      "vaultResourceGroup": {
-        "type": "string",
-        "metadata": {
-          "description": "The Resource Group containing the Recovery Services Vault to which this server should be joined"
-        }
-      },
-      "backupPolicyName": {
-        "type": "string",
-        "metadata": {
-          "description": "The Backup Policy that should be applied to this server"
-        }
-      },
       "useDomainJoinExtension": {
         "type": "string",
         "defaultValue": "No",
@@ -334,10 +305,7 @@
     "emptyVariable": "",
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
-    },
-    "backupFabric": "Azure",
-    "protectionContainer": "[concat('iaasvmcontainer;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]",
-    "protectedItem": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]"
+    }
   },
   "resources": [
       {
@@ -468,20 +436,6 @@
             }
           }
         ]
-      },
-      {
-        "apiVersion": "[parameters('vaultApiVersion')]",
-        "condition": "[equals(parameters('backupRequired'),'Yes')]",
-        "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
-        "name": "[concat(parameters('vaultName'), '/', variables('backupFabric'), '/', variables('protectionContainer'), '/', variables('protectedItem'))]",
-        "dependsOn": [
-          "[resourceId('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-        ],
-        "properties": {
-          "protectedItemType": "Microsoft.Compute/virtualMachines",
-          "policyId": "[resourceId(parameters('vaultResourceGroup'),'Microsoft.RecoveryServices/vaults/backupPolicies', parameters('vaultName'), parameters('backupPolicyName'))]",
-          "sourceResourceId": "[resourceId('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
-        }
       }
     ],
   "outputs": {}
