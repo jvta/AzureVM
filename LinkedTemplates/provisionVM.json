@@ -264,6 +264,7 @@
     "windowsConfiguration": {
         "provisionVmAgent": "true"
     },
+    "emptyVariable": "",
     "linuxConfiguration": {
         "disablePasswordAuthentication": true,
         "ssh": {
@@ -309,7 +310,7 @@
         "dependsOn": [],
         "properties": {
             "availabilitySet": {
-                "id": "[if(equals(parameters('avSetRequired'),'Yes'), parameters('avSetId'), json('null'))]"
+                "id": "[if(equals(parameters('avSetRequired'),'Yes'), parameters('avSetId'), variables('emptyVariable'))]"
             },
             "hardwareProfile": {
               "vmSize": "[variables('vmSize')]"

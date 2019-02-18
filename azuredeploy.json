@@ -321,6 +321,13 @@
               "description": "Password of additional local user account to be added to local Administrators Group"
             }
           },
+          "branch": {
+            "type": "string",
+            "default": "master",
+            "metadata": {
+              "description": "Code branch for template testing. Remove for master merge"
+            }
+          },
           "tagCostCentre": {
             "type": "string",
             "metadata": {
@@ -372,7 +379,8 @@
         "computeApiVersion": "2017-03-30",
         "extensionApiVersion": "2015-06-15",
         "deploymentApiVersion": "2015-01-01",
-        "templateLink": "https://raw.githubusercontent.com/jvta/AzureVM/master",
+        "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
+        "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('branch'))]",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "pipName": "[concat(parameters('vmName'),'-PIP')]",
         "avSetId": "[resourceId('Microsoft.Compute/availabilitySets', parameters('avSetName'))]",
