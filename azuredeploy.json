@@ -671,18 +671,6 @@
                     "bootDiagnosticsStorage": {
                       "value": "[parameters('bootDiagnosticsStorage')]"
                     },
-                    "backupRequired": {
-                      "value": "[parameters('backupRequired')]"
-                    },
-                    "vaultName": {
-                      "value": "[parameters('vaultName')]"
-                    },
-                    "vaultResourceGroup": {
-                      "value": "[parameters('vaultResourceGroup')]"
-                    },
-                    "backupPolicyName": {
-                      "value": "[parameters('backupPolicyName')]"
-                    },
                     "useDomainJoinExtension": {
                       "value": "[parameters('useDomainJoinExtension')]"
                     },
@@ -734,7 +722,7 @@
           "apiVersion": "[variables('nestedDeploymentApiVersion')]",
           "type": "Microsoft.Resources/deployments",
           "dependsOn": [
-            "[resourceId('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+            "Microsoft.Resources/deployments/provisionCompute"
           ],
           "resourceGroup": "[parameters('vaultResourceGroup')]",
           "properties": {
@@ -748,6 +736,8 @@
                 {
                   "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
                   "name": "[concat(parameters('vaultName'), '/', variables('backupFabric'), '/', variables('protectionContainer'), '/', variables('protectedItem'))]",
+                  "apiVersion": "[variables('vaultApiVersion')]",
+                  "location": "[parameters('location')]",
                   "properties": {
                     "protectedItemType": "Microsoft.Compute/virtualMachines",
                     "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies', parameters('vaultName'), parameters('backupPolicyName'))]",
