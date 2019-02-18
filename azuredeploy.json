@@ -166,6 +166,46 @@
                     "description": "A static private IP address to be used"
                 }
             },
+            "enableAcceleratedNetworking": {
+              "defaultValue": "false",
+              "type": "string",
+              "metadata": {
+                  "description": "Specify whether the NIC should have Accelerated Networking enabled"
+              },
+              "allowedValues": [
+                  "false",
+                  "true"
+              ]
+            },
+            "networkSecurityGroup": {
+              "type": "string",
+              "metadata": {
+                  "description": "Name of an NSG to attach to the NIC"
+              }
+            },
+            "joinLoadBalancer": {
+              "allowedValues": [
+                "Yes",
+                "No"
+            ],
+            "defaultValue": "No",
+            "type": "string",
+            "metadata": {
+                "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is No."
+            }
+          },
+          "loadBalancerName": {
+              "type": "string",
+              "metadata": {
+                  "description": "Name of an Azure Load Balancer to attach to the NIC"
+              }
+          },
+          "loadBalancerBackendPoolName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Backend Pool of the Load Balancer to join"
+            }
+          },
           "platform": {
               "allowedValues": [
                   "Windows",
@@ -439,7 +479,10 @@
                     "contentVersion":"1.0.0.0"
                 },
                 "parameters":{
-                    "apiVersion":{
+                  "location": {
+                    "value": "[parameters('location')]"
+                  },
+                  "apiVersion":{
                         "value":"[variables('networkApiVersion')]"
                     },
                     "name":{
@@ -497,6 +540,21 @@
                 },
                 "privateIpAllocationType": {
                   "value": "[parameters('privateIpAllocationType')]"
+                },
+                "enableAcceleratedNetworking": {
+                  "value": "[parameters('enableAcceleratedNetworking')]"
+                },
+                "networkSecurityGroup": {
+                  "value": "[parameters('networkSecurityGroup')]"
+                },
+                "joinLoadBalancer": {
+                  "value": "[parameters('joinLoadBalancer')]"
+                },
+                "loadBalancerName": {
+                  "value": "[parameters('loadBalancerName')]"
+                },
+                "loadBalancerBackendPoolName": {
+                  "value": "[parameters('loadBalancerBackendPoolName')]"
                 }
               }
             }
