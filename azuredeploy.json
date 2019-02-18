@@ -323,7 +323,7 @@
           },
           "branch": {
             "type": "string",
-            "default": "master",
+            "defaultValue": "master",
             "metadata": {
               "description": "Code branch for template testing. Remove for master merge"
             }
