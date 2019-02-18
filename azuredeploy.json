@@ -383,8 +383,11 @@
         "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('branch'))]",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "pipName": "[concat(parameters('vmName'),'-PIP')]",
-        "emptyVariable": "",
-        "dependsOnPublicIp": "Microsoft.Resources/deployments/ProvisionPublicIp",
+        "emptyString": "",
+        "emptyArray": [],
+        "dependsOnPublicIp": [
+          "Microsoft.Resources/deployments/ProvisionPublicIp"
+        ],
         "tags": {
             "CostCentre": "[parameters('tagCostCentre')]",
             "Application": "[parameters('tagApplication')]",
@@ -458,9 +461,7 @@
             "name": "provisionNetworkInterface",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('deploymentApiVersion')]",
-            "dependsOn": [
-              "[if(equals(parameters('networkInterfaceType'),'Public'),variables('dependsOnPublicIp'),json('null'))]"
-            ],
+            "dependsOn": "[if(equals(parameters('networkInterfaceType'),'Public'),variables('dependsOnPublicIp'),variables('emptyArray'))]",
             "properties": {
               "mode": "Incremental",
               "templateLink": {
@@ -543,7 +544,7 @@
                       "value": "[parameters('avSetRequired')]"
                     },
                     "avSetName": {
-                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), parameters('avSetName'), variables('emptyVariable'))]"
+                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), parameters('avSetName'), variables('emptyString'))]"
                     },
                     "vmOsDiskSize": {
                         "value": "[parameters('vmOsDiskSize')]"
