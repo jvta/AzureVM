@@ -62,11 +62,54 @@
             "metadata": {
                 "description": "Whether IP should be set statically or dynamically"
               }
+          },
+          "enableAcceleratedNetworking": {
+            "type": "string",
+            "metadata": {
+                "description": "Whether the NIC should have Accelerated Networking enabled"
+              }
+          },
+          "networkSecurityGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of an NSG to attach to the NIC"
+              }
+          },
+          "joinLoadBalancer": {
+              "allowedValues": [
+                "Yes",
+                "No"
+            ],
+            "defaultValue": "No",
+            "type": "string",
+            "metadata": {
+                "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is No."
+            }
+          },
+          "loadBalancerName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of an Azure Load Balancer to attach to the NIC"
+              }
+          },
+          "loadBalancerBackendPoolName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Backend Pool of the Load Balancer to join"
+              }
           }
     },
     "variables": {
         "vnetID": "[resourceId(parameters('virtualNetworkRGName'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]"
+        "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
+        "networkSecurityGroup": {
+          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('networkSecurityGroup'))]"
+        },
+        "loadBalancerBackendAddressPools": [
+          {
+            "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/',parameters('loadBalancerBackendPoolName'))]"
+          }
+        ]
     },
     "resources": [
         {
@@ -86,12 +129,12 @@
                               "id": "[variables('subnetRef')]"
                           },
                           "primary": true,
-                          "loadBalancerBackendAddressPools": [
-                          ]
+                          "loadBalancerBackendAddressPools": "[if(equals(parameters('joinLoadBalancer'),'Yes'), variables('loadBalancerBackendAddressPools'), json('null'))]"
                       }
                   }
               ],
-              "enableAcceleratedNetworking": false,
+              "networkSecurityGroup": "[if(empty(parameters('networkSecurityGroup')), json('null'),variables('networkSecurityGroup'))]",
+              "enableAcceleratedNetworking": "[parameters('enableAcceleratedNetworking')]",
               "enableIPForwarding": false,
               "primary": true
             }
