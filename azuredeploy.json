@@ -384,6 +384,7 @@
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
         "pipName": "[concat(parameters('vmName'),'-PIP')]",
         "avSetId": "[resourceId('Microsoft.Compute/availabilitySets', parameters('avSetName'))]",
+        "emptyVariable": "",
         "tags": {
             "CostCentre": "[parameters('tagCostCentre')]",
             "Application": "[parameters('tagApplication')]",
@@ -541,7 +542,7 @@
                       "value": "[parameters('avSetRequired')]"
                     },
                     "avSetId": {
-                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), variables('avSetId'), json('null'))]"
+                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), variables('avSetId'), variables('emptyVariable'))]"
                     },
                     "vmOsDiskSize": {
                         "value": "[parameters('vmOsDiskSize')]"
