@@ -2,6 +2,12 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location to create the resource"
+              }
+        },
         "apiVersion": {
             "type": "string",
             "metadata": {
@@ -40,7 +46,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[parameters('name')]",
             "apiVersion": "[parameters('apiVersion')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('location')]",
             "tags": "[parameters('tags')]",
             "sku": {
                 "name": "[parameters('sku')]"
