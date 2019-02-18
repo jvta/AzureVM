@@ -729,6 +729,7 @@
         },
         {
           "condition": "[equals(parameters('backupRequired'),'Yes')]",
+          "name": "nestedBackupDeployment",
           "apiVersion": "[variables('deploymentApiVersion')]",
           "type": "Microsoft.Resources/deployments",
           "dependsOn": [
