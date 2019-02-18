@@ -64,11 +64,11 @@
             "No"
         ]
       },
-      "avSetId": {
+      "avSetName": {
         "defaultValue": "None",
         "type": "string",
         "metadata": {
-            "description": "The Resource ID of the Availability Set, if required. Specify None if not required"
+            "description": "The name of the Availability Set, if required. Specify None if not required"
         }
       },
       "vmOSDiskSize": {
@@ -265,6 +265,9 @@
         "provisionVmAgent": "true"
     },
     "emptyVariable": "",
+    "availabilitySet": {
+      "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
+    },
     "linuxConfiguration": {
         "disablePasswordAuthentication": true,
         "ssh": {
@@ -309,9 +312,7 @@
         },
         "dependsOn": [],
         "properties": {
-            "availabilitySet": {
-                "id": "[if(equals(parameters('avSetRequired'),'Yes'), parameters('avSetId'), variables('emptyVariable'))]"
-            },
+            "availabilitySet": "[if(equals(parameters('avSetRequired'),'Yes'), variables('availabilitySet'), json('null'))]",
             "hardwareProfile": {
               "vmSize": "[variables('vmSize')]"
             },
