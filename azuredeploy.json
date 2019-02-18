@@ -449,6 +449,7 @@
         "extensionApiVersion": "2015-06-15",
         "vaultApiVersion": "2016-06-01",
         "deploymentApiVersion": "2015-01-01",
+        "nestedDeploymentApiVersion": "2017-05-10",
         "mainResourceGroup": "[resourceGroup().name]",
         "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
         "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('branch'))]",
@@ -730,7 +731,7 @@
         {
           "condition": "[equals(parameters('backupRequired'),'Yes')]",
           "name": "nestedBackupDeployment",
-          "apiVersion": "[variables('deploymentApiVersion')]",
+          "apiVersion": "[variables('nestedDeploymentApiVersion')]",
           "type": "Microsoft.Resources/deployments",
           "dependsOn": [
             "[resourceId('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
