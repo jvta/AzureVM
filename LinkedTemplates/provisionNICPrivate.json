@@ -65,14 +65,14 @@
           },
           "boolEnableAcceleratedNetworking": {
             "type": "bool",
-            "defaultValue": "false",
+            "defaultValue": false,
             "metadata": {
                 "description": "Whether the NIC should have Accelerated Networking enabled"
               }
           },
           "boolAttachNetworkSecurityGroup": {
             "type": "bool",
-            "defaultValue": "false",
+            "defaultValue": false,
             "metadata": {
                 "description": "Whether the NIC should have an NSG attached"
               }
@@ -84,15 +84,11 @@
               }
           },
           "boolJoinLoadBalancer": {
-            "defaultValue": "false",
+            "defaultValue": false,
             "type": "bool",
             "metadata": {
                 "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is No."
-            },
-              "allowedValues": [
-                "true",
-                "false"
-            ]
+            }
           },
           "loadBalancerName": {
             "type": "string",

@@ -55,14 +55,10 @@
       },
       "boolAvSetRequired": {
         "type": "bool",
-        "defaultValue": "false",
+        "defaultValue": false,
         "metadata": {
             "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
-          },
-          "allowedValues": [
-            "true",
-            "false"
-        ]
+          }
       },
       "avSetName": {
         "defaultValue": "None",
@@ -140,14 +136,10 @@
       },
       "boolUseHybridUseBenefit": {
         "type": "bool",
-        "defaultValue": "false",
+        "defaultValue": false,
         "metadata": {
             "description": "Whether this server should use Hybrid Use Benefit licencing. Default is false"
-          },
-          "allowedValues": [
-            "true",
-            "false"
-        ]
+          }
       },
       "timeZone": {
         "type": "string",
@@ -181,14 +173,10 @@
       },
       "boolUseDomainJoinExtension": {
         "type": "bool",
-        "defaultValue": "false",
+        "defaultValue": false,
         "metadata": {
             "description": "Whether this server should be domain joined"
-          },
-          "allowedValues": [
-            "true",
-            "false"
-        ]
+          }
       },
       "domainToJoin": {
         "type": "string",
@@ -216,14 +204,10 @@
       },
       "boolUseDSCExtension": {
         "type": "bool",
-        "defaultValue": "true",
+        "defaultValue": true,
         "metadata": {
             "description": "Whether this server should use PowerShell DSC Extension"
-          },
-          "allowedValues": [
-            "true",
-            "false"
-        ]
+          }
       },
       "dscExtensionUpdateTagVersion": {
         "type": "string",

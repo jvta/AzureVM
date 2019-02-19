@@ -27,25 +27,17 @@
           },
           "boolAvSetRequired": {
             "type": "bool",
-            "defaultValue": "false",
+            "defaultValue": false,
             "metadata": {
                 "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
-              },
-              "allowedValues": [
-                "false",
-                "true"
-            ]
+              }
           },
           "boolAvSetCreateNew": {
             "type": "bool",
-            "defaultValue": "false",
+            "defaultValue": false,
             "metadata": {
                 "description": "Whether a new AV Set should be created. Allowed values are true or false"
-              },
-              "allowedValues": [
-                "false",
-                "true"
-            ]
+              }
           },
           "avSetName": {
             "defaultValue": "None",
@@ -167,26 +159,18 @@
                 }
             },
             "boolEnableAcceleratedNetworking": {
-              "defaultValue": "false",
+              "defaultValue": false,
               "type": "bool",
               "metadata": {
                   "description": "Specify whether the NIC should have Accelerated Networking enabled"
-              },
-              "allowedValues": [
-                  "false",
-                  "true"
-              ]
+              }
             },
             "boolAttachNetworkSecurityGroup": {
-              "defaultValue": "false",
+              "defaultValue": false,
               "type": "bool",
               "metadata": {
                   "description": "Specify whether the NIC should have an NSG attached"
-              },
-              "allowedValues": [
-                  "false",
-                  "true"
-              ]
+              }
             },
             "networkSecurityGroup": {
               "type": "string",
@@ -195,15 +179,11 @@
               }
             },
             "boolJoinLoadBalancer": {
-            "defaultValue": "false",
+            "defaultValue": false,
             "type": "bool",
             "metadata": {
                 "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is false"
-            },
-               "allowedValues": [
-                "true",
-                "false"
-            ]
+            }
           },
           "loadBalancerName": {
               "type": "string",
@@ -229,14 +209,10 @@
           },
           "boolUseHybridUseBenefit": {
             "type": "bool",
-            "defaultValue": "false",
+            "defaultValue": false,
             "metadata": {
                 "description": "Whether this server should use Hybrid Use Benefit licencing. Default is false"
-              },
-              "allowedValues": [
-                "true",
-                "false"
-            ]
+              }
           },
           "timeZone": {
             "type": "string",
@@ -298,14 +274,10 @@
         },
         "boolBackupRequired": {
           "type": "bool",
-          "defaultValue": "false",
+          "defaultValue": false,
           "metadata": {
               "description": "Whether this server should be added to a Recovery Services Vault for Azure backup"
-            },
-            "allowedValues": [
-              "true",
-              "false"
-          ]
+            }
         },
         "vaultName": {
           "type": "string",
@@ -327,14 +299,10 @@
         },
         "boolUseDomainJoinExtension": {
             "type": "bool",
-            "defaultValue": "false",
+            "defaultValue": false,
             "metadata": {
                 "description": "Whether this server should be domain joined"
-              },
-              "allowedValues": [
-                "true",
-                "false"
-            ]
+              }
           },
           "domainToJoin": {
             "type": "string",
@@ -362,14 +330,10 @@
           },
           "boolUseDSCExtension": {
             "type": "bool",
-            "defaultValue": "true",
+            "defaultValue": true,
             "metadata": {
                 "description": "Whether this server should use PowerShell DSC Extension"
-              },
-              "allowedValues": [
-                "true",
-                "false"
-            ]
+              }
           },
           "dscExtensionUpdateTagVersion": {
             "type": "string",
@@ -661,9 +625,6 @@
                     "extensionApiVersion": {
                         "value": "[variables('extensionApiVersion')]"
                     },
-                    "vaultApiVersion": {
-                      "value": "[variables('vaultApiVersion')]"
-                  },
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
                     },
