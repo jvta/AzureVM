@@ -298,34 +298,37 @@
           "version": "latest"
         }
     },
-    "emptyVariable": "",
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
     },
-    "dataDiskNonZeroCheck": [1,"int(parameters('numDataDisks'))"],
-    "dataDisksEmpty":{
-      "dataDisks": []
-    },
-    "dataDisksMulti": [
+    "dataDisksMulti": {
+      "copy": [
         {
-        "copy": [
-          {
-          "name": "dataDisks",
-          "count": "[max(1,int(parameters('numDataDisks')))]",
-          "input": {
-            "caching": "[parameters('dataDiskCaching')]",
-            "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
-            "lun": "[copyIndex('dataDisks')]",
-            "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
-            "createOption": "Empty",
-              "managedDisk": {
-                "storageAccountType": "[parameters('dataDiskStorageType')]"
-              }
+        "name": "dataDisks",
+        "count": "[max(1,int(parameters('numDataDisks')))]",
+        "input": {
+          "caching": "[parameters('dataDiskCaching')]",
+          "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
+          "lun": "[copyIndex('dataDisks')]",
+          "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
+          "createOption": "Empty",
+            "managedDisk": {
+              "storageAccountType": "[parameters('dataDiskStorageType')]"
             }
           }
-        ]
+        }
+      ]
+    },
+    "dataDisksSingle": {
+      "caching": "[parameters('dataDiskCaching')]",
+      "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
+      "lun": 0,
+      "name": "[concat(parameters('vmName'),'-datadisk0')]",
+      "createOption": "Empty",
+      "managedDisk": {
+        "storageAccountType": "[parameters('dataDiskStorageType')]"
       }
-    ]
+    }
   },
   "resources": [
       {
@@ -361,7 +364,7 @@
                     },
                     "caching": "ReadWrite"
                 },
-                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), json('null'))]"
+                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), if(equals(parameters('numDataDisks'), 1), variables('dataDisksSingle'), variables('dataDisksMulti')), json('null'))]"
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
