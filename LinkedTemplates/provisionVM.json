@@ -306,24 +306,26 @@
     "dataDisksEmpty":{
       "dataDisks": []
     },
-    "dataDisksMulti": {
-      "copy": [
+    "dataDisksMulti": [
         {
-        "name": "dataDisks",
-        "count": "[max(1,int(parameters('numDataDisks')))]",
-        "input": {
-          "caching": "[parameters('dataDiskCaching')]",
-          "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
-          "lun": "[copyIndex('dataDisks')]",
-          "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
-          "createOption": "Empty",
-            "managedDisk": {
-              "storageAccountType": "[parameters('dataDiskStorageType')]"
+        "copy": [
+          {
+          "name": "dataDisks",
+          "count": "[max(1,int(parameters('numDataDisks')))]",
+          "input": {
+            "caching": "[parameters('dataDiskCaching')]",
+            "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
+            "lun": "[copyIndex('dataDisks')]",
+            "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
+            "createOption": "Empty",
+              "managedDisk": {
+                "storageAccountType": "[parameters('dataDiskStorageType')]"
+              }
             }
           }
-        }
-      ]
-    }
+        ]
+      }
+    ]
   },
   "resources": [
       {
