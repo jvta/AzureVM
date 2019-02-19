@@ -25,26 +25,26 @@
                 "description": "Specify the size of the VM required."
             }
           },
-          "avSetRequired": {
-            "type": "string",
-            "defaultValue": "No",
+          "boolAvSetRequired": {
+            "type": "bool",
+            "defaultValue": "false",
             "metadata": {
-                "description": "Whether this server should belong to an Availability Set. Allowed values are Yes or No"
+                "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
               },
               "allowedValues": [
-                "Yes",
-                "No"
+                "false",
+                "true"
             ]
           },
-          "avSetCreateNew": {
-            "type": "string",
-            "defaultValue": "No",
+          "boolAvSetCreateNew": {
+            "type": "bool",
+            "defaultValue": "false",
             "metadata": {
-                "description": "Whether a new AV Set should be created"
+                "description": "Whether a new AV Set should be created. Allowed values are true or false"
               },
               "allowedValues": [
-                "Yes",
-                "No"
+                "false",
+                "true"
             ]
           },
           "avSetName": {
@@ -114,7 +114,7 @@
                 "ReadWrite"
             ]
           },
-          "networkInterfaceType": {
+          "networkPrivateOrPublic": {
             "type": "string",
             "defaultValue": "Private",
             "metadata": {
@@ -166,11 +166,22 @@
                     "description": "A static private IP address to be used"
                 }
             },
-            "enableAcceleratedNetworking": {
+            "boolEnableAcceleratedNetworking": {
               "defaultValue": "false",
-              "type": "string",
+              "type": "bool",
               "metadata": {
                   "description": "Specify whether the NIC should have Accelerated Networking enabled"
+              },
+              "allowedValues": [
+                  "false",
+                  "true"
+              ]
+            },
+            "boolAttachNetworkSecurityGroup": {
+              "defaultValue": "false",
+              "type": "bool",
+              "metadata": {
+                  "description": "Specify whether the NIC should have an NSG attached"
               },
               "allowedValues": [
                   "false",
@@ -183,16 +194,16 @@
                   "description": "Name of an NSG to attach to the NIC"
               }
             },
-            "joinLoadBalancer": {
-              "allowedValues": [
-                "Yes",
-                "No"
-            ],
-            "defaultValue": "No",
-            "type": "string",
+            "boolJoinLoadBalancer": {
+            "defaultValue": "false",
+            "type": "bool",
             "metadata": {
-                "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is No."
-            }
+                "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is false"
+            },
+               "allowedValues": [
+                "true",
+                "false"
+            ]
           },
           "loadBalancerName": {
               "type": "string",
@@ -267,15 +278,15 @@
             "description": "Storage Account for storing boot diagnostics data"
           }
         },
-        "backupRequired": {
-          "type": "string",
-          "defaultValue": "No",
+        "boolBackupRequired": {
+          "type": "bool",
+          "defaultValue": "false",
           "metadata": {
               "description": "Whether this server should be added to a Recovery Services Vault for Azure backup"
             },
             "allowedValues": [
-              "Yes",
-              "No"
+              "true",
+              "false"
           ]
         },
         "vaultName": {
@@ -296,15 +307,15 @@
             "description": "The Backup Policy that should be applied to this server"
           }
         },
-        "useDomainJoinExtension": {
-            "type": "string",
-            "defaultValue": "No",
+        "boolUseDomainJoinExtension": {
+            "type": "bool",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Whether this server should be domain joined"
               },
               "allowedValues": [
-                "Yes",
-                "No"
+                "true",
+                "false"
             ]
           },
           "domainToJoin": {
@@ -331,15 +342,15 @@
               "description": "The domain account password for domain join"
             }
           },
-          "useDSCExtension": {
-            "type": "string",
-            "defaultValue": "Yes",
+          "boolUseDSCExtension": {
+            "type": "bool",
+            "defaultValue": "true",
             "metadata": {
                 "description": "Whether this server should use PowerShell DSC Extension"
               },
               "allowedValues": [
-                "Yes",
-                "No"
+                "true",
+                "false"
             ]
           },
           "dscExtensionUpdateTagVersion": {
@@ -459,10 +470,6 @@
         "protectionContainer": "[concat('iaasvmcontainer;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]",
         "protectedItem": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]",
         "emptyString": "",
-        "emptyArray": [],
-        "dependsOnPublicIp": [
-          "Microsoft.Resources/deployments/ProvisionPublicIp"
-        ],
         "tags": {
             "CostCentre": "[parameters('tagCostCentre')]",
             "Application": "[parameters('tagApplication')]",
@@ -474,7 +481,7 @@
     },
     "resources": [
         {
-            "condition": "[equals(parameters('avSetCreateNew'),'Yes')]",
+            "condition": "[and(parameters('boolAvSetCreateNew'),parameters('boolAvSetRequired'))]",
             "type":"Microsoft.Resources/deployments",
             "name":"provisionAvSet",
             "apiVersion":"[variables('deploymentApiVersion')]",
@@ -502,7 +509,7 @@
             }
         },
         {
-            "condition": "[equals(parameters('networkInterfaceType'),'Public')]",
+            "condition": "[equals(parameters('networkPrivateOrPublic'),'Public')]",
             "type":"Microsoft.Resources/deployments",
             "name":"provisionPublicIp",
             "apiVersion":"[variables('deploymentApiVersion')]",
@@ -539,10 +546,13 @@
             "name": "provisionNetworkInterface",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('deploymentApiVersion')]",
+            "dependsOn":[
+              "Microsoft.Resources/deployments/provisionPublicIp"
+            ],
             "properties": {
               "mode": "Incremental",
               "templateLink": {
-                "uri": "[concat(variables('templateLink'),'/LinkedTemplates/','provisionNIC',parameters('networkInterfaceType'),'.json')]",
+                "uri": "[concat(variables('templateLink'),'/LinkedTemplates/','provisionNIC',parameters('networkPrivateOrPublic'),'.json')]",
                 "contentVersion": "1.0.0.0"
               },
               "parameters": {
@@ -553,7 +563,7 @@
                     "value":"[variables('tags')]"
                 },
                 "pipId": {
-                    "value": "[if(equals(parameters('networkInterfaceType'),'Public'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
+                    "value": "[if(equals(parameters('networkPrivateOrPublic'),'Public'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
                 },
                 "nicName": {
                   "value": "[variables('nicName')]"
@@ -576,14 +586,17 @@
                 "privateIpAllocationType": {
                   "value": "[parameters('privateIpAllocationType')]"
                 },
-                "enableAcceleratedNetworking": {
-                  "value": "[parameters('enableAcceleratedNetworking')]"
+                "boolEnableAcceleratedNetworking": {
+                  "value": "[parameters('boolEnableAcceleratedNetworking')]"
+                },
+                "boolAttachNetworkSecurityGroup": {
+                  "value": "[parameters('boolAttachNetworkSecurityGroup')]"
                 },
                 "networkSecurityGroup": {
                   "value": "[parameters('networkSecurityGroup')]"
                 },
-                "joinLoadBalancer": {
-                  "value": "[parameters('joinLoadBalancer')]"
+                "boolJoinLoadBalancer": {
+                  "value": "[parameters('boolJoinLoadBalancer')]"
                 },
                 "loadBalancerName": {
                   "value": "[parameters('loadBalancerName')]"
@@ -599,7 +612,8 @@
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "[variables('deploymentApiVersion')]",
             "dependsOn": [
-                "Microsoft.Resources/deployments/ProvisionNetworkInterface"
+                "Microsoft.Resources/deployments/ProvisionNetworkInterface",
+                "Microsoft.Resources/deployments/ProvisionAvSet"
             ],
             "properties": {
                 "mode": "Incremental",
@@ -635,11 +649,11 @@
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
                     },
-                    "avSetRequired": {
-                      "value": "[parameters('avSetRequired')]"
+                    "boolAvSetRequired": {
+                      "value": "[parameters('boolAvSetRequired')]"
                     },
                     "avSetName": {
-                        "value": "[if(equals(parameters('avSetRequired'),'Yes'), parameters('avSetName'), variables('emptyString'))]"
+                        "value": "[if(parameters('boolAvSetRequired'), parameters('avSetName'), variables('emptyString'))]"
                     },
                     "vmOsDiskSize": {
                         "value": "[parameters('vmOsDiskSize')]"
@@ -671,8 +685,8 @@
                     "bootDiagnosticsStorage": {
                       "value": "[parameters('bootDiagnosticsStorage')]"
                     },
-                    "useDomainJoinExtension": {
-                      "value": "[parameters('useDomainJoinExtension')]"
+                    "boolUseDomainJoinExtension": {
+                      "value": "[parameters('boolUseDomainJoinExtension')]"
                     },
                     "domainToJoin": {
                       "value": "[parameters('domainToJoin')]"
@@ -686,8 +700,8 @@
                     "domainJoinAccountPassword": {
                       "value": "[parameters('domainJoinAccountPassword')]"
                     },
-                    "useDSCExtension": {
-                      "value": "[parameters('useDSCExtension')]"
+                    "boolUseDSCExtension": {
+                      "value": "[parameters('boolUseDSCExtension')]"
                     },
                     "dscExtensionUpdateTagVersion": {
                       "value": "[parameters('dscExtensionUpdateTagVersion')]"
@@ -717,7 +731,7 @@
             }
         },
         {
-          "condition": "[equals(parameters('backupRequired'),'Yes')]",
+          "condition": "[equals(parameters('boolBackupRequired'),'true')]",
           "name": "nestedBackupDeployment",
           "apiVersion": "[variables('nestedDeploymentApiVersion')]",
           "type": "Microsoft.Resources/deployments",
