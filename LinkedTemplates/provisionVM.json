@@ -47,28 +47,21 @@
             "description": "VM Extentsion API version to be used"
         }
       },
-      "vaultApiVersion": {
-        "defaultValue": "2016-06-01",
-        "type": "string",
-        "metadata": {
-            "description": "Recovery Services Vault API version to be used"
-        }
-      },
         "adminUsername": {
           "type": "string",
           "metadata": {
               "description": "Specify the username of the Administrator account"
           }
       },
-      "avSetRequired": {
-        "type": "string",
-        "defaultValue": "No",
+      "boolAvSetRequired": {
+        "type": "bool",
+        "defaultValue": "false",
         "metadata": {
-            "description": "Whether this server should belong to an Availability Set. Allowed values are Yes or No"
+            "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
           },
           "allowedValues": [
-            "Yes",
-            "No"
+            "true",
+            "false"
         ]
       },
       "avSetName": {
@@ -168,15 +161,15 @@
             "description": "Storage Account for storing boot diagnostics data"
         }
       },
-      "useDomainJoinExtension": {
-        "type": "string",
-        "defaultValue": "No",
+      "boolUseDomainJoinExtension": {
+        "type": "bool",
+        "defaultValue": "false",
         "metadata": {
             "description": "Whether this server should be domain joined"
           },
           "allowedValues": [
-            "Yes",
-            "No"
+            "true",
+            "false"
         ]
       },
       "domainToJoin": {
@@ -203,15 +196,15 @@
           "description": "The domain account password for domain join"
         }
       },
-      "useDSCExtension": {
-        "type": "string",
-        "defaultValue": "Yes",
+      "boolUseDSCExtension": {
+        "type": "bool",
+        "defaultValue": "true",
         "metadata": {
             "description": "Whether this server should use PowerShell DSC Extension"
           },
           "allowedValues": [
-            "Yes",
-            "No"
+            "true",
+            "false"
         ]
       },
       "dscExtensionUpdateTagVersion": {
@@ -305,6 +298,34 @@
     "emptyVariable": "",
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
+    },
+    "dataDisksMulti": {
+      "copy": [
+        {
+        "name": "dataDisks",
+        "count": "[parameters('numDataDisks')]",
+        "input": {
+          "caching": "[parameters('dataDiskCaching')]",
+          "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
+          "lun": "[copyIndex('dataDisks')]",
+          "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
+          "createOption": "Empty",
+            "managedDisk": {
+              "storageAccountType": "[parameters('dataDiskStorageType')]"
+              }
+          }
+        }
+      ]
+    },
+    "dataDisksSingle": {
+      "caching": "[parameters('dataDiskCaching')]",
+      "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
+      "lun": 0,
+      "name": "[concat(parameters('vmName'),'-datadisk1')]",
+      "createOption": "Empty",
+      "managedDisk": {
+        "storageAccountType": "[parameters('dataDiskStorageType')]"
+      }
     }
   },
   "resources": [
@@ -319,7 +340,7 @@
         },
         "dependsOn": [],
         "properties": {
-            "availabilitySet": "[if(equals(parameters('avSetRequired'),'Yes'), variables('availabilitySet'), json('null'))]",
+            "availabilitySet": "[if(parameters('boolAvSetRequired'), variables('availabilitySet'), json('null'))]",
             "hardwareProfile": {
               "vmSize": "[variables('vmSize')]"
             },
@@ -341,22 +362,7 @@
                     },
                     "caching": "ReadWrite"
                 },
-                "copy": [
-                    {
-                    "name": "dataDisks",
-                    "count": "[parameters('numDataDisks')]",
-                    "input": {
-                      "caching": "[parameters('dataDiskCaching')]",
-                      "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
-                      "lun": "[copyIndex('dataDisks')]",
-                      "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
-                      "createOption": "Empty",
-                         "managedDisk": {
-                          "storageAccountType": "[parameters('dataDiskStorageType')]"
-                          }
-                      }
-                    }
-                ]
+                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), variables('dataDisksSingle'))]"
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
@@ -374,7 +380,7 @@
         },
         "resources": [
           {
-            "condition": "[equals(parameters('useDomainJoinExtension'),'Yes')]",
+            "condition": "[equals(parameters('boolUseDomainJoinExtension'),'Yes')]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/joindomain')]",
@@ -399,7 +405,7 @@
             }
           },
           {
-            "condition": "[equals(parameters('useDSCExtension'),'Yes')]",
+            "condition": "[equals(parameters('boolUseDSCExtension'),'Yes')]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "type": "extensions",
             "name": "Microsoft.Powershell.DSC",
