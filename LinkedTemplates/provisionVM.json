@@ -301,24 +301,22 @@
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
     },
-    "dataDisksMulti": {
-      "copy": [
-        {
-        "name": "dataDisks",
-        "count": "[max(1,int(parameters('numDataDisks')))]",
-        "input": {
-          "caching": "[parameters('dataDiskCaching')]",
-          "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
-          "lun": "[copyIndex('dataDisks')]",
-          "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
-          "createOption": "Empty",
-            "managedDisk": {
-              "storageAccountType": "[parameters('dataDiskStorageType')]"
-            }
+    "copy": [
+      {
+      "name": "dataDisks",
+      "count": "[max(1,int(parameters('numDataDisks')))]",
+      "input": {
+        "caching": "[parameters('dataDiskCaching')]",
+        "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
+        "lun": "[copyIndex('dataDisks')]",
+        "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
+        "createOption": "Empty",
+          "managedDisk": {
+            "storageAccountType": "[parameters('dataDiskStorageType')]"
           }
         }
-      ]
-    },
+      }
+    ],
     "dataDisksSingle": {
       "caching": "[parameters('dataDiskCaching')]",
       "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
@@ -364,7 +362,7 @@
                     },
                     "caching": "ReadWrite"
                 },
-                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), if(equals(parameters('numDataDisks'), 1), variables('dataDisksSingle'), variables('dataDisksMulti')), json('null'))]"
+                "dataDisks": "[if(greater(parameters('numDataDisks'), 1), variables('copy'), if(equals(parameters('numDataDisks'), 1), variables('dataDisksSingle'), json('null')))]"
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
