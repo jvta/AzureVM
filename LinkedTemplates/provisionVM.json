@@ -359,7 +359,7 @@
                     },
                     "caching": "ReadWrite"
                 },
-                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), variables('dataDisksEmpty'))]"
+                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), json('null'))]"
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
