@@ -63,10 +63,18 @@
                 "description": "Whether IP should be set statically or dynamically"
               }
           },
-          "enableAcceleratedNetworking": {
-            "type": "string",
+          "boolEnableAcceleratedNetworking": {
+            "type": "bool",
+            "defaultValue": "false",
             "metadata": {
                 "description": "Whether the NIC should have Accelerated Networking enabled"
+              }
+          },
+          "boolAttachNetworkSecurityGroup": {
+            "type": "bool",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Whether the NIC should have an NSG attached"
               }
           },
           "networkSecurityGroup": {
@@ -75,16 +83,16 @@
                 "description": "Name of an NSG to attach to the NIC"
               }
           },
-          "joinLoadBalancer": {
-              "allowedValues": [
-                "Yes",
-                "No"
-            ],
-            "defaultValue": "No",
-            "type": "string",
+          "boolJoinLoadBalancer": {
+            "defaultValue": "false",
+            "type": "bool",
             "metadata": {
                 "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is No."
-            }
+            },
+              "allowedValues": [
+                "true",
+                "false"
+            ]
           },
           "loadBalancerName": {
             "type": "string",
@@ -129,12 +137,12 @@
                               "id": "[variables('subnetRef')]"
                           },
                           "primary": true,
-                          "loadBalancerBackendAddressPools": "[if(equals(parameters('joinLoadBalancer'),'Yes'), variables('loadBalancerBackendAddressPools'), json('null'))]"
+                          "loadBalancerBackendAddressPools": "[if(parameters('boolJoinLoadBalancer'), variables('loadBalancerBackendAddressPools'), json('null'))]"
                       }
                   }
               ],
-              "networkSecurityGroup": "[if(empty(parameters('networkSecurityGroup')), json('null'),variables('networkSecurityGroup'))]",
-              "enableAcceleratedNetworking": "[parameters('enableAcceleratedNetworking')]",
+              "networkSecurityGroup": "[if(parameters('boolAttachNetworkSecurityGroup'),variables('networkSecurityGroup'),json('null'))]",
+              "enableAcceleratedNetworking": "[parameters('boolEnableAcceleratedNetworking')]",
               "enableIPForwarding": false,
               "primary": true
             }
