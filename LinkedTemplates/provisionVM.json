@@ -302,6 +302,7 @@
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
     },
+    "dataDiskNonZeroCheck": ["parameters('numDataDisks')",1],
     "dataDisksEmpty":{
       "dataDisks": []
     },
@@ -309,7 +310,7 @@
       "copy": [
         {
         "name": "dataDisks",
-        "count": "[parameters('numDataDisks')]",
+        "count": "[max(variables('dataDiskNonZeroCheck'))]",
         "input": {
           "caching": "[parameters('dataDiskCaching')]",
           "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
