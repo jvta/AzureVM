@@ -302,6 +302,9 @@
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
     },
+    "dataDisksEmpty":{
+      "dataDisks": []
+    },
     "dataDisksMulti": {
       "copy": [
         {
@@ -355,7 +358,7 @@
                     },
                     "caching": "ReadWrite"
                 },
-                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), json('null'))]"
+                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), variables('dataDisksEmpty'))]"
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
