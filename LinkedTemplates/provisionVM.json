@@ -310,7 +310,7 @@
       "copy": [
         {
         "name": "dataDisks",
-        "count": "[max(variables('dataDiskNonZeroCheck'))]",
+        "count": "[max(1,int(parameters('numDataDisks')))]",
         "input": {
           "caching": "[parameters('dataDiskCaching')]",
           "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
