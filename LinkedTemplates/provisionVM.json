@@ -315,20 +315,10 @@
           "createOption": "Empty",
             "managedDisk": {
               "storageAccountType": "[parameters('dataDiskStorageType')]"
-              }
+            }
           }
         }
       ]
-    },
-    "dataDisksSingle": {
-      "caching": "[parameters('dataDiskCaching')]",
-      "diskSizeGB": "[parameters('sizeOfDataDisksInGB')]",
-      "lun": 0,
-      "name": "[concat(parameters('vmName'),'-datadisk1')]",
-      "createOption": "Empty",
-      "managedDisk": {
-        "storageAccountType": "[parameters('dataDiskStorageType')]"
-      }
     }
   },
   "resources": [
@@ -365,7 +355,7 @@
                     },
                     "caching": "ReadWrite"
                 },
-                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), variables('dataDisksSingle'))]"
+                "dataDisks": "[if(greater(parameters('numDataDisks'), 0), variables('dataDisksMulti'), json('null'))]"
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
