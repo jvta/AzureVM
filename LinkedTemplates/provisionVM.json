@@ -138,6 +138,24 @@
               "description": "Select the OS type to be provisioned"
           }
       },
+      "boolUseHybridUseBenefit": {
+        "type": "bool",
+        "defaultValue": "false",
+        "metadata": {
+            "description": "Whether this server should use Hybrid Use Benefit licencing. Default is false"
+          },
+          "allowedValues": [
+            "true",
+            "false"
+        ]
+      },
+      "timeZone": {
+        "type": "string",
+        "defaultValue": "AUS Eastern Standard Time",
+        "metadata": {
+            "description": "Timezone to use for this server. Default is AUS Eastern Standard Time"
+        }
+      },
       "authenticationType": {
           "defaultValue": "Password",
           "allowedValues": [
@@ -262,7 +280,8 @@
     "dscExtensionArchiveFileName": "configuration.ps1.zip",
     "vmSize": "[parameters('vmSize')]",
     "windowsConfiguration": {
-        "provisionVmAgent": "true"
+        "provisionVmAgent": "true",
+        "timeZone": "[parameters('timeZone')]"
     },
     "linuxConfiguration": {
         "disablePasswordAuthentication": true,
@@ -370,6 +389,7 @@
                   "storageUri": "[concat('https://',parameters('bootDiagnosticsStorage'),'.blob.core.windows.net')]"
                 }
               },
+            "licenseType": "[if(parameters('boolUseHybridUseBenefit'), 'Windows_Server', json('null'))]",
             "networkProfile": {
                 "networkInterfaces": [
                     {
