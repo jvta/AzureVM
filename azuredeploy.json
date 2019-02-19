@@ -227,6 +227,24 @@
                   "description": "Select the OS type to be provisioned"
               }
           },
+          "boolUseHybridUseBenefit": {
+            "type": "bool",
+            "defaultValue": "false",
+            "metadata": {
+                "description": "Whether this server should use Hybrid Use Benefit licencing. Default is false"
+              },
+              "allowedValues": [
+                "true",
+                "false"
+            ]
+          },
+          "timeZone": {
+            "type": "string",
+            "defaultValue": "AUS Eastern Standard Time",
+            "metadata": {
+                "description": "Timezone to use for this server. Default is AUS Eastern Standard Time"
+            }
+          },
           "adminUsername": {
             "type": "string",
             "metadata": {
@@ -675,6 +693,12 @@
                     },
                     "platform": {
                       "value": "[parameters('platform')]"
+                    },
+                    "timeZone": {
+                      "value": "[parameters('timeZone')]"
+                    },
+                    "boolUseHybridUseBenefit": {
+                      "value": "[parameters('boolUseHybridUseBenefit')]"
                     },
                     "authenticationType": {
                       "value": "[parameters('authenticationType')]"
