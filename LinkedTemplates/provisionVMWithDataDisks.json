@@ -470,7 +470,7 @@
           },
           {
             "condition": "[equals(parameters('boolUseBGInfoExtension'),'true')]",
-            "type": "extensions",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/BGInfo')]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "location": "[parameters('location')]",
