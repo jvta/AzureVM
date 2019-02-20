@@ -387,6 +387,38 @@
               "description": "Password of additional local user account to be added to local Administrators Group"
             }
           },
+          "boolUseBGInfoExtension": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Whether this server should use the BGInfo Extension"
+              }
+          },
+          "boolUseOMSExtension": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Whether this server should use the OMS Agent Extension"
+              }
+          },
+          "OMSResourceGroupName": {
+            "type": "string",
+            "metadata": {
+              "description": "Resource Group where OMS Workspace resides"
+            }
+          },
+          "workspaceName": {
+            "type": "string",
+            "metadata": {
+              "description": "Name of OMS Workspace that agent to attach to"
+            }
+          },
+          "omsProxyUri": {
+            "type": "string",
+            "metadata": {
+              "description": "OMS Proxy URI if required"
+            }
+          },
           "branch": {
             "type": "string",
             "defaultValue": "master",
@@ -716,8 +748,23 @@
                     "localAccountUserName": {
                       "value": "[parameters('localAccountUserName')]"
                     },
-                    "localAccountUserPassword": {
+                     "localAccountUserPassword": {
                       "value": "[parameters('localAccountUserPassword')]"
+                    },
+                    "boolUseBGInfoExtension": {
+                      "value": "[parameters('boolUseBGInfoExtension')]"
+                    },
+                    "boolUseOMSExtension": {
+                      "value": "[parameters('boolUseOMSExtension')]"
+                    },
+                    "OMSResourceGroupName": {
+                      "value": "[parameters('OMSResourceGroupName')]"
+                    },
+                    "workspaceName": {
+                      "value": "[parameters('workspaceName')]"
+                    },
+                    "omsProxyUri": {
+                      "value": "[parameters('omsProxyUri')]"
                     }
               }
             }
