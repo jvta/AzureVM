@@ -255,6 +255,38 @@
         "metadata": {
           "description": "Password of additional local user account to be added to local Administrators Group"
         }
+      },
+      "boolUseBGInfoExtension": {
+        "type": "bool",
+        "defaultValue": true,
+        "metadata": {
+            "description": "Whether this server should use the BGInfo Extension"
+          }
+      },
+      "boolUseOMSExtension": {
+        "type": "bool",
+        "defaultValue": false,
+        "metadata": {
+            "description": "Whether this server should use the OMS Agent Extension"
+          }
+      },
+      "OMSResourceGroupName": {
+        "type": "string",
+        "metadata": {
+          "description": "Resource Group where OMS Workspace resides"
+        }
+      },
+      "workspaceName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of OMS Workspace that agent to attach to"
+        }
+      },
+      "omsProxyUri": {
+        "type": "string",
+        "metadata": {
+          "description": "OMS Proxy URI if required"
+        }
       }
   },
   "variables": {
@@ -359,7 +391,7 @@
         },
         "resources": [
           {
-            "condition": "[equals(parameters('boolUseDomainJoinExtension'),'Yes')]",
+            "condition": "[equals(parameters('boolUseDomainJoinExtension'),'true')]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/joindomain')]",
@@ -384,7 +416,7 @@
             }
           },
           {
-            "condition": "[equals(parameters('boolUseDSCExtension'),'Yes')]",
+            "condition": "[equals(parameters('boolUseDSCExtension'),'true')]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "type": "extensions",
             "name": "Microsoft.Powershell.DSC",
@@ -418,6 +450,49 @@
                 },
                 "configurationUrlSasToken": "[parameters('_artifactsLocationSasToken')]"
               }
+            }
+          },
+          {
+            "condition": "[equals(parameters('boolUseBGInfoExtension'),'true')]",
+            "type": "extensions",
+            "name": "BGInfo",
+            "apiVersion": "[parameters('extensionApiVersion')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+            ],
+            "properties": {
+              "publisher": "Microsoft.Compute",
+              "type": "BGInfo",
+              "typeHandlerVersion": "2.1",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "Properties": [
+                ]
+              }
+            }
+          },
+          {
+            "condition": "[equals(parameters('boolUseOMSExtension'),'true')]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('vmName'),'/','MMAAgent')]",
+            "apiVersion": "2015-05-01-preview",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+            ],
+            "properties": {
+                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                "type": "MicrosoftMonitoringAgent",
+                "typeHandlerVersion": "1.0",
+                "autoUpgradeMinorVersion": true,
+                "settings": {
+                    "workspaceId": "[reference(resourceId(parameters('OMSResourceGroupName'),'Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]",
+                    "proxyUri": "[if(empty(parameters('omsProxyUri')), json('null'),parameters('omsProxyUri'))]"
+                },
+                "protectedSettings": {
+                    "workspaceKey": "[listKeys(resourceId(parameters('OMSResourceGroupName'),'Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                }
             }
           }
         ]
