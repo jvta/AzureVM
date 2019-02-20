@@ -87,21 +87,52 @@
         ]
       },
       "dataDisks": {
-        "type": "array",
+        "type": "object",
         "metadata": {
             "description": "The data disks to attach to the VM"
         }
       },
-       "platform": {
-          "allowedValues": [
-              "Windows",
-              "Linux"
-          ],
-          "type": "string",
-          "metadata": {
-              "description": "Select the OS type to be provisioned"
-          }
-      },
+      "platform": {
+        "defaultValue": "Windows",
+        "type": "string",
+        "metadata": {
+            "description": "Select the OS type to be provisioned. Default is Windows. Provide publisher, offer, sku and version if choosing Custom"
+        },
+         "allowedValues": [
+            "Windows",
+            "Windows10",
+            "Linux",
+            "Custom"
+        ]
+    },
+    "publisher": {
+      "type": "string",
+      "defaultValue": "MicrosoftWindowsServer",
+      "metadata": {
+          "description": "The publisher of the image to use"
+      }
+    },
+    "offer": {
+      "type": "string",
+      "defaultValue": "WindowsServer",
+      "metadata": {
+          "description": "The offer from the selected publisher to select for image to use"
+      }
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "2016-Datacenter",
+      "metadata": {
+          "description": "The SKU of the selected offer and publisher to select for image to use"
+      }
+    },
+    "version": {
+      "type": "string",
+      "defaultValue": "latest",
+      "metadata": {
+          "description": "The version of the selected SKU to use"
+      }
+    },
       "boolUseHybridUseBenefit": {
         "type": "bool",
         "defaultValue": false,
@@ -264,6 +295,12 @@
           "offer": "Windows-10",
           "sku": "rs5-pro",
           "version": "latest"
+        },
+        "Custom": {
+          "publisher": "[parameters('publisher')]",
+          "offer": "[parameters('offer')]",
+          "sku": "[parameters('sku')]",
+          "version": "[parameters('version')]"
         }
     },
     "availabilitySet": {
@@ -309,13 +346,13 @@
                   "name": "dataDisks",
                   "count": "[length(parameters('dataDisks'))]",
                   "input": {
-                    "caching": "[parameters('dataDisks')[copyIndex('dataDisks')].Cache]",
-                    "diskSizeGB": "[parameters('dataDisks')[copyIndex('dataDisks')].Size]",
+                    "caching": "[parameters('dataDisks').disks[copyIndex('dataDisks')].Cache]",
+                    "diskSizeGB": "[parameters('dataDisks').disks[copyIndex('dataDisks')].Size]",
                     "lun": "[copyIndex('dataDisks')]",
                     "name": "[concat(parameters('vmName'),'-datadisk',copyIndex('dataDisks'))]",
                     "createOption": "Empty",
                       "managedDisk": {
-                        "storageAccountType": "[parameters('dataDisks')[copyIndex('dataDisks')].StorageAccountType]"
+                        "storageAccountType": "[parameters('dataDisks').disks[copyIndex('dataDisks')].StorageAccountType]"
                       }
                     }
                   }
