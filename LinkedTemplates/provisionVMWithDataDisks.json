@@ -344,7 +344,7 @@
                 "copy": [
                   {
                   "name": "dataDisks",
-                  "count": "[length(parameters('dataDisks'))]",
+                  "count": "[length(parameters('dataDisks').disks)]",
                   "input": {
                     "caching": "[parameters('dataDisks').disks[copyIndex('dataDisks')].Cache]",
                     "diskSizeGB": "[parameters('dataDisks').disks[copyIndex('dataDisks')].Size]",
