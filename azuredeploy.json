@@ -67,11 +67,52 @@
             ]
           },
           "dataDisks": {
-            "type": "array",
+            "type": "object",
             "metadata": {
                 "description": "The data disks to attach to the VM"
             }
           },
+          "platform": {
+            "defaultValue": "Windows",
+            "type": "string",
+            "metadata": {
+                "description": "Select the OS type to be provisioned. Default is Windows. Provide publisher, offer, sku and version if choosing Custom"
+            },
+             "allowedValues": [
+                "Windows",
+                "Windows10",
+                "Linux",
+                "Custom"
+            ]
+        },
+        "publisher": {
+          "type": "string",
+          "defaultValue": "MicrosoftWindowsServer",
+          "metadata": {
+              "description": "The publisher of the image to use"
+          }
+        },
+        "offer": {
+          "type": "string",
+          "defaultValue": "WindowsServer",
+          "metadata": {
+              "description": "The offer from the selected publisher to select for image to use"
+          }
+        },
+        "sku": {
+          "type": "string",
+          "defaultValue": "2016-Datacenter",
+          "metadata": {
+              "description": "The SKU of the selected offer and publisher to select for image to use"
+          }
+        },
+        "version": {
+          "type": "string",
+          "defaultValue": "latest",
+          "metadata": {
+              "description": "The version of the selected SKU to use"
+          }
+        },
           "networkPrivateOrPublic": {
             "type": "string",
             "defaultValue": "Private",
@@ -162,16 +203,6 @@
             "metadata": {
                 "description": "Name of the Backend Pool of the Load Balancer to join"
             }
-          },
-          "platform": {
-              "allowedValues": [
-                  "Windows",
-                  "Linux"
-              ],
-              "type": "string",
-              "metadata": {
-                  "description": "Select the OS type to be provisioned"
-              }
           },
           "boolUseHybridUseBenefit": {
             "type": "bool",
@@ -611,6 +642,18 @@
                     },
                     "platform": {
                       "value": "[parameters('platform')]"
+                    },
+                    "publisher": {
+                      "value": "[parameters('publisher')]"
+                    },
+                    "offer": {
+                      "value": "[parameters('offer')]"
+                    },
+                    "sku": {
+                      "value": "[parameters('sku')]"
+                    },
+                    "version": {
+                      "value": "[parameters('version')]"
                     },
                     "timeZone": {
                       "value": "[parameters('timeZone')]"
