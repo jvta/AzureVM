@@ -66,6 +66,13 @@
                 "Premium_LRS"
             ]
           },
+          "boolAddDataDisks": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Whether the VM will require data disks"
+              }
+          },
           "dataDisks": {
             "type": "object",
             "metadata": {
@@ -597,7 +604,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('templateLink'),'/LinkedTemplates/provisionVM',if(equals(length(parameters('dataDisks')),0),'NoDataDisks','WithDataDisks'),'.json')]",
+                    "uri": "[concat(variables('templateLink'),'/LinkedTemplates/provisionVM',if(parameters('boolAddDataDisks'),'WithDataDisks','NoDataDisks'),'.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
