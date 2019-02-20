@@ -270,16 +270,16 @@
             "description": "Whether this server should use the OMS Agent Extension"
           }
       },
-      "OMSResourceGroupName": {
+      "omsWorkspaceId": {
         "type": "string",
         "metadata": {
-          "description": "Resource Group where OMS Workspace resides"
+          "description": "OMS Workspace ID to connect to"
         }
       },
-      "workspaceName": {
+      "omsWorkspaceKey": {
         "type": "string",
         "metadata": {
-          "description": "Name of OMS Workspace that agent to attach to"
+          "description": "Primary Key of the OMS Workspace selected"
         }
       },
       "omsProxyUri": {
@@ -487,11 +487,11 @@
                 "typeHandlerVersion": "1.0",
                 "autoUpgradeMinorVersion": true,
                 "settings": {
-                    "workspaceId": "[reference(resourceId(parameters('OMSResourceGroupName'),'Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').customerId]",
+                    "workspaceId": "[parameters('omsWorkspaceId')]",
                     "proxyUri": "[if(empty(parameters('omsProxyUri')), json('null'),parameters('omsProxyUri'))]"
                 },
                 "protectedSettings": {
-                    "workspaceKey": "[listKeys(resourceId(parameters('OMSResourceGroupName'),'Microsoft.OperationalInsights/workspaces/', parameters('workspaceName')), '2015-03-20').primarySharedKey]"
+                    "workspaceKey": "[parameters('omsWorkspaceKey')]"
                 }
             }
           }

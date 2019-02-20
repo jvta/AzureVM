@@ -401,16 +401,16 @@
                 "description": "Whether this server should use the OMS Agent Extension"
               }
           },
-          "OMSResourceGroupName": {
+          "omsWorkspaceId": {
             "type": "string",
             "metadata": {
-              "description": "Resource Group where OMS Workspace resides"
+              "description": "OMS Workspace ID to connect to"
             }
           },
-          "workspaceName": {
+          "omsWorkspaceKey": {
             "type": "string",
             "metadata": {
-              "description": "Name of OMS Workspace that agent to attach to"
+              "description": "Primary Key of the OMS Workspace selected"
             }
           },
           "omsProxyUri": {
@@ -757,11 +757,11 @@
                     "boolUseOMSExtension": {
                       "value": "[parameters('boolUseOMSExtension')]"
                     },
-                    "OMSResourceGroupName": {
-                      "value": "[parameters('OMSResourceGroupName')]"
+                    "omsWorkspaceId": {
+                      "value": "[parameters('omsWorkspaceId')]"
                     },
-                    "workspaceName": {
-                      "value": "[parameters('workspaceName')]"
+                    "omsWorkspaceKey": {
+                      "value": "[parameters('omsWorkspaceKey')]"
                     },
                     "omsProxyUri": {
                       "value": "[parameters('omsProxyUri')]"
