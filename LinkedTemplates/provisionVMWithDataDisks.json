@@ -196,7 +196,7 @@
         }
       },
       "domainJoinAccountPassword": {
-        "type": "string",
+        "type": "secureString",
         "metadata": {
           "description": "The domain account password for domain join"
         }
@@ -221,7 +221,7 @@
         }
       },
       "_artifactsLocationSasToken": {
-        "type": "string",
+        "type": "secureString",
         "metadata": {
           "description": "SAS token for access to the DSC extension file"
         }
@@ -233,13 +233,13 @@
         }
       },
       "storageUserName": {
-        "type": "string",
+        "type": "secureString",
         "metadata": {
           "description": "The storage account where the DSC related tools downloads are saved for this environment"
         }
       },
       "storagePassword": {
-        "type": "string",
+        "type": "secureString",
         "metadata": {
           "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
         }
@@ -251,7 +251,7 @@
         }
       },
       "localAccountUserPassword": {
-        "type": "securestring",
+        "type": "secureString",
         "metadata": {
           "description": "Password of additional local user account to be added to local Administrators Group"
         }
@@ -277,7 +277,7 @@
         }
       },
       "omsWorkspaceKey": {
-        "type": "string",
+        "type": "secureString",
         "metadata": {
           "description": "Primary Key of the OMS Workspace selected"
         }
