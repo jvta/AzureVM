@@ -296,7 +296,7 @@
     "vmSize": "[parameters('vmSize')]",
     "true": true,
     "windowsConfiguration": {
-        "provisionVmAgent": "true",
+        "provisionVmAgent": true,
         "timeZone": "[parameters('timeZone')]"
     },
     "linuxConfiguration": {
@@ -377,7 +377,7 @@
             },
             "diagnosticsProfile": {
                 "bootDiagnostics": {
-                  "enabled": "true",
+                  "enabled": true,
                   "storageUri": "[concat('https://',parameters('bootDiagnosticsStorage'),'.blob.core.windows.net')]"
                 }
               },
@@ -408,7 +408,7 @@
                     "Name": "[parameters('domainToJoin')]",
                     "OUPath": "[parameters('ouPath')]",
                     "User": "[parameters('domainJoinAccount')]",
-                    "Restart": "true",
+                    "Restart": true,
                     "Options": "[variables('domainJoinOptions')]"
                   },
                   "protectedsettings": {
