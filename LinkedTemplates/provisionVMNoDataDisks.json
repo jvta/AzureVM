@@ -455,7 +455,7 @@
           {
             "condition": "[equals(parameters('boolUseBGInfoExtension'),'true')]",
             "type": "extensions",
-            "name": "BGInfo",
+            "name": "[concat(parameters('vmName'),'/BGInfo')]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "location": "[parameters('location')]",
             "dependsOn": [
