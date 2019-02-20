@@ -480,6 +480,7 @@
         "deploymentApiVersion": "2015-01-01",
         "nestedDeploymentApiVersion": "2017-05-10",
         "mainResourceGroup": "[resourceGroup().name]",
+        "true": true,
         "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
         "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('branch'))]",
         "nicName": "[concat(parameters('vmName'),'-nic1')]",
@@ -770,7 +771,7 @@
             }
         },
         {
-          "condition": "[equals(parameters('boolBackupRequired'),'true')]",
+          "condition": "[and(parameters('boolBackupRequired'),variables('true'))]",
           "name": "nestedBackupDeployment",
           "apiVersion": "[variables('nestedDeploymentApiVersion')]",
           "type": "Microsoft.Resources/deployments",

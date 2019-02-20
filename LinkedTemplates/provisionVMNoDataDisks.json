@@ -294,6 +294,7 @@
     "dscExtensionArchiveFolder": "windows-powershell-dsc",
     "dscExtensionArchiveFileName": "configuration.ps1.zip",
     "vmSize": "[parameters('vmSize')]",
+    "true": true,
     "windowsConfiguration": {
         "provisionVmAgent": "true",
         "timeZone": "[parameters('timeZone')]"
@@ -390,113 +391,113 @@
             }
         },
         "resources": [
-          {
-            "condition": "[equals(parameters('boolUseDomainJoinExtension'),'true')]",
-            "apiVersion": "[parameters('extensionApiVersion')]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmName'),'/joindomain')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-              "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
-            ],
-            "properties": {
-              "publisher": "Microsoft.Compute",
-              "type": "JsonADDomainExtension",
-              "typeHandlerVersion": "1.0",
-              "settings": {
-                "Name": "[parameters('domainToJoin')]",
-                "OUPath": "[parameters('ouPath')]",
-                "User": "[parameters('domainJoinAccount')]",
-                "Restart": "true",
-                "Options": "[variables('domainJoinOptions')]"
-              },
-              "protectedsettings": {
-                "Password": "[parameters('domainJoinAccountPassword')]"
-              }
-            }
-          },
-          {
-            "condition": "[equals(parameters('boolUseDSCExtension'),'true')]",
-            "apiVersion": "[parameters('extensionApiVersion')]",
-            "type": "extensions",
-            "name": "Microsoft.Powershell.DSC",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-              "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
-            ],
-            "properties": {
-              "publisher": "Microsoft.Powershell",
-              "type": "DSC",
-              "typeHandlerVersion": "2.26",
-              "autoUpgradeMinorVersion": false,
-              "forceUpdateTag": "[parameters('dscExtensionUpdateTagVersion')]",
-              "settings": {
-                "configuration": {
-                  "url": "[concat(parameters('_artifactsLocation'),'/',variables('dscExtensionArchiveFolder'), '/', variables('dscExtensionArchiveFileName'))]",
-                  "script": "configuration.ps1",
-                  "function": "[parameters('dscFunction')]"
-                }
-              },
-              "protectedSettings": {
-                "configurationArguments": {
-                  "storageCredential": {
-                    "userName": "[parameters('storageUserName')]",
-                    "password": "[parameters('storagePassword')]"
+            {
+                "condition": "[and(parameters('boolUseDomainJoinExtension'),variables('true'))]",
+                "apiVersion": "[parameters('extensionApiVersion')]",
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "[concat(parameters('vmName'),'/joindomain')]",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                  "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                ],
+                "properties": {
+                  "publisher": "Microsoft.Compute",
+                  "type": "JsonADDomainExtension",
+                  "typeHandlerVersion": "1.0",
+                  "settings": {
+                    "Name": "[parameters('domainToJoin')]",
+                    "OUPath": "[parameters('ouPath')]",
+                    "User": "[parameters('domainJoinAccount')]",
+                    "Restart": "true",
+                    "Options": "[variables('domainJoinOptions')]"
                   },
-                  "adminCredential": {
-                    "userName": "[parameters('localAccountUserName')]",
-                    "password": "[parameters('localAccountUserPassword')]"
+                  "protectedsettings": {
+                    "Password": "[parameters('domainJoinAccountPassword')]"
                   }
-                },
-                "configurationUrlSasToken": "[parameters('_artifactsLocationSasToken')]"
-              }
-            }
-          },
-          {
-            "condition": "[equals(parameters('boolUseBGInfoExtension'),'true')]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmName'),'/BGInfo')]",
-            "apiVersion": "[parameters('extensionApiVersion')]",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
-            ],
-            "properties": {
-              "publisher": "Microsoft.Compute",
-              "type": "BGInfo",
-              "typeHandlerVersion": "2.1",
-              "autoUpgradeMinorVersion": true,
-              "settings": {
-                "Properties": [
-                ]
-              }
-            }
-          },
-          {
-            "condition": "[equals(parameters('boolUseOMSExtension'),'true')]",
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('vmName'),'/','MMAAgent')]",
-            "apiVersion": "2015-05-01-preview",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
-            ],
-            "properties": {
-                "publisher": "Microsoft.EnterpriseCloud.Monitoring",
-                "type": "MicrosoftMonitoringAgent",
-                "typeHandlerVersion": "1.0",
-                "autoUpgradeMinorVersion": true,
-                "settings": {
-                    "workspaceId": "[parameters('omsWorkspaceId')]",
-                    "proxyUri": "[if(empty(parameters('omsProxyUri')), json('null'),parameters('omsProxyUri'))]"
-                },
-                "protectedSettings": {
-                    "workspaceKey": "[parameters('omsWorkspaceKey')]"
                 }
-            }
+              },
+              {
+                "condition": "[and(parameters('boolUseDSCExtension'),variables('true'))]",
+                "apiVersion": "[parameters('extensionApiVersion')]",
+                "type": "extensions",
+                "name": "Microsoft.Powershell.DSC",
+                "location": "[resourceGroup().location]",
+                "dependsOn": [
+                  "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                ],
+                "properties": {
+                  "publisher": "Microsoft.Powershell",
+                  "type": "DSC",
+                  "typeHandlerVersion": "2.26",
+                  "autoUpgradeMinorVersion": false,
+                  "forceUpdateTag": "[parameters('dscExtensionUpdateTagVersion')]",
+                  "settings": {
+                    "configuration": {
+                      "url": "[concat(parameters('_artifactsLocation'),'/',variables('dscExtensionArchiveFolder'), '/', variables('dscExtensionArchiveFileName'))]",
+                      "script": "configuration.ps1",
+                      "function": "[parameters('dscFunction')]"
+                    }
+                  },
+                  "protectedSettings": {
+                    "configurationArguments": {
+                      "storageCredential": {
+                        "userName": "[parameters('storageUserName')]",
+                        "password": "[parameters('storagePassword')]"
+                      },
+                      "adminCredential": {
+                        "userName": "[parameters('localAccountUserName')]",
+                        "password": "[parameters('localAccountUserPassword')]"
+                      }
+                    },
+                    "configurationUrlSasToken": "[parameters('_artifactsLocationSasToken')]"
+                  }
+                }
+              },
+              {
+                "condition": "[and(parameters('boolUseBGInfoExtension'),variables('true'))]",
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "[concat(parameters('vmName'),'/BGInfo')]",
+                "apiVersion": "[parameters('extensionApiVersion')]",
+                "location": "[parameters('location')]",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                ],
+                "properties": {
+                  "publisher": "Microsoft.Compute",
+                  "type": "BGInfo",
+                  "typeHandlerVersion": "2.1",
+                  "autoUpgradeMinorVersion": true,
+                  "settings": {
+                    "Properties": [
+                    ]
+                  }
+                }
+              },
+              {
+                "condition": "[and(parameters('boolUseOMSExtension'),variables('true'))]",
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "[concat(parameters('vmName'),'/','MMAAgent')]",
+                "apiVersion": "2015-06-15",
+                "location": "[parameters('location')]",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                ],
+                "properties": {
+                    "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+                    "type": "MicrosoftMonitoringAgent",
+                    "typeHandlerVersion": "1.0",
+                    "autoUpgradeMinorVersion": true,
+                    "settings": {
+                        "workspaceId": "[parameters('omsWorkspaceId')]",
+                        "proxyUri": "[if(empty(parameters('omsProxyUri')), json('null'),parameters('omsProxyUri'))]"
+                    },
+                    "protectedSettings": {
+                        "workspaceKey": "[parameters('omsWorkspaceKey')]"
+                    }
+                }
+              }
+            ]
           }
-        ]
-      }
-    ],
+        ],
   "outputs": {}
 }

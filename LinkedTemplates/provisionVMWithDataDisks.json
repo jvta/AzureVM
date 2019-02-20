@@ -294,6 +294,7 @@
     "dscExtensionArchiveFolder": "windows-powershell-dsc",
     "dscExtensionArchiveFileName": "configuration.ps1.zip",
     "vmSize": "[parameters('vmSize')]",
+    "true": true,
     "windowsConfiguration": {
         "provisionVmAgent": "true",
         "timeZone": "[parameters('timeZone')]"
@@ -407,7 +408,7 @@
         },
         "resources": [
           {
-            "condition": "[equals(parameters('boolUseDomainJoinExtension'),'true')]",
+            "condition": "[and(parameters('boolUseDomainJoinExtension'),variables('true'))]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/joindomain')]",
@@ -432,7 +433,7 @@
             }
           },
           {
-            "condition": "[equals(parameters('boolUseDSCExtension'),'true')]",
+            "condition": "[and(parameters('boolUseDSCExtension'),variables('true'))]",
             "apiVersion": "[parameters('extensionApiVersion')]",
             "type": "extensions",
             "name": "Microsoft.Powershell.DSC",
@@ -469,7 +470,7 @@
             }
           },
           {
-            "condition": "[equals(parameters('boolUseBGInfoExtension'),'true')]",
+            "condition": "[and(parameters('boolUseBGInfoExtension'),variables('true'))]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/BGInfo')]",
             "apiVersion": "[parameters('extensionApiVersion')]",
@@ -489,7 +490,7 @@
             }
           },
           {
-            "condition": "[equals(parameters('boolUseOMSExtension'),'true')]",
+            "condition": "[and(parameters('boolUseOMSExtension'),variables('true'))]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('vmName'),'/','MMAAgent')]",
             "apiVersion": "2015-06-15",
