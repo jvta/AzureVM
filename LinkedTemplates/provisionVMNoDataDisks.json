@@ -497,9 +497,9 @@
                 }
               },
               {
-                "condition": "[and(parameters('platform'),'Windows10')]",
+                "condition": "[equals(parameters('platform'),'Windows10')]",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(parameters('vmName'),'/Microsoft.Powershell.DSC')]",
+                "name": "[concat(parameters('vmName'),'/','SOEConfig')]",
                 "apiVersion": "2017-03-30",
                 "location": "[parameters('location')]",
                 "properties": {
