@@ -55,7 +55,7 @@
           },
            "osDiskStorageType": {
             "type": "string",
-            "defaultValue": "Standard_LRS",
+            "defaultValue": "StandardSSD_LRS",
             "metadata": {
                 "group": "Infrastructure Configuration",
                 "description": "The type of disk storage to use for OS Disk. Accepted values are Standard_LRS, StandardSSD_LRS or Premium_LRS"
@@ -80,13 +80,13 @@
             }
           },
           "platform": {
-            "defaultValue": "Windows",
+            "defaultValue": "WindowsSrv",
             "type": "string",
             "metadata": {
                 "description": "Select the OS type to be provisioned. Default is Windows. Provide publisher, offer, sku and version if choosing Custom"
             },
              "allowedValues": [
-                "Windows",
+                "WindowsSrv",
                 "Windows10",
                 "Linux",
                 "Custom"
@@ -243,7 +243,7 @@
             }
         },
         "adminPasswordOrKey": {
-            "type": "SecureString",
+            "type": "securestring",
             "metadata": {
                 "description": "OS Admin password or SSH Key depending on value of authentication type"
             }
@@ -327,7 +327,7 @@
             }
           },
           "domainJoinAccountPassword": {
-            "type": "secureString",
+            "type": "securestring",
             "metadata": {
               "description": "The domain account password for domain join"
             }
@@ -352,7 +352,7 @@
             }
           },
           "_artifactsLocationSasToken": {
-            "type": "secureString",
+            "type": "securestring",
             "metadata": {
               "description": "SAS token for access to the DSC extension file"
             }
@@ -364,13 +364,13 @@
             }
           },
           "storageUserName": {
-            "type": "secureString",
+            "type": "securestring",
             "metadata": {
               "description": "The storage account where the DSC related tools downloads are saved for this environment"
             }
           },
           "storagePassword": {
-            "type": "secureString",
+            "type": "securestring",
             "metadata": {
               "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
             }
@@ -382,7 +382,7 @@
             }
           },
           "localAccountUserPassword": {
-            "type": "secureString",
+            "type": "securestring",
             "metadata": {
               "description": "Password of additional local user account to be added to local Administrators Group"
             }
@@ -408,7 +408,7 @@
             }
           },
           "omsWorkspaceKey": {
-            "type": "secureString",
+            "type": "securestring",
             "metadata": {
               "description": "Primary Key of the OMS Workspace selected"
             }
