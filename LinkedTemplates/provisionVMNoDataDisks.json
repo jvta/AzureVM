@@ -495,6 +495,32 @@
                         "workspaceKey": "[parameters('omsWorkspaceKey')]"
                     }
                 }
+              },
+              {
+                "condition": "[and(parameters('platform'),'Windows10')]",
+                "type": "Microsoft.Compute/virtualMachines/extensions",
+                "name": "[concat(parameters('vmName'),'/Microsoft.Powershell.DSC')]",
+                "apiVersion": "2017-03-30",
+                "location": "[parameters('location')]",
+                "properties": {
+                     "publisher": "Microsoft.Powershell",
+                     "type": "DSC",
+                     "typeHandlerVersion": "2.19",
+                     "autoUpgradeMinorVersion": false,
+                     "settings": {
+                           "ModulesUrl": "https://raw.githubusercontent.com/sarquiss/azure-arm/development/BuildServerDSCconfig.ps1.zip",
+                           "ConfigurationFunction": "BuildServerDSCconfig.ps1\\BuildServer",
+                           "Properties": [],
+                           "Privacy": {
+                               "DataCollection": null
+                              }
+                          }
+                          
+                      },
+                      "resources": [],
+                      "dependsOn": [
+                          "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                      ]
               }
             ]
           }
