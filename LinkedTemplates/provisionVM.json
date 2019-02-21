@@ -160,7 +160,7 @@
           }
       },
       "adminPasswordOrKey": {
-          "type": "SecureString",
+          "type": "securestring",
           "metadata": {
               "description": "OS Admin password or SSH Key depending on value of authentication type"
           }
@@ -285,7 +285,7 @@
             "sku": "7.4",
             "version": "latest"
         },
-        "Windows": {
+        "WindowsServer": {
             "publisher": "MicrosoftWindowsServer",
             "offer": "WindowsServer",
             "sku": "2016-Datacenter",

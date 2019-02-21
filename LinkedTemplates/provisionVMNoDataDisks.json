@@ -159,7 +159,7 @@
           }
       },
       "adminPasswordOrKey": {
-          "type": "secureString",
+          "type": "securestring",
           "metadata": {
               "description": "OS Admin password or SSH Key depending on value of authentication type"
           }
@@ -196,7 +196,7 @@
         }
       },
       "domainJoinAccountPassword": {
-        "type": "secureString",
+        "type": "securestring",
         "metadata": {
           "description": "The domain account password for domain join"
         }
@@ -221,7 +221,7 @@
         }
       },
       "_artifactsLocationSasToken": {
-        "type": "secureString",
+        "type": "securestring",
         "metadata": {
           "description": "SAS token for access to the DSC extension file"
         }
@@ -233,13 +233,13 @@
         }
       },
       "storageUserName": {
-        "type": "secureString",
+        "type": "securestring",
         "metadata": {
           "description": "The storage account where the DSC related tools downloads are saved for this environment"
         }
       },
       "storagePassword": {
-        "type": "secureString",
+        "type": "securestring",
         "metadata": {
           "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
         }
@@ -251,7 +251,7 @@
         }
       },
       "localAccountUserPassword": {
-        "type": "secureString",
+        "type": "securestring",
         "metadata": {
           "description": "Password of additional local user account to be added to local Administrators Group"
         }
@@ -277,7 +277,7 @@
         }
       },
       "omsWorkspaceKey": {
-        "type": "secureString",
+        "type": "securestring",
         "metadata": {
           "description": "Primary Key of the OMS Workspace selected"
         }
@@ -317,7 +317,7 @@
             "sku": "7.4",
             "version": "latest"
         },
-        "Windows": {
+        "WindowsServer": {
             "publisher": "MicrosoftWindowsServer",
             "offer": "WindowsServer",
             "sku": "2016-Datacenter",
