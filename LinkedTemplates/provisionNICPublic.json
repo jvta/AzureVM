@@ -2,137 +2,138 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "type": "string",
-            "metadata": {
-                "description": "Location for the deployment"
-              }
-          },
-          "tags": {
-            "type": "object",
-            "metadata": {
-                "description": "Tags to attach to resource"
-              }
-          },
-          "pipId": {
-            "type": "string",
-            "metadata": {
-                "description": "Resource ID of PIP object"
-              }
-          },
-          "nicName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of NIC object"
-              }
-          },
-          "networkApiVersion": {
-            "type": "string",
-            "metadata": {
-                "description": "API version for this resource"
-              }
-          },
-          "virtualNetworkName": {
-            "type": "string",
-            "metadata": {
-                "description": "VNet name where NIC will reside"
-              }
-          },
-          "virtualNetworkRGName": {
-            "type": "string",
-            "metadata": {
-                "description": "Resource Group of VNet"
-              }
-          },
-          "subnetName": {
-            "type": "string",
-            "metadata": {
-                "description": "Subnet name where NIC will reside"
-              }
-          },
-          "privateIpAddress": {
-            "type": "string",
-            "metadata": {
-                "description": "IP address of server"
-              }
-          },
-          "privateIpAllocationType": {
-            "type": "string",
-            "metadata": {
-                "description": "Whether IP should be set statically or dynamically"
-              }
-          },
-          "boolEnableAcceleratedNetworking": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Whether the NIC should have Accelerated Networking enabled"
-              }
-          },
-          "boolAttachNetworkSecurityGroup": {
-            "type": "bool",
-            "defaultValue": false,
-            "metadata": {
-                "description": "Whether the NIC should have an NSG attached"
-              }
-          },
-          "networkSecurityGroup": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of an NSG to attach to the NIC"
-              }
-          },
-          "boolJoinLoadBalancer": {
-            "defaultValue": false,
-            "type": "bool",
-            "metadata": {
-                "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is No."
-            }
-          },
-          "loadBalancerName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of an Azure Load Balancer to attach to the NIC"
-              }
-          },
-          "loadBalancerBackendPoolName": {
-            "type": "string",
-            "metadata": {
-                "description": "Name of the Backend Pool of the Load Balancer to join"
-              }
+      "strLocation": {
+        "type": "string",
+        "metadata": {
+            "description": "Location for the deployment"
           }
-    },
+      },
+      "objTags": {
+        "type": "object",
+        "metadata": {
+            "description": "Tags to attach to resource"
+          }
+      },
+      "strPipId": {
+        "type": "string",
+        "defaultValue": "None",
+        "metadata": {
+            "description": "Resource ID of PIP object - will get passed from dynamically linked master template but not used for this NIC configuration"
+          }
+      },
+      "strNicName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of NIC object"
+          }
+      },
+      "strNetworkApiVersion": {
+        "type": "string",
+        "metadata": {
+            "description": "API version for this resource"
+          }
+      },
+      "strVirtualNetworkName": {
+        "type": "string",
+        "metadata": {
+            "description": "VNet name where NIC will reside"
+          }
+      },
+      "strVirtualNetworkRGName": {
+        "type": "string",
+        "metadata": {
+            "description": "Resource Group of VNet"
+          }
+      },
+      "strSubnetName": {
+        "type": "string",
+        "metadata": {
+            "description": "Subnet name where NIC will reside"
+          }
+      },
+      "strPrivateIpAddress": {
+        "type": "string",
+        "metadata": {
+            "description": "IP address of server"
+          }
+      },
+      "strPrivateIpAllocationType": {
+        "type": "string",
+        "metadata": {
+            "description": "Whether IP should be set statically or dynamically"
+          }
+      },
+      "boolEnableAcceleratedNetworking": {
+        "type": "bool",
+        "defaultValue": false,
+        "metadata": {
+            "description": "Whether the NIC should have Accelerated Networking enabled"
+          }
+      },
+      "boolAttachNetworkSecurityGroup": {
+        "type": "bool",
+        "defaultValue": false,
+        "metadata": {
+            "description": "Whether the NIC should have an NSG attached"
+          }
+      },
+      "strNetworkSecurityGroup": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of an NSG to attach to the NIC"
+          }
+      },
+      "boolJoinLoadBalancer": {
+        "defaultValue": false,
+        "type": "bool",
+        "metadata": {
+            "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is No."
+        }
+      },
+      "strLoadBalancerName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of an Azure Load Balancer to attach to the NIC"
+          }
+      },
+      "strLoadBalancerBackendPoolName": {
+        "type": "string",
+        "metadata": {
+            "description": "Name of the Backend Pool of the Load Balancer to join"
+          }
+      }
+},
     "variables": {
-        "vnetID": "[resourceId(parameters('virtualNetworkRGName'), 'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-        "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('subnetName'))]",
-        "networkSecurityGroup": {
-          "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('networkSecurityGroup'))]"
-        },
-        "loadBalancerBackendAddressPools": [
-          {
-            "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('loadBalancerName')), '/backendAddressPools/',parameters('loadBalancerBackendPoolName'))]"
-          }
-        ]
-    },
+      "vnetID": "[resourceId(parameters('strVirtualNetworkRGName'), 'Microsoft.Network/virtualNetworks', parameters('strVirtualNetworkName'))]",
+      "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('strSubnetName'))]",
+      "networkSecurityGroup": {
+        "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('strNetworkSecurityGroup'))]"
+      },
+      "loadBalancerBackendAddressPools": [
+        {
+          "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('strLoadBalancerName')), '/backendAddressPools/',parameters('strLoadBalancerBackendPoolName'))]"
+        }
+      ]
+  },
     "resources": [
         {
-            "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('nicName')]",
-            "apiVersion": "[parameters('networkApiVersion')]",
-            "location": "[parameters('location')]",
-            "tags": "[parameters('tags')]",
-            "properties": {
-              "ipConfigurations": [
-                  {
-                      "name": "ipconfig1",
-                      "properties": {
-                          "privateIPAllocationMethod": "[parameters('privateIpAllocationType')]",
-                          "privateIpAddress": "[if(equals(parameters('privateIpAllocationType'),'Static'), parameters('privateIpAddress'), json('null'))]",
+          "type": "Microsoft.Network/networkInterfaces",
+          "name": "[parameters('strNicName')]",
+          "apiVersion": "[parameters('strNetworkApiVersion')]",
+          "location": "[parameters('strLocation')]",
+          "tags": "[parameters('objTags')]",
+          "properties": {
+            "ipConfigurations": [
+                {
+                    "name": "ipconfig1",
+                    "properties": {
+                        "privateIPAllocationMethod": "[parameters('strPrivateIpAllocationType')]",
+                        "privateIpAddress": "[if(equals(parameters('strPrivateIpAllocationType'),'Static'), parameters('strPrivateIpAddress'), json('null'))]",
                           "subnet": {
                               "id": "[variables('subnetRef')]"
                           },
                           "publicIPAddress": {
-                            "id": "[parameters('pipId')]"
+                            "id": "[parameters('strPipId')]"
                           },
                           "primary": true,
                           "loadBalancerBackendAddressPools": "[if(parameters('boolJoinLoadBalancer'), variables('loadBalancerBackendAddressPools'), json('null'))]"
@@ -149,7 +150,7 @@
     "outputs": {
         "resourceID": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]"
+            "value": "[resourceId('Microsoft.Network/networkInterfaces', parameters('strNicName'))]"
         }
     }
 }

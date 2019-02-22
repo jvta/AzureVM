@@ -2,52 +2,52 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "location": {
+    "strLocation": {
         "type": "string",
         "metadata": {
             "description": "Location to create the resource"
         }
     },
-    "vmName": {
+    "strVmName": {
           "type": "string",
           "metadata": {
               "description": "Specify the name of the VM to be provisioned"
           }
       },
-      "vmSize": {
+      "strVmSize": {
           "defaultValue": "Standard_DS2_v2",
           "type": "string",
           "metadata": {
               "description": "Size of the VM"
           }
       },
-      "tags": {
+      "objTags": {
         "type": "object",
         "metadata": {
             "description": "Tags to attach to resource"
           }
       },
-      "nicName": {
+      "strNicName": {
         "type": "string",
         "metadata": {
             "description": "Name of the NIC object to attach to the VM"
         }
       },
-      "computeApiVersion": {
+      "strComputeApiVersion": {
         "defaultValue": "2017-03-30",
         "type": "string",
         "metadata": {
             "description": "Compute API version to be used"
         }
       },
-      "extensionApiVersion": {
+      "strExtensionApiVersion": {
         "defaultValue": "2015-06-15",
         "type": "string",
         "metadata": {
             "description": "VM Extentsion API version to be used"
         }
       },
-        "adminUsername": {
+        "strAdminUsername": {
           "type": "string",
           "metadata": {
               "description": "Specify the username of the Administrator account"
@@ -60,21 +60,21 @@
             "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
           }
       },
-      "avSetName": {
+      "strAvSetName": {
         "defaultValue": "None",
         "type": "string",
         "metadata": {
             "description": "The name of the Availability Set, if required. Specify None if not required"
         }
       },
-      "vmOSDiskSize": {
+      "intVmOSDiskSize": {
         "defaultValue": "None",
         "type": "int",
         "metadata": {
             "description": "The size of the VM OS Disk in GB"
         }
       },
-      "osDiskStorageType": {
+      "strOsDiskStorageType": {
         "type": "string",
         "defaultValue": "StandardSSD_LRS",
         "metadata": {
@@ -86,13 +86,13 @@
             "Premium_LRS"
         ]
       },
-      "dataDisks": {
+      "objDataDisks": {
         "type": "object",
         "metadata": {
             "description": "The data disks to attach to the VM"
         }
       },
-       "platform": {
+       "strPlatform": {
           "defaultValue": "Windows",
           "type": "string",
           "metadata": {
@@ -105,28 +105,28 @@
               "Custom"
           ]
       },
-      "publisher": {
+      "strPublisher": {
         "type": "string",
         "defaultValue": "MicrosoftWindowsServer",
         "metadata": {
             "description": "The publisher of the image to use"
         }
       },
-      "offer": {
+      "strOffer": {
         "type": "string",
         "defaultValue": "WindowsServer",
         "metadata": {
             "description": "The offer from the selected publisher to select for image to use"
         }
       },
-      "sku": {
+      "strSku": {
         "type": "string",
         "defaultValue": "2016-Datacenter",
         "metadata": {
             "description": "The SKU of the selected offer and publisher to select for image to use"
         }
       },
-      "version": {
+      "strVersion": {
         "type": "string",
         "defaultValue": "latest",
         "metadata": {
@@ -140,14 +140,14 @@
             "description": "Whether this server should use Hybrid Use Benefit licencing. Default is false"
           }
       },
-      "timeZone": {
+      "strTimeZone": {
         "type": "string",
         "defaultValue": "AUS Eastern Standard Time",
         "metadata": {
             "description": "Timezone to use for this server. Default is AUS Eastern Standard Time"
         }
       },
-      "authenticationType": {
+      "strAuthenticationType": {
           "defaultValue": "Password",
           "allowedValues": [
               "Password",
@@ -158,13 +158,13 @@
               "description": "Authentication type for the deployment"
           }
       },
-      "adminPasswordOrKey": {
+      "sstrAdminPasswordOrKey": {
           "type": "securestring",
           "metadata": {
               "description": "OS Admin password or SSH Key depending on value of authentication type"
           }
       },
-      "bootDiagnosticsStorage": {
+      "strBootDiagnosticsStorage": {
         "type": "string",
         "metadata": {
             "description": "Storage Account for storing boot diagnostics data"
@@ -177,25 +177,25 @@
             "description": "Whether this server should be domain joined"
           }
       },
-      "domainToJoin": {
+      "strDomainToJoin": {
         "type": "string",
         "metadata": {
           "description": "The domain to which this server should be joined"
         }
       },
-      "ouPath": {
+      "strOuPath": {
         "type": "string",
         "metadata": {
           "description": "The Organisational Unit into which server should be placed in the chosen domain"
         }
       },
-      "domainJoinAccount": {
+      "strDomainJoinAccount": {
         "type": "string",
         "metadata": {
           "description": "The domain account to use for joining the domain"
         }
       },
-      "domainJoinAccountPassword": {
+      "sstrDomainJoinAccountPassword": {
         "type": "securestring",
         "metadata": {
           "description": "The domain account password for domain join"
@@ -208,49 +208,49 @@
             "description": "Whether this server should use PowerShell DSC Extension"
           }
       },
-      "dscExtensionUpdateTagVersion": {
+      "strDscExtensionUpdateTagVersion": {
         "type": "string",
         "metadata": {
           "description": "The current extension revision number. Increment by one with each update to ensure targets refresh their DSC settings"
         }
       },
-      "dscFunction": {
+      "strDscFunction": {
         "type": "string",
         "metadata": {
             "description": "Calls function to execute within DSC configuration file"
         }
       },
-      "_artifactsLocationSasToken": {
+      "sstrArtifactsLocationSasToken": {
         "type": "securestring",
         "metadata": {
           "description": "SAS token for access to the DSC extension file"
         }
       },
-      "_artifactsLocation": {
+      "strArtifactsLocation": {
         "type": "string",
         "metadata": {
           "description": "URI of DSC artifacts required"
         }
       },
-      "storageUserName": {
+      "sstrStorageUserName": {
         "type": "securestring",
         "metadata": {
           "description": "The storage account where the DSC related tools downloads are saved for this environment"
         }
       },
-      "storagePassword": {
+      "sstrStoragePassword": {
         "type": "securestring",
         "metadata": {
           "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
         }
       },
-      "localAccountUserName": {
+      "strLocalAccountUserName": {
         "type": "string",
         "metadata": {
           "description": "Name of additional local user account to be added to local Administrators Group"
         }
       },
-      "localAccountUserPassword": {
+      "sstrLocalAccountUserPassword": {
         "type": "securestring",
         "metadata": {
           "description": "Password of additional local user account to be added to local Administrators Group"
@@ -270,19 +270,19 @@
             "description": "Whether this server should use the OMS Agent Extension"
           }
       },
-      "omsWorkspaceId": {
+      "strOmsWorkspaceId": {
         "type": "string",
         "metadata": {
           "description": "OMS Workspace ID to connect to"
         }
       },
-      "omsWorkspaceKey": {
+      "sstrOmsWorkspaceKey": {
         "type": "securestring",
         "metadata": {
           "description": "Primary Key of the OMS Workspace selected"
         }
       },
-      "omsProxyUri": {
+      "strOmsProxyUri": {
         "type": "string",
         "metadata": {
           "description": "OMS Proxy URI if required"
@@ -293,19 +293,19 @@
     "domainJoinOptions": "3",
     "dscExtensionArchiveFolder": "windows-powershell-dsc",
     "dscExtensionArchiveFileName": "configuration.ps1.zip",
-    "vmSize": "[parameters('vmSize')]",
+    "vmSize": "[parameters('strVmSize')]",
     "true": true,
     "windowsConfiguration": {
         "provisionVmAgent": true,
-        "timeZone": "[parameters('timeZone')]"
+        "timeZone": "[parameters('strTimeZone')]"
     },
     "linuxConfiguration": {
         "disablePasswordAuthentication": true,
         "ssh": {
             "publicKeys": [
                 {
-                    "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-                    "keyData": "[parameters('adminPasswordOrKey')]"
+                    "path": "[concat('/home/', parameters('strAdminUsername'), '/.ssh/authorized_keys')]",
+                    "keyData": "[parameters('sstrAdminPasswordOrKey')]"
                 }
             ]
         }
@@ -330,23 +330,23 @@
           "version": "latest"
         },
         "Custom": {
-            "publisher": "[parameters('publisher')]",
-            "offer": "[parameters('offer')]",
-            "sku": "[parameters('sku')]",
-            "version": "[parameters('version')]"
+            "publisher": "[parameters('strPublisher')]",
+            "offer": "[parameters('strOffer')]",
+            "sku": "[parameters('strSku')]",
+            "version": "[parameters('strVersion')]"
         }
     },
     "availabilitySet": {
-      "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avSetName'))]"
+      "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('strAvSetName'))]"
     }
   },
   "resources": [
       {
         "type": "Microsoft.Compute/virtualMachines",
-        "name": "[parameters('vmName')]",
-        "apiVersion": "[parameters('computeApiVersion')]",
-        "location": "[parameters('location')]",
-        "tags": "[parameters('tags')]",
+        "name": "[parameters('strVmName')]",
+        "apiVersion": "[parameters('strComputeApiVersion')]",
+        "location": "[parameters('strLocation')]",
+        "tags": "[parameters('objTags')]",
         "identity": {
             "type": "SystemAssigned"
         },
@@ -357,20 +357,20 @@
               "vmSize": "[variables('vmSize')]"
             },
             "osProfile": {
-                "computerName": "[parameters('vmName')]",
-                "adminUsername": "[parameters('adminUsername')]",
-                "adminPassword": "[parameters('adminPasswordOrKey')]",
-                "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
-                "windowsConfiguration": "[if(equals(parameters('platform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
+                "computerName": "[parameters('strVmName')]",
+                "adminUsername": "[parameters('strAdminUsername')]",
+                "adminPassword": "[parameters('sstrAdminPasswordOrKey')]",
+                "linuxConfiguration": "[if(equals(parameters('strAuthenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
+                "windowsConfiguration": "[if(equals(parameters('strPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
             },
             "storageProfile": {
-                "imageReference": "[variables('imageReference')[parameters('platform')]]",
+                "imageReference": "[variables('imageReference')[parameters('strPlatform')]]",
                 "osdisk": {
-                    "name": "[concat(parameters('vmName'), '-osDisk')]",
-                    "diskSizeGB": "[parameters('vmOSDiskSize')]",
+                    "name": "[concat(parameters('strVmName'), '-osDisk')]",
+                    "diskSizeGB": "[parameters('intVmOSDiskSize')]",
                     "createOption": "FromImage",
                     "managedDisk": {
-                      "storageAccountType": "[parameters('osDiskStorageType')]"
+                      "storageAccountType": "[parameters('strOsDiskStorageType')]"
                     },
                     "caching": "ReadWrite"
                 }
@@ -378,14 +378,14 @@
             "diagnosticsProfile": {
                 "bootDiagnostics": {
                   "enabled": true,
-                  "storageUri": "[concat('https://',parameters('bootDiagnosticsStorage'),'.blob.core.windows.net')]"
+                  "storageUri": "[concat('https://',parameters('strBootDiagnosticsStorage'),'.blob.core.windows.net')]"
                 }
               },
             "licenseType": "[if(parameters('boolUseHybridUseBenefit'), 'Windows_Server', json('null'))]",
             "networkProfile": {
                 "networkInterfaces": [
                     {
-                        "id": "[resourceId('Microsoft.Network/networkInterfaces/',parameters('nicName'))]"
+                        "id": "[resourceId('Microsoft.Network/networkInterfaces/',parameters('strNicName'))]"
                     }
                 ]
             }
@@ -393,74 +393,74 @@
         "resources": [
             {
                 "condition": "[and(parameters('boolUseDomainJoinExtension'),variables('true'))]",
-                "apiVersion": "[parameters('extensionApiVersion')]",
+                "apiVersion": "[parameters('strExtensionApiVersion')]",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(parameters('vmName'),'/joindomain')]",
+                "name": "[concat(parameters('strVmName'),'/joindomain')]",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
-                  "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                  "[resourceId('Microsoft.Compute/virtualMachines/',parameters('strVmName'))]"
                 ],
                 "properties": {
                   "publisher": "Microsoft.Compute",
                   "type": "JsonADDomainExtension",
                   "typeHandlerVersion": "1.0",
                   "settings": {
-                    "Name": "[parameters('domainToJoin')]",
-                    "OUPath": "[parameters('ouPath')]",
-                    "User": "[parameters('domainJoinAccount')]",
+                    "Name": "[parameters('strDomainToJoin')]",
+                    "OUPath": "[parameters('strOuPath')]",
+                    "User": "[parameters('strDomainJoinAccount')]",
                     "Restart": true,
                     "Options": "[variables('domainJoinOptions')]"
                   },
                   "protectedsettings": {
-                    "Password": "[parameters('domainJoinAccountPassword')]"
+                    "Password": "[parameters('sstrDomainJoinAccountPassword')]"
                   }
                 }
               },
               {
                 "condition": "[and(parameters('boolUseDSCExtension'),variables('true'))]",
-                "apiVersion": "[parameters('extensionApiVersion')]",
+                "apiVersion": "[parameters('strExtensionApiVersion')]",
                 "type": "extensions",
                 "name": "Microsoft.Powershell.DSC",
                 "location": "[resourceGroup().location]",
                 "dependsOn": [
-                  "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                  "[resourceId('Microsoft.Compute/virtualMachines/',parameters('strVmName'))]"
                 ],
                 "properties": {
                   "publisher": "Microsoft.Powershell",
                   "type": "DSC",
                   "typeHandlerVersion": "2.26",
                   "autoUpgradeMinorVersion": false,
-                  "forceUpdateTag": "[parameters('dscExtensionUpdateTagVersion')]",
+                  "forceUpdateTag": "[parameters('strDscExtensionUpdateTagVersion')]",
                   "settings": {
                     "configuration": {
-                      "url": "[concat(parameters('_artifactsLocation'),'/',variables('dscExtensionArchiveFolder'), '/', variables('dscExtensionArchiveFileName'))]",
+                      "url": "[concat(parameters('strArtifactsLocation'),'/',variables('dscExtensionArchiveFolder'), '/', variables('dscExtensionArchiveFileName'))]",
                       "script": "configuration.ps1",
-                      "function": "[parameters('dscFunction')]"
+                      "function": "[parameters('strDscFunction')]"
                     }
                   },
                   "protectedSettings": {
                     "configurationArguments": {
                       "storageCredential": {
-                        "userName": "[parameters('storageUserName')]",
-                        "password": "[parameters('storagePassword')]"
+                        "userName": "[parameters('sstrStorageUserName')]",
+                        "password": "[parameters('sstrStoragePassword')]"
                       },
                       "adminCredential": {
-                        "userName": "[parameters('localAccountUserName')]",
-                        "password": "[parameters('localAccountUserPassword')]"
+                        "userName": "[parameters('strLocalAccountUserName')]",
+                        "password": "[parameters('sstrLocalAccountUserPassword')]"
                       }
                     },
-                    "configurationUrlSasToken": "[parameters('_artifactsLocationSasToken')]"
+                    "configurationUrlSasToken": "[parameters('sstrArtifactsLocationSasToken')]"
                   }
                 }
               },
               {
                 "condition": "[and(parameters('boolUseBGInfoExtension'),variables('true'))]",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(parameters('vmName'),'/BGInfo')]",
-                "apiVersion": "[parameters('extensionApiVersion')]",
-                "location": "[parameters('location')]",
+                "name": "[concat(parameters('strVmName'),'/BGInfo')]",
+                "apiVersion": "[parameters('strExtensionApiVersion')]",
+                "location": "[parameters('strLocation')]",
                 "dependsOn": [
-                    "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                    "[resourceId('Microsoft.Compute/virtualMachines/',parameters('strVmName'))]"
                 ],
                 "properties": {
                   "publisher": "Microsoft.Compute",
@@ -476,11 +476,11 @@
               {
                 "condition": "[and(parameters('boolUseOMSExtension'),variables('true'))]",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(parameters('vmName'),'/','MMAAgent')]",
+                "name": "[concat(parameters('strVmName'),'/','MMAAgent')]",
                 "apiVersion": "2015-06-15",
-                "location": "[parameters('location')]",
+                "location": "[parameters('strLocation')]",
                 "dependsOn": [
-                    "[resourceId('Microsoft.Compute/virtualMachines/',parameters('vmName'))]"
+                    "[resourceId('Microsoft.Compute/virtualMachines/',parameters('strVmName'))]"
                 ],
                 "properties": {
                     "publisher": "Microsoft.EnterpriseCloud.Monitoring",
@@ -488,20 +488,20 @@
                     "typeHandlerVersion": "1.0",
                     "autoUpgradeMinorVersion": true,
                     "settings": {
-                        "workspaceId": "[parameters('omsWorkspaceId')]",
-                        "proxyUri": "[if(empty(parameters('omsProxyUri')), json('null'),parameters('omsProxyUri'))]"
+                        "workspaceId": "[parameters('strOmsWorkspaceId')]",
+                        "proxyUri": "[if(empty(parameters('strOmsProxyUri')), json('null'),parameters('strOmsProxyUri'))]"
                     },
                     "protectedSettings": {
-                        "workspaceKey": "[parameters('omsWorkspaceKey')]"
+                        "workspaceKey": "[parameters('sstrOmsWorkspaceKey')]"
                     }
                 }
               },
               {
-                "condition": "[equals(parameters('platform'),'Windows10')]",
+                "condition": "[equals(parameters('strPlatform'),'Windows10')]",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
-                "name": "[concat(parameters('vmName'),'/','SOEConfig')]",
+                "name": "[concat(parameters('strVmName'),'/','SOEConfig')]",
                 "apiVersion": "2017-03-30",
-                "location": "[parameters('location')]",
+                "location": "[parameters('strLocation')]",
                 "properties": {
                      "publisher": "Microsoft.Powershell",
                      "type": "DSC",
@@ -515,11 +515,11 @@
                                "DataCollection": null
                               }
                           }
-                          
+
                       },
                       "resources": [],
                       "dependsOn": [
-                          "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmName'))]"
+                          "[resourceId('Microsoft.Compute/virtualMachines', parameters('strVmName'))]"
                       ]
               }
             ]

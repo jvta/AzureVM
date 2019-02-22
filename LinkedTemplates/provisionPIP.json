@@ -2,38 +2,38 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
+        "strLocation": {
             "type": "string",
             "metadata": {
                 "description": "Location to create the resource"
               }
         },
-        "apiVersion": {
+        "strApiVersion": {
             "type": "string",
             "metadata": {
                 "description": "API version for this resource"
               }
         },
-        "name": {
+        "strName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the resource"
               }
         },
-        "publicIpAllocationType": {
+        "strPublicIpAllocationType": {
             "type": "string",
             "metadata": {
                 "description": "Whether IP is Static or Dynamic"
               }
         },
-        "sku": {
+        "strSku": {
             "type": "string",
             "defaultValue": "Standard",
             "metadata": {
                 "description": "SKU of Public IP to create"
               }
         },
-        "tags": {
+        "objTags": {
             "type": "object",
             "metadata": {
                 "description": "Tags to attach to resource"
@@ -44,16 +44,16 @@
     "resources": [
         {
             "type": "Microsoft.Network/publicIPAddresses",
-            "name": "[parameters('name')]",
-            "apiVersion": "[parameters('apiVersion')]",
-            "location": "[parameters('location')]",
-            "tags": "[parameters('tags')]",
+            "name": "[parameters('strName')]",
+            "apiVersion": "[parameters('strApiVersion')]",
+            "location": "[parameters('strLocation')]",
+            "tags": "[parameters('objTags')]",
             "sku": {
-                "name": "[parameters('sku')]"
+                "name": "[parameters('strSku')]"
             },
             "properties": {
                 "publicIPAddressVersion": "IPv4",
-                "publicIPAllocationMethod": "[parameters('publicIpAllocationType')]",
+                "publicIPAllocationMethod": "[parameters('strPublicIpAllocationType')]",
                 "idleTimeoutInMinutes": 4
             },
             "dependsOn": []
@@ -62,7 +62,7 @@
     "outputs": {
         "resourceID": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('name'))]"
+            "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('strName'))]"
         }
     }
 }

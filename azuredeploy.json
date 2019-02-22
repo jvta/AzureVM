@@ -2,7 +2,7 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
+        "strLocation": {
             "type": "string",
             "defaultValue": "[resourceGroup().location]",
             "metadata": {
@@ -10,14 +10,14 @@
                 "description": "The region to deploy the resources into. Only change if resources need to be deployed to a different location than the resource group."
             }
           },
-          "vmName": {
+          "strVmName": {
             "type": "string",
             "metadata": {
                 "group": "Infrastructure Configuration",
                 "description": "Specify the name of the VM meeting the Caltex naming standards."
             }
           },
-          "vmSize": {
+          "strVmSize": {
             "type": "string",
             "defaultValue": "Standard_DS2_v2",
             "metadata": {
@@ -39,21 +39,21 @@
                 "description": "Whether a new AV Set should be created. Allowed values are true or false"
               }
           },
-          "avSetName": {
+          "strAvSetName": {
             "defaultValue": "None",
             "type": "string",
             "metadata": {
                 "description": "Specify the name of the Availability Set, if required. Specify None if not required"
             }
           },
-          "vmOsDiskSize": {
+          "intVmOsDiskSize": {
             "defaultValue": 128,
             "type": "int",
             "metadata": {
                 "description": "The size of the VM OS Disk in GB"
             }
           },
-           "osDiskStorageType": {
+           "strOsDiskStorageType": {
             "type": "string",
             "defaultValue": "StandardSSD_LRS",
             "metadata": {
@@ -73,13 +73,13 @@
                 "description": "Whether the VM will require data disks"
               }
           },
-          "dataDisks": {
+          "objDataDisks": {
             "type": "object",
             "metadata": {
                 "description": "The data disks to attach to the VM"
             }
           },
-          "platform": {
+          "strPlatform": {
             "defaultValue": "WindowsServer",
             "type": "string",
             "metadata": {
@@ -92,47 +92,43 @@
                 "Custom"
             ]
         },
-        "publisher": {
+        "strPublisher": {
           "type": "string",
           "defaultValue": "MicrosoftWindowsServer",
           "metadata": {
               "description": "The publisher of the image to use"
           }
         },
-        "offer": {
+        "strOffer": {
           "type": "string",
           "defaultValue": "WindowsServer",
           "metadata": {
               "description": "The offer from the selected publisher to select for image to use"
           }
         },
-        "sku": {
+        "strSku": {
           "type": "string",
           "defaultValue": "2016-Datacenter",
           "metadata": {
               "description": "The SKU of the selected offer and publisher to select for image to use"
           }
         },
-        "version": {
+        "strVersion": {
           "type": "string",
           "defaultValue": "latest",
           "metadata": {
               "description": "The version of the selected SKU to use"
           }
         },
-          "networkPrivateOrPublic": {
-            "type": "string",
-            "defaultValue": "Private",
+          "boolRequirePublicIp": {
+            "type": "bool",
+            "defaultValue": false,
             "metadata": {
                 "group": "Network Configuration",
                 "description": "Whether this server should attach a Public IP to the primary NIC or only use a Private IP"
-              },
-              "allowedValues": [
-                "Public",
-                "Private"
-            ]
+              }
           },
-          "publicIpAllocationType": {
+          "strPublicIpAllocationType": {
             "defaultValue": "Dynamic",
             "type": "string",
             "metadata": {
@@ -143,7 +139,7 @@
                 "Dynamic"
               ]
             },
-            "publicIpSku": {
+            "strPublicIpSku": {
                 "defaultValue": "Standard",
                 "type": "string",
                 "metadata": {
@@ -154,7 +150,7 @@
                     "Basic"
                 ]
             },
-            "privateIpAllocationType": {
+            "strPrivateIpAllocationType": {
                 "defaultValue": "Static",
                 "type": "string",
                 "metadata": {
@@ -165,7 +161,7 @@
                     "Dynamic"
                 ]
             },
-            "privateIpAddress": {
+            "strPrivateIpAddress": {
                 "defaultValue": "None",
                 "type": "string",
                 "metadata": {
@@ -186,7 +182,7 @@
                   "description": "Specify whether the NIC should have an NSG attached"
               }
             },
-            "networkSecurityGroup": {
+            "strNetworkSecurityGroup": {
               "type": "string",
               "metadata": {
                   "description": "Name of an NSG to attach to the NIC"
@@ -199,13 +195,13 @@
                 "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is false"
             }
           },
-          "loadBalancerName": {
+          "strLoadBalancerName": {
               "type": "string",
               "metadata": {
                   "description": "Name of an Azure Load Balancer to attach to the NIC"
               }
           },
-          "loadBalancerBackendPoolName": {
+          "strLoadBalancerBackendPoolName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the Backend Pool of the Load Balancer to join"
@@ -218,58 +214,58 @@
                 "description": "Whether this server should use Hybrid Use Benefit licencing. Default is false"
               }
           },
-          "timeZone": {
+          "strTimeZone": {
             "type": "string",
             "defaultValue": "AUS Eastern Standard Time",
             "metadata": {
                 "description": "Timezone to use for this server. Default is AUS Eastern Standard Time"
             }
           },
-          "adminUsername": {
+          "strAdminUsername": {
             "type": "string",
             "metadata": {
                 "description": "Specify the username of the Administrator account"
             }
         },
-        "authenticationType": {
+        "strAuthenticationType": {
             "defaultValue": "Password",
-            "allowedValues": [
-                "Password",
-                "SSH-Public-Key"
-            ],
             "type": "string",
             "metadata": {
                 "description": "Authentication type for the deployment"
-            }
+            },
+            "allowedValues": [
+                "Password",
+                "SSH-Public-Key"
+            ]
         },
-        "adminPasswordOrKey": {
+        "sstrAdminPasswordOrKey": {
             "type": "securestring",
             "metadata": {
                 "description": "OS Admin password or SSH Key depending on value of authentication type"
             }
         },
-        "virtualNetworkName": {
+        "strVirtualNetworkName": {
             "type": "string",
             "metadata": {
                 "group": "Network Configuration",
                 "description": "Name of the Virtual Network"
             }
         },
-        "virtualNetworkRGName": {
+        "strVirtualNetworkRGName": {
             "type": "string",
             "metadata": {
                 "group": "Network Configuration",
                 "description": "Specify the name of the Resource Group where the vNet resides"
             }
         },
-        "subnetName": {
+        "strSubnetName": {
             "type": "string",
             "metadata": {
                 "group": "Network Configuration",
                 "description": "Specify the name of the Subnet"
             }
         },
-        "bootDiagnosticsStorage": {
+        "strBootDiagnosticsStorage": {
           "type": "string",
           "metadata": {
             "group": "Infrastructure Configuration",
@@ -283,19 +279,19 @@
               "description": "Whether this server should be added to a Recovery Services Vault for Azure backup"
             }
         },
-        "vaultName": {
+        "strVaultName": {
           "type": "string",
           "metadata": {
             "description": "The Recovery Services Vault to which this server should be joined"
           }
         },
-        "vaultResourceGroup": {
+        "strVaultResourceGroup": {
           "type": "string",
           "metadata": {
             "description": "The Resource Group containing the Recovery Services Vault to which this server should be joined"
           }
         },
-        "backupPolicyName": {
+        "strBackupPolicyName": {
           "type": "string",
           "metadata": {
             "description": "The Backup Policy that should be applied to this server"
@@ -308,25 +304,25 @@
                 "description": "Whether this server should be domain joined"
               }
           },
-          "domainToJoin": {
+          "strDomainToJoin": {
             "type": "string",
             "metadata": {
               "description": "The domain to which this server should be joined"
             }
           },
-          "ouPath": {
+          "strOuPath": {
             "type": "string",
             "metadata": {
               "description": "The Organisational Unit into which server should be placed in the chosen domain"
             }
           },
-          "domainJoinAccount": {
+          "strDomainJoinAccount": {
             "type": "string",
             "metadata": {
               "description": "The domain account to use for joining the domain"
             }
           },
-          "domainJoinAccountPassword": {
+          "sstrDomainJoinAccountPassword": {
             "type": "securestring",
             "metadata": {
               "description": "The domain account password for domain join"
@@ -339,49 +335,49 @@
                 "description": "Whether this server should use PowerShell DSC Extension"
               }
           },
-          "dscExtensionUpdateTagVersion": {
+          "strDscExtensionUpdateTagVersion": {
             "type": "string",
             "metadata": {
               "description": "The current extension revision number. Increment by one with each update to ensure targets refresh their DSC settings"
             }
           },
-          "dscFunction": {
+          "strDscFunction": {
             "type": "string",
             "metadata": {
                 "description": "Calls function to execute within DSC configuration file"
             }
           },
-          "_artifactsLocationSasToken": {
+          "sstrArtifactsLocationSasToken": {
             "type": "securestring",
             "metadata": {
               "description": "SAS token for access to the DSC extension file"
             }
           },
-          "_artifactsLocation": {
+          "strArtifactsLocation": {
             "type": "string",
             "metadata": {
               "description": "URI of DSC artifacts required"
             }
           },
-          "storageUserName": {
+          "sstrStorageUserName": {
             "type": "securestring",
             "metadata": {
               "description": "The storage account where the DSC related tools downloads are saved for this environment"
             }
           },
-          "storagePassword": {
+          "sstrStoragePassword": {
             "type": "securestring",
             "metadata": {
               "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
             }
           },
-          "localAccountUserName": {
+          "strLocalAccountUserName": {
             "type": "string",
             "metadata": {
               "description": "Name of additional local user account to be added to local Administrators Group"
             }
           },
-          "localAccountUserPassword": {
+          "sstrLocalAccountUserPassword": {
             "type": "securestring",
             "metadata": {
               "description": "Password of additional local user account to be added to local Administrators Group"
@@ -401,76 +397,38 @@
                 "description": "Whether this server should use the OMS Agent Extension"
               }
           },
-          "omsWorkspaceId": {
+          "strOmsWorkspaceId": {
             "type": "string",
             "metadata": {
               "description": "OMS Workspace ID to connect to"
             }
           },
-          "omsWorkspaceKey": {
+          "sstrOmsWorkspaceKey": {
             "type": "securestring",
             "metadata": {
               "description": "Primary Key of the OMS Workspace selected"
             }
           },
-          "omsProxyUri": {
+          "strOmsProxyUri": {
             "type": "string",
             "metadata": {
               "description": "OMS Proxy URI if required"
             }
           },
-          "branch": {
+          "strBranch": {
             "type": "string",
             "defaultValue": "master",
             "metadata": {
               "description": "Code branch for template testing. Remove for master merge"
             }
           },
-          "tagCostCentre": {
-            "type": "string",
+          "objTags": {
+            "type": "object",
             "metadata": {
                 "group": "Tags",
-                "description": "Tag - Cost Cnetre"
+                "description": "The tags to apply to all resources in this deployment"
             }
-          },
-          "tagApplication": {
-            "type": "string",
-            "metadata": {
-                "group": "Tags",
-                "description": "Tag - Application"
-            }
-          },
-          "tagITOwner": {
-            "type": "string",
-            "metadata": {
-                "group": "Tags",
-                "description": "Tag - IT Owner"
-            }
-          },
-          "tagProvisionedBy": {
-            "type": "string",
-            "metadata": {
-              "description": "Tag - Provisioned By"
-            }
-          },
-          "tagProvisionDate": {
-            "type": "string",
-            "metadata": {
-              "description": "Tag - Provision Date"
-            }
-          },
-          "tagEnvironment": {
-            "type": "string",
-            "allowedValues": [
-                "Production",
-                "Development",
-                "Test"
-            ],
-            "metadata": {
-                "group": "Infrastructure Configuration",
-                "description": "Specify the environment which best describes the deployment."
-            }
-        }
+          }
     },
     "variables": {
         "networkApiVersion": "2018-07-01",
@@ -482,21 +440,13 @@
         "mainResourceGroup": "[resourceGroup().name]",
         "true": true,
         "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
-        "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('branch'))]",
-        "nicName": "[concat(parameters('vmName'),'-nic1')]",
-        "pipName": "[concat(parameters('vmName'),'-PIP')]",
+        "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('strBranch'))]",
+        "nicName": "[concat(parameters('strVmName'),'-nic1')]",
+        "pipName": "[concat(parameters('strVmName'),'-PIP')]",
         "backupFabric": "Azure",
-        "protectionContainer": "[concat('iaasvmcontainer;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]",
-        "protectedItem": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('vmName'))]",
-        "emptyString": "",
-        "tags": {
-            "CostCentre": "[parameters('tagCostCentre')]",
-            "Application": "[parameters('tagApplication')]",
-            "ITOwner": "[parameters('tagITOwner')]",
-            "provisionedBy": "[parameters('tagProvisionedBy')]",
-            "provisionDate": "[parameters('tagProvisionDate')]",
-            "Environment": "[parameters('tagEnvironment')]"
-        }
+        "protectionContainer": "[concat('iaasvmcontainer;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('strVmName'))]",
+        "protectedItem": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('strVmName'))]",
+        "emptyString": ""
     },
     "resources": [
         {
@@ -513,22 +463,22 @@
                 },
                 "parameters":{
                     "location": {
-                        "value": "[parameters('location')]"
-                      },
-                    "apiVersion":{
+                      "strLocation": "[parameters('strLocation')]"
+                    },
+                    "strApiVersion":{
                         "value":"[variables('computeApiVersion')]"
                     },
-                    "name":{
-                        "value":"[parameters('avSetName')]"
+                    "strAvSetName":{
+                        "value":"[parameters('strAvSetName')]"
                     },
-                    "tags": {
-                        "value": "[variables('tags')]"
+                    "objTags": {
+                        "value": "[parameters('objTags')]"
                     }
                 }
             }
         },
         {
-            "condition": "[equals(parameters('networkPrivateOrPublic'),'Public')]",
+            "condition": "[and(parameters('boolRequirePublicIp'),variables('true'))]",
             "type":"Microsoft.Resources/deployments",
             "name":"provisionPublicIp",
             "apiVersion":"[variables('deploymentApiVersion')]",
@@ -540,23 +490,23 @@
                     "contentVersion":"1.0.0.0"
                 },
                 "parameters":{
-                  "location": {
-                    "value": "[parameters('location')]"
+                  "strLocation": {
+                    "value": "[parameters('strLocation')]"
                   },
-                  "apiVersion":{
+                  "strApiVersion":{
                         "value":"[variables('networkApiVersion')]"
                     },
-                    "name":{
+                    "strName":{
                         "value":"[variables('pipName')]"
                     },
-                    "publicIpAllocationType":{
-                        "value":"[parameters('publicIpAllocationType')]"
+                    "strPublicIpAllocationType":{
+                        "value":"[parameters('strPublicIpAllocationType')]"
                     },
-                    "sku": {
-                        "value": "[parameters('publicIpSku')]"
+                    "strPublicIpSku": {
+                        "value": "[parameters('strPublicIpSku')]"
                     },
-                    "tags": {
-                        "value": "[variables('tags')]"
+                    "objTags": {
+                        "value": "[parameters('objTags')]"
                     }
                 }
             }
@@ -571,39 +521,39 @@
             "properties": {
               "mode": "Incremental",
               "templateLink": {
-                "uri": "[concat(variables('templateLink'),'/LinkedTemplates/','provisionNIC',parameters('networkPrivateOrPublic'),'.json')]",
+                "uri": "[concat(variables('templateLink'),'/LinkedTemplates/','provisionNIC',if(parameters('boolRequirePublicIp'),'Public','Private'),'.json')]",
                 "contentVersion": "1.0.0.0"
               },
               "parameters": {
-                "location": {
-                  "value": "[parameters('location')]"
+                "strLocation": {
+                  "value": "[parameters('strLocation')]"
                 },
-                "tags": {
-                    "value":"[variables('tags')]"
+                "objTags": {
+                    "value":"[parameters('objTags')]"
                 },
-                "pipId": {
-                    "value": "[if(equals(parameters('networkPrivateOrPublic'),'Public'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
+                "strPipId": {
+                    "value": "[if(parameters('boolRequirePublicIp'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
                 },
-                "nicName": {
+                "strNicName": {
                   "value": "[variables('nicName')]"
                 },
-                "networkApiVersion": {
+                "strNetworkApiVersion": {
                     "value": "[variables('networkApiVersion')]"
                   },
-                "virtualNetworkName": {
-                  "value": "[parameters('virtualNetworkName')]"
+                "strVirtualNetworkName": {
+                  "value": "[parameters('strVirtualNetworkName')]"
                 },
-                "virtualNetworkRGName": {
-                  "value": "[parameters('virtualNetworkRGName')]"
+                "strVirtualNetworkRGName": {
+                  "value": "[parameters('strVirtualNetworkRGName')]"
                 },
-                "subnetName": {
-                  "value": "[parameters('subnetName')]"
+                "strSubnetName": {
+                  "value": "[parameters('strSubnetName')]"
                 },
-                "privateIpAddress": {
-                    "value": "[parameters('privateIpAddress')]"
+                "strPrivateIpAddress": {
+                    "value": "[parameters('strPrivateIpAddress')]"
                 },
-                "privateIpAllocationType": {
-                  "value": "[parameters('privateIpAllocationType')]"
+                "strPrivateIpAllocationType": {
+                  "value": "[parameters('strPrivateIpAllocationType')]"
                 },
                 "boolEnableAcceleratedNetworking": {
                   "value": "[parameters('boolEnableAcceleratedNetworking')]"
@@ -611,17 +561,17 @@
                 "boolAttachNetworkSecurityGroup": {
                   "value": "[parameters('boolAttachNetworkSecurityGroup')]"
                 },
-                "networkSecurityGroup": {
-                  "value": "[parameters('networkSecurityGroup')]"
+                "strNetworkSecurityGroup": {
+                  "value": "[parameters('strNetworkSecurityGroup')]"
                 },
                 "boolJoinLoadBalancer": {
                   "value": "[parameters('boolJoinLoadBalancer')]"
                 },
-                "loadBalancerName": {
-                  "value": "[parameters('loadBalancerName')]"
+                "strLoadBalancerName": {
+                  "value": "[parameters('strLoadBalancerName')]"
                 },
-                "loadBalancerBackendPoolName": {
-                  "value": "[parameters('loadBalancerBackendPoolName')]"
+                "strLoadBalancerBackendPoolName": {
+                  "value": "[parameters('strLoadBalancerBackendPoolName')]"
                 }
               }
             }
@@ -641,116 +591,116 @@
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
-                    "location": {
-                        "value": "[parameters('location')]"
+                    "strLocation": {
+                        "value": "[parameters('strLocation')]"
                     },
-                    "vmName": {
-                        "value": "[parameters('vmName')]"
+                    "strVmName": {
+                        "value": "[parameters('strVmName')]"
                     },
-                    "vmSize": {
-                        "value": "[parameters('vmSize')]"
+                    "strVmSize": {
+                        "value": "[parameters('strVmSize')]"
                     },
-                    "tags": {
-                        "value":"[variables('tags')]"
+                    "objTags": {
+                        "value":"[parameters('objTags')]"
                     },
-                    "nicName": {
+                    "strNicName": {
                         "value": "[variables('nicName')]"
                     },
-                    "computeApiVersion": {
+                    "strComputeApiVersion": {
                         "value": "[variables('computeApiVersion')]"
                     },
-                    "extensionApiVersion": {
+                    "strExtensionApiVersion": {
                         "value": "[variables('extensionApiVersion')]"
                     },
-                    "adminUsername": {
-                        "value": "[parameters('adminUsername')]"
+                    "strAdminUsername": {
+                        "value": "[parameters('strAdminUsername')]"
                     },
                     "boolAvSetRequired": {
                       "value": "[parameters('boolAvSetRequired')]"
                     },
-                    "avSetName": {
-                        "value": "[if(parameters('boolAvSetRequired'), parameters('avSetName'), variables('emptyString'))]"
+                    "strAvSetName": {
+                        "value": "[if(parameters('boolAvSetRequired'), parameters('strAvSetName'), variables('emptyString'))]"
                     },
-                    "vmOsDiskSize": {
-                        "value": "[parameters('vmOsDiskSize')]"
+                    "intVmOsDiskSize": {
+                        "value": "[parameters('intVmOsDiskSize')]"
                     },
-                    "osDiskStorageType": {
-                        "value": "[parameters('osDiskStorageType')]"
+                    "strOsDiskStorageType": {
+                        "value": "[parameters('strOsDiskStorageType')]"
                     },
-                    "dataDisks": {
-                      "value": "[parameters('dataDisks')]"
+                    "objDataDisks": {
+                      "value": "[parameters('objDataDisks')]"
                     },
-                    "platform": {
-                      "value": "[parameters('platform')]"
+                    "strPlatform": {
+                      "value": "[parameters('strPlatform')]"
                     },
-                    "publisher": {
-                      "value": "[parameters('publisher')]"
+                    "strPublisher": {
+                      "value": "[parameters('strPublisher')]"
                     },
-                    "offer": {
-                      "value": "[parameters('offer')]"
+                    "strOffer": {
+                      "value": "[parameters('strOffer')]"
                     },
-                    "sku": {
-                      "value": "[parameters('sku')]"
+                    "strSku": {
+                      "value": "[parameters('strSku')]"
                     },
-                    "version": {
-                      "value": "[parameters('version')]"
+                    "strVersion": {
+                      "value": "[parameters('strVersion')]"
                     },
-                    "timeZone": {
-                      "value": "[parameters('timeZone')]"
+                    "strTimeZone": {
+                      "value": "[parameters('strTimeZone')]"
                     },
                     "boolUseHybridUseBenefit": {
                       "value": "[parameters('boolUseHybridUseBenefit')]"
                     },
-                    "authenticationType": {
-                      "value": "[parameters('authenticationType')]"
+                    "strAuthenticationType": {
+                      "value": "[parameters('strAuthenticationType')]"
                     },
-                    "adminPasswordOrKey": {
-                      "value": "[parameters('adminPasswordOrKey')]"
+                    "sstrAdminPasswordOrKey": {
+                      "value": "[parameters('sstrAdminPasswordOrKey')]"
                     },
-                    "bootDiagnosticsStorage": {
-                      "value": "[parameters('bootDiagnosticsStorage')]"
+                    "strBootDiagnosticsStorage": {
+                      "value": "[parameters('strBootDiagnosticsStorage')]"
                     },
                     "boolUseDomainJoinExtension": {
                       "value": "[parameters('boolUseDomainJoinExtension')]"
                     },
-                    "domainToJoin": {
-                      "value": "[parameters('domainToJoin')]"
+                    "strDomainToJoin": {
+                      "value": "[parameters('strDomainToJoin')]"
                     },
-                    "ouPath": {
-                      "value": "[parameters('ouPath')]"
+                    "strOuPath": {
+                      "value": "[parameters('strOuPath')]"
                     },
-                    "domainJoinAccount": {
-                      "value": "[parameters('domainJoinAccount')]"
+                    "strDomainJoinAccount": {
+                      "value": "[parameters('strDomainJoinAccount')]"
                     },
-                    "domainJoinAccountPassword": {
-                      "value": "[parameters('domainJoinAccountPassword')]"
+                    "sstrDomainJoinAccountPassword": {
+                      "value": "[parameters('sstrDomainJoinAccountPassword')]"
                     },
                     "boolUseDSCExtension": {
                       "value": "[parameters('boolUseDSCExtension')]"
                     },
-                    "dscExtensionUpdateTagVersion": {
-                      "value": "[parameters('dscExtensionUpdateTagVersion')]"
+                    "strDscExtensionUpdateTagVersion": {
+                      "value": "[parameters('strDscExtensionUpdateTagVersion')]"
                     },
-                    "dscFunction": {
-                      "value": "[parameters('dscFunction')]"
+                    "strDscFunction": {
+                      "value": "[parameters('strDscFunction')]"
                     },
-                    "_artifactsLocationSasToken": {
-                      "value": "[parameters('_artifactsLocationSasToken')]"
+                    "sstrArtifactsLocationSasToken": {
+                      "value": "[parameters('sstrArtifactsLocationSasToken')]"
                     },
-                    "_artifactsLocation": {
-                      "value": "[parameters('_artifactsLocation')]"
+                    "strArtifactsLocation": {
+                      "value": "[parameters('strArtifactsLocation')]"
                     },
-                    "storageUserName": {
-                      "value": "[parameters('storageUserName')]"
+                    "sstrStorageUserName": {
+                      "value": "[parameters('sstrStorageUserName')]"
                     },
-                    "storagePassword": {
-                      "value": "[parameters('storagePassword')]"
+                    "sstrStoragePassword": {
+                      "value": "[parameters('sstrStoragePassword')]"
                     },
-                    "localAccountUserName": {
-                      "value": "[parameters('localAccountUserName')]"
+                    "strLocalAccountUserName": {
+                      "value": "[parameters('strLocalAccountUserName')]"
                     },
-                     "localAccountUserPassword": {
-                      "value": "[parameters('localAccountUserPassword')]"
+                     "sstrLocalAccountUserPassword": {
+                      "value": "[parameters('sstrLocalAccountUserPassword')]"
                     },
                     "boolUseBGInfoExtension": {
                       "value": "[parameters('boolUseBGInfoExtension')]"
@@ -758,14 +708,14 @@
                     "boolUseOMSExtension": {
                       "value": "[parameters('boolUseOMSExtension')]"
                     },
-                    "omsWorkspaceId": {
-                      "value": "[parameters('omsWorkspaceId')]"
+                    "strOmsWorkspaceId": {
+                      "value": "[parameters('strOmsWorkspaceId')]"
                     },
-                    "omsWorkspaceKey": {
-                      "value": "[parameters('omsWorkspaceKey')]"
+                    "sstrOmsWorkspaceKey": {
+                      "value": "[parameters('sstrOmsWorkspaceKey')]"
                     },
-                    "omsProxyUri": {
-                      "value": "[parameters('omsProxyUri')]"
+                    "strOmsProxyUri": {
+                      "value": "[parameters('strOmsProxyUri')]"
                     }
               }
             }
@@ -778,7 +728,7 @@
           "dependsOn": [
             "Microsoft.Resources/deployments/provisionCompute"
           ],
-          "resourceGroup": "[parameters('vaultResourceGroup')]",
+          "resourceGroup": "[parameters('strVaultResourceGroup')]",
           "properties": {
             "mode": "incremental",
             "template": {
@@ -789,13 +739,13 @@
               "resources": [
                 {
                   "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
-                  "name": "[concat(parameters('vaultName'), '/', variables('backupFabric'), '/', variables('protectionContainer'), '/', variables('protectedItem'))]",
+                  "name": "[concat(parameters('strVaultName'), '/', variables('backupFabric'), '/', variables('protectionContainer'), '/', variables('protectedItem'))]",
                   "apiVersion": "[variables('vaultApiVersion')]",
-                  "location": "[parameters('location')]",
+                  "location": "[parameters('strLocation')]",
                   "properties": {
                     "protectedItemType": "Microsoft.Compute/virtualMachines",
-                    "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies', parameters('vaultName'), parameters('backupPolicyName'))]",
-                    "sourceResourceId": "[resourceId(variables('mainResourceGroup'),'Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+                    "policyId": "[resourceId('Microsoft.RecoveryServices/vaults/backupPolicies', parameters('strVaultName'), parameters('strBackupPolicyName'))]",
+                    "sourceResourceId": "[resourceId(variables('mainResourceGroup'),'Microsoft.Compute/virtualMachines/', parameters('strVmName'))]"
                   }
                 }
               ]
