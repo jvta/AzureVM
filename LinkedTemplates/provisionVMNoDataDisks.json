@@ -99,7 +99,7 @@
               "description": "Select the OS type to be provisioned. Default is Windows. Provide publisher, offer, sku and version if choosing Custom"
           },
            "allowedValues": [
-              "Windows",
+              "WindowsServer",
               "Windows10",
               "Linux",
               "Custom"
