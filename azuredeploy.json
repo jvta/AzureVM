@@ -328,15 +328,49 @@
               "description": "The domain account password for domain join"
             }
           },
-          "boolUseDSCExtension": {
+          "boolUseCustomisedDSCExtension": {
             "type": "bool",
-            "defaultValue": true,
+            "defaultValue": false,
             "metadata": {
-                "description": "Whether this server should use PowerShell DSC Extension"
+                "description": "Whether this server should use a customised PowerShell DSC Agent Extension"
               }
+          },
+          "boolUseGenericDSCExtension": {
+            "type": "bool",
+            "defaultValue": false,
+            "metadata": {
+                "description": "Whether this server should use the Generic PowerShell DSC Agent Extension"
+              }
+          },
+          "strArtifactsLocation": {
+            "type": "string",
+            "metadata": {
+              "description": "Base URI of DSC artifacts required"
+            }
+          },
+          "strDscExtensionArchiveFolder": {
+            "type": "string",
+            "defaultValue": "windows-powershell-dsc",
+            "metadata": {
+              "description": "Container or folder name that hosts the configuration archive file. Default is windows-powershell-dsc"
+            }
+          },
+          "strDscExtensionArchiveFileName": {
+            "type": "string",
+            "defaultValue": "configuration.ps1.zip",
+            "metadata": {
+              "description": "Name of the Archive file that DSC will reference. E.g. configuration.ps1.zip is default"
+            }
+          },
+          "strDscScript": {
+            "type": "string",
+            "metadata": {
+              "description": "The DSC Script filename to use. e.g. configuration.ps1 is normally a default"
+            }
           },
           "strDscExtensionUpdateTagVersion": {
             "type": "string",
+            "defaultValue": "1",
             "metadata": {
               "description": "The current extension revision number. Increment by one with each update to ensure targets refresh their DSC settings"
             }
@@ -350,13 +384,7 @@
           "sstrArtifactsLocationSasToken": {
             "type": "securestring",
             "metadata": {
-              "description": "SAS token for access to the DSC extension file"
-            }
-          },
-          "strArtifactsLocation": {
-            "type": "string",
-            "metadata": {
-              "description": "URI of DSC artifacts required"
+              "description": "Azure blob SAS token for access to the DSC extension file. Set to empty if not required e.g. if using public GitHub repository location"
             }
           },
           "sstrStorageUserName": {
@@ -422,11 +450,46 @@
               "description": "Code branch for template testing. Remove for master merge"
             }
           },
-          "objTags": {
-            "type": "object",
+          "strTagCostCentre": {
+            "type": "string",
             "metadata": {
                 "group": "Tags",
-                "description": "The tags to apply to all resources in this deployment"
+                "description": "A tag to apply to all resources in this deployment"
+            }
+          },
+          "strTagApplication": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "A tag to apply to all resources in this deployment"
+            }
+          },
+          "strTagProvisionedBy": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "A tag to apply to all resources in this deployment"
+            }
+          },
+          "strTagProvisionDate": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "A tag to apply to all resources in this deployment"
+            }
+          },
+          "strTagITOwner": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "A tag to apply to all resources in this deployment"
+            }
+          },
+          "strTagEnvironment": {
+            "type": "string",
+            "metadata": {
+                "group": "Tags",
+                "description": "A tag to apply to all resources in this deployment"
             }
           }
     },
@@ -446,7 +509,15 @@
         "backupFabric": "Azure",
         "protectionContainer": "[concat('iaasvmcontainer;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('strVmName'))]",
         "protectedItem": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('strVmName'))]",
-        "emptyString": ""
+        "emptyString": "",
+        "objTags": {
+          "CostCentre": "[parameters('strTagCostCentre')]",
+          "Application": "[parameters('strTagApplication')]",
+          "ProvisionedBy": "[parameters('strTagProvisionedBy')]",
+          "ProvisionDate": "[parameters('strTagProvisionDate')]",
+          "ITOwner": "[parameters('strTagITOwner')]",
+          "Environment": "[parameters('strTagEnvironment')]"
+        }
     },
     "resources": [
         {
@@ -472,7 +543,7 @@
                         "value":"[parameters('strAvSetName')]"
                     },
                     "objTags": {
-                        "value": "[parameters('objTags')]"
+                        "value": "[variables('objTags')]"
                     }
                 }
             }
@@ -506,7 +577,7 @@
                         "value": "[parameters('strPublicIpSku')]"
                     },
                     "objTags": {
-                        "value": "[parameters('objTags')]"
+                        "value": "[variables('objTags')]"
                     }
                 }
             }
@@ -529,7 +600,7 @@
                   "value": "[parameters('strLocation')]"
                 },
                 "objTags": {
-                    "value":"[parameters('objTags')]"
+                    "value":"[variables('objTags')]"
                 },
                 "strPipId": {
                     "value": "[if(parameters('boolRequirePublicIp'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
@@ -601,7 +672,7 @@
                         "value": "[parameters('strVmSize')]"
                     },
                     "objTags": {
-                        "value":"[parameters('objTags')]"
+                        "value":"[variables('objTags')]"
                     },
                     "strNicName": {
                         "value": "[variables('nicName')]"
@@ -675,8 +746,23 @@
                     "sstrDomainJoinAccountPassword": {
                       "value": "[parameters('sstrDomainJoinAccountPassword')]"
                     },
-                    "boolUseDSCExtension": {
-                      "value": "[parameters('boolUseDSCExtension')]"
+                    "boolUseCustomisedDSCExtension": {
+                      "value": "[parameters('boolUseCustomisedDSCExtension')]"
+                    },
+                    "boolUseGenericDSCExtension": {
+                      "value": "[parameters('boolUseGenericDSCExtension')]"
+                    },
+                    "strArtifactsLocation": {
+                      "value": "[parameters('strArtifactsLocation')]"
+                    },
+                    "strDscExtensionArchiveFolder": {
+                      "value": "[parameters('strDscExtensionArchiveFolder')]"
+                    },
+                    "strDscExtensionArchiveFileName": {
+                      "value": "[parameters('strDscExtensionArchiveFileName')]"
+                    },
+                    "strDscScript": {
+                      "value": "[parameters('strDscScript')]"
                     },
                     "strDscExtensionUpdateTagVersion": {
                       "value": "[parameters('strDscExtensionUpdateTagVersion')]"
@@ -686,9 +772,6 @@
                     },
                     "sstrArtifactsLocationSasToken": {
                       "value": "[parameters('sstrArtifactsLocationSasToken')]"
-                    },
-                    "strArtifactsLocation": {
-                      "value": "[parameters('strArtifactsLocation')]"
                     },
                     "sstrStorageUserName": {
                       "value": "[parameters('sstrStorageUserName')]"
@@ -730,7 +813,7 @@
           ],
           "resourceGroup": "[parameters('strVaultResourceGroup')]",
           "properties": {
-            "mode": "incremental",
+            "mode": "Incremental",
             "template": {
               "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
               "contentVersion": "1.0.0.0",
