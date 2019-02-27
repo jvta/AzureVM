@@ -201,15 +201,49 @@
         "description": "The domain account password for domain join"
       }
     },
-    "boolUseDSCExtension": {
+    "boolUseCustomisedDSCExtension": {
       "type": "bool",
-      "defaultValue": true,
+      "defaultValue": false,
       "metadata": {
-          "description": "Whether this server should use PowerShell DSC Extension"
+          "description": "Whether this server should use a customised PowerShell DSC Agent Extension"
         }
+    },
+    "boolUseGenericDSCExtension": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+          "description": "Whether this server should use the Generic PowerShell DSC Agent Extension"
+        }
+    },
+    "strArtifactsLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "Base URI of DSC artifacts required"
+      }
+    },
+    "strDscExtensionArchiveFolder": {
+      "type": "string",
+      "defaultValue": "windows-powershell-dsc",
+      "metadata": {
+        "description": "Container or folder name that hosts the configuration archive file. Default is windows-powershell-dsc"
+      }
+    },
+    "strDscExtensionArchiveFileName": {
+      "type": "string",
+      "defaultValue": "configuration.ps1.zip",
+      "metadata": {
+        "description": "Name of the Archive file that DSC will reference. E.g. configuration.ps1.zip is default"
+      }
+    },
+    "strDscScript": {
+      "type": "string",
+      "metadata": {
+        "description": "The DSC Script filename to use. e.g. configuration.ps1 is normally a default"
+      }
     },
     "strDscExtensionUpdateTagVersion": {
       "type": "string",
+      "defaultValue": "1",
       "metadata": {
         "description": "The current extension revision number. Increment by one with each update to ensure targets refresh their DSC settings"
       }
@@ -223,13 +257,7 @@
     "sstrArtifactsLocationSasToken": {
       "type": "securestring",
       "metadata": {
-        "description": "SAS token for access to the DSC extension file"
-      }
-    },
-    "strArtifactsLocation": {
-      "type": "string",
-      "metadata": {
-        "description": "URI of DSC artifacts required"
+        "description": "Azure blob SAS token for access to the DSC extension file. Set to empty if not required e.g. if using public GitHub repository location"
       }
     },
     "sstrStorageUserName": {
@@ -291,8 +319,6 @@
   },
   "variables": {
     "domainJoinOptions": "3",
-    "dscExtensionArchiveFolder": "windows-powershell-dsc",
-    "dscExtensionArchiveFileName": "configuration.ps1.zip",
     "vmSize": "[parameters('strVmSize')]",
     "true": true,
     "windowsConfiguration": {
@@ -412,7 +438,7 @@
             "apiVersion": "[parameters('strExtensionApiVersion')]",
             "type": "Microsoft.Compute/virtualMachines/extensions",
             "name": "[concat(parameters('strVmName'),'/joindomain')]",
-            "location": "[resourceGroup().location]",
+            "location": "[parameters('strLocation')]",
             "dependsOn": [
               "[resourceId('Microsoft.Compute/virtualMachines/',parameters('strVmName'))]"
             ],
@@ -433,11 +459,11 @@
             }
           },
           {
-            "condition": "[and(parameters('boolUseDSCExtension'),variables('true'))]",
+            "condition": "[and(parameters('boolUseCustomisedDSCExtension'),variables('true'))]",
             "apiVersion": "[parameters('strExtensionApiVersion')]",
-            "type": "extensions",
-            "name": "Microsoft.Powershell.DSC",
-            "location": "[resourceGroup().location]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('strVmName'),'/MSPowerShellDSC')]",
+            "location": "[parameters('strLocation')]",
             "dependsOn": [
               "[resourceId('Microsoft.Compute/virtualMachines/',parameters('strVmName'))]"
             ],
@@ -449,7 +475,7 @@
               "forceUpdateTag": "[parameters('strDscExtensionUpdateTagVersion')]",
               "settings": {
                 "configuration": {
-                  "url": "[concat(parameters('strArtifactsLocation'),'/',variables('dscExtensionArchiveFolder'), '/', variables('dscExtensionArchiveFileName'))]",
+                  "url": "[concat(parameters('strArtifactsLocation'),'/',parameters('strDscExtensionArchiveFolder'), '/', parameters('strDscExtensionArchiveFileName'))]",
                   "script": "configuration.ps1",
                   "function": "[parameters('strDscFunction')]"
                 }
@@ -510,6 +536,34 @@
                 "protectedSettings": {
                     "workspaceKey": "[parameters('sstrOmsWorkspaceKey')]"
                 }
+            }
+          },
+          {
+            "condition": "[and(parameters('boolUseGenericDSCExtension'),variables('true'))]",
+            "type": "Microsoft.Compute/virtualMachines/extensions",
+            "name": "[concat(parameters('strVmName'),'/','GenericDSC')]",
+            "apiVersion": "[parameters('strExtensionApiVersion')]",
+            "location": "[parameters('strLocation')]",
+            "dependsOn": [
+              "[resourceId('Microsoft.Compute/virtualMachines', parameters('strVmName'))]"
+            ],
+            "properties": {
+                 "publisher": "Microsoft.Powershell",
+                 "type": "DSC",
+                 "typeHandlerVersion": "2.26",
+                 "autoUpgradeMinorVersion": false,
+                 "forceUpdateTag": "[parameters('strDscExtensionUpdateTagVersion')]",
+                 "settings": {
+                   "configuration": {
+                     "url": "[concat(parameters('strArtifactsLocation'),'/',parameters('strDscExtensionArchiveFolder'), '/', parameters('strDscExtensionArchiveFileName'))]",
+                     "script": "[parameters('strDscScript')]",
+                     "function": "[parameters('strDscFunction')]"
+                   }
+                 },
+                  "protectedSettings": {
+                    "configurationUrlSasToken": "[if(empty(parameters('sstrArtifactsLocationSasToken')),json('null'),parameters('sstrArtifactsLocationSasToken'))]"
+                  },
+                  "resources": []
             }
           }
         ]
