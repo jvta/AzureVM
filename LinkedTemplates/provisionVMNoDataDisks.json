@@ -460,7 +460,7 @@
                   "settings": {
                     "configuration": {
                       "url": "[concat(parameters('strArtifactsLocation'),'/',parameters('strDscExtensionArchiveFolder'), '/', parameters('strDscExtensionArchiveFileName'))]",
-                      "script": "configuration.ps1",
+                      "script": "[parameters('strDscScript')]",
                       "function": "[parameters('strDscFunction')]"
                     }
                   },
@@ -503,7 +503,7 @@
                 "condition": "[and(parameters('boolUseOMSExtension'),variables('true'))]",
                 "type": "Microsoft.Compute/virtualMachines/extensions",
                 "name": "[concat(parameters('strVmName'),'/','MMAAgent')]",
-                "apiVersion": "2015-06-15",
+                "apiVersion": "[parameters('strExtensionApiVersion')]",
                 "location": "[parameters('strLocation')]",
                 "dependsOn": [
                     "[resourceId('Microsoft.Compute/virtualMachines/',parameters('strVmName'))]"
