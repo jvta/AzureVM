@@ -151,7 +151,7 @@
                 ]
             },
             "strPrivateIpAllocationType": {
-                "defaultValue": "Static",
+                "defaultValue": "Dynamic",
                 "type": "string",
                 "metadata": {
                     "description": "Specify whether the private IP should be Static or Dynamic"
@@ -447,7 +447,7 @@
             "type": "string",
             "defaultValue": "master",
             "metadata": {
-              "description": "Code branch for template testing. Remove for master merge"
+              "description": "Code branch for template testing. Default is master. Supply alternate development branch name only if required"
             }
           },
           "strTagCostCentre": {
@@ -487,6 +487,7 @@
           },
           "strTagEnvironment": {
             "type": "string",
+            "defaultValue": "Test",
             "metadata": {
                 "group": "Tags",
                 "description": "A tag to apply to all resources in this deployment"
@@ -502,7 +503,6 @@
         "nestedDeploymentApiVersion": "2017-05-10",
         "mainResourceGroup": "[resourceGroup().name]",
         "true": true,
-        "templateLinkProd": "https://raw.githubusercontent.com/jvta/AzureVM/master",
         "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('strBranch'))]",
         "nicName": "[concat(parameters('strVmName'),'-nic1')]",
         "pipName": "[concat(parameters('strVmName'),'-PIP')]",
