@@ -90,7 +90,25 @@ All VM deployments require the following parameters at a minimum to deploy a val
 * strVirtualNetworkRGName
 * strSubnetName
 * strBootDiagnosticsStorage
+
 Other key parameters like VM size and OS selection do have defaults supplied within the template that will produce a vaiable VM, however you should always review all parameters for relevance to your current build. All remaining parameters can be considered as optional.
+
+Data Disks must be entered in an array format per data disk within the template file, and the array object must not be passed in empty as the script logic cannot compute the length of an empty array and may result in an erro, so always leave at least the default data for a single disk in the array object as below:
+
+```JSON
+"objDataDisks": {
+    "value": {
+        "disks": [
+            {
+                "Cache": "None",
+                "Size": 1024,
+                "StorageAccountType": "Standard_LRS"
+            }
+        ]
+    }
+}
+```
+If you do not need any data disks simply set the Boolean parameter boolAddDataDisks to false.
 
 ## VM Extensions
 The VM provision templates also permit optional VM extensions such as BGInfo, AD domain join or a PowerShell DSC extension. Simply set Boolean parameters e.g. boolUseDomainJoinExtension or boolUseGenericDSCExtension to 'false' if you do not wish to use these. Alternatively, review the parameters required by each extension below and edit your copy of the templates to suit.
@@ -101,6 +119,7 @@ The domain join extension requires you specify:
 * strOuPath (Canonical format e.g. OU=Servers,DC=domain,DC=local)
 * strDomainJoinAccount
 * sstrDomainJoinAccountPassword
+
 Server will restart upon successful domain join and has dependency on VM provision completing
 
 ### BGInfo
@@ -112,7 +131,7 @@ To attach the OMS (Log Analytics) agent to your VM supply the following paramete
 * boolUseOMSExtension - set to 'true' to use this extension
 * strOmsWorkspaceId (your unique workspace ID)
 * sstrOmsWorkspaceKey (store this in KeyVault if possible)
-* strOmsProxyUri (optional if you require it, leave as empty - "" if not)
+* strOmsProxyUri (optional if you require it, leave as empty e.g. "" if not)
 
 ### PowerShell DSC
 To use either of the PowerShell DSC extensions you will need to write your own DSC config file and publish it to a storage account blob or other publicly accessible URL location then adjust any settings here to provide the appropriate inputs - the parameters for the Customised DSC extension may vary from what you create. Specific DSC content creation is not covered here.
@@ -124,6 +143,7 @@ For DSC configuration publication to Azure blob storage:
 * https://docs.microsoft.com/en-us/powershell/module/azurerm.compute/publish-azurermvmdscconfiguration?view=azurermps-6.13.0
 
 **Customised DSC**
+
 The Customised PowerShell DSC extension requires you specify several configuration related settings common to all configurations, as well as protected settings that will be specific to your particular PowerShell DSC configuration file and what it does.
 
 Common parameters:
@@ -146,12 +166,13 @@ Example-specific parameters:
 * sstrArtifactsLocationSasToken (SAS token for accessing configuration.ps1.zip file blob)
 
 **Generic DSC**
+
 The Generic DSC extension contains only details for accessing a PowerShell DSC configuration file and will pass no additional parameters.
 
 Common parameters:
 * boolUseGenericDSCExtension - set to 'true' to use this extension
 * strDscExtensionUpdateTagVersion (Default '1'. Increment and redeploy to force an updated configuration)
-* strArtifactsLocation (e.g. storage account where your DSC blob is stored e.g. "https://mydscacc.blob.core.windows.net" or a perhaps another GitHub location e.g. https://"https://raw.githubusercontent.com/mygithub")
+* strArtifactsLocation (e.g. storage account where your DSC blob is stored e.g. "https://mydscacc.blob.core.windows.net" or perhaps another GitHub location e.g. https://"https://raw.githubusercontent.com/mygithub")
 * strDscFunction (your name for a DSC "configuration" block to apply e.g. 'StandardAzureServer')
 * strDscScript (your DSC configuration script name. Default is configuration.ps1)
 * strDscExtensionArchiveFolder (a folder or container name hosting the configuration file. Will otherwise use a storage blob default of 'windows-powershell-dsc')
