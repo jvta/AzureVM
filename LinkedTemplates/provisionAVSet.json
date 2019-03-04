@@ -8,7 +8,7 @@
                 "description": "API version for this resource"
               }
         },
-        "strName": {
+        "strAvSetName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the resource"
@@ -34,7 +34,7 @@
             "sku": {
                 "name": "Aligned"
             },
-            "name": "[parameters('strName')]",
+            "name": "[parameters('strAvSetName')]",
             "apiVersion": "[parameters('strApiVersion')]",
             "location": "[parameters('strLocation')]",
             "tags": "[parameters('objTags')]",
@@ -47,7 +47,7 @@
     "outputs": {
         "resourceID": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Compute/availabilitySets', parameters('strName'))]"
+            "value": "[resourceId('Microsoft.Compute/availabilitySets', parameters('strAvSetName'))]"
         }
     }
 }
