@@ -557,8 +557,7 @@
                      },
                       "protectedSettings": {
                         "configurationUrlSasToken": "[if(empty(parameters('sstrArtifactsLocationSasToken')),json('null'),parameters('sstrArtifactsLocationSasToken'))]"
-                      },
-                      "resources": []
+                      }
                 }
               }
             ]
