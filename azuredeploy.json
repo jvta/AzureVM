@@ -545,7 +545,7 @@
                 },
                 "parameters":{
                     "location": {
-                      "strLocation": "[parameters('strLocation')]"
+                      "value": "[parameters('strLocation')]"
                     },
                     "strApiVersion":{
                         "value":"[variables('computeApiVersion')]"
