@@ -6,39 +6,39 @@
             "type": "string",
             "metadata": {
                 "description": "Location to create the resource"
-              }
+            }
         },
         "strApiVersion": {
             "type": "string",
             "metadata": {
                 "description": "API version for this resource"
-              }
+            }
         },
         "strName": {
             "type": "string",
             "metadata": {
                 "description": "Name of the resource"
-              }
+            }
         },
         "strPublicIpAllocationType": {
             "type": "string",
             "metadata": {
                 "description": "Whether IP is Static or Dynamic"
-              }
+            }
         },
         "strSku": {
             "type": "string",
             "defaultValue": "Standard",
             "metadata": {
                 "description": "SKU of Public IP to create"
-              }
+            }
         },
         "objTags": {
             "type": "object",
             "metadata": {
                 "description": "Tags to attach to resource"
-              }
-          }
+            }
+        }
     },
     "variables": {},
     "resources": [
