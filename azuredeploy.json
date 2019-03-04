@@ -80,17 +80,28 @@
             }
           },
           "strPlatform": {
-            "defaultValue": "WindowsServer",
+            "defaultValue": "Windows",
             "type": "string",
             "metadata": {
-                "description": "Select the OS type to be provisioned. Default is Windows. Provide publisher, offer, sku and version if choosing Custom"
+                "description": "Select the OS type to be provisioned. Default is Windows"
             },
              "allowedValues": [
-                "WindowsServer",
-                "Windows10",
-                "Linux",
-                "Custom"
+                "Windows",
+                "Linux"
             ]
+        },
+        "strImage": {
+          "defaultValue": "WindowsServer",
+          "type": "string",
+          "metadata": {
+              "description": "Select the OS image to be provisioned. Default is WindowsServer. If you select Custom, also provide publisher, offer, sku and version"
+          },
+           "allowedValues": [
+              "WindowsServer",
+              "Windows10",
+              "Linux",
+              "Custom"
+          ]
         },
         "strPublisher": {
           "type": "string",
@@ -703,6 +714,9 @@
                     },
                     "strPlatform": {
                       "value": "[parameters('strPlatform')]"
+                    },
+                    "strImage": {
+                      "value": "[parameters('strImage')]"
                     },
                     "strPublisher": {
                       "value": "[parameters('strPublisher')]"

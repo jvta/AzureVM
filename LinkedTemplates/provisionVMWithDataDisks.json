@@ -92,19 +92,30 @@
           "description": "The data disks to attach to the VM"
       }
     },
-     "strPlatform": {
-        "defaultValue": "Windows",
-        "type": "string",
-        "metadata": {
-            "description": "Select the OS type to be provisioned. Default is Windows. Provide publisher, offer, sku and version if choosing Custom"
-        },
-         "allowedValues": [
-            "WindowsServer",
-            "Windows10",
-            "Linux",
-            "Custom"
-        ]
+    "strPlatform": {
+      "defaultValue": "Windows",
+      "type": "string",
+      "metadata": {
+          "description": "Select the OS type to be provisioned. Default is Windows"
+      },
+       "allowedValues": [
+          "Windows",
+          "Linux"
+      ]
+  },
+  "strImage": {
+    "defaultValue": "WindowsServer",
+    "type": "string",
+    "metadata": {
+        "description": "Select the OS image to be provisioned. Default is WindowsServer. If you select Custom, also provide publisher, offer, sku and version"
     },
+     "allowedValues": [
+        "WindowsServer",
+        "Windows10",
+        "Linux",
+        "Custom"
+    ]
+},
     "strPublisher": {
       "type": "string",
       "defaultValue": "MicrosoftWindowsServer",
@@ -390,7 +401,7 @@
                 "windowsConfiguration": "[if(equals(parameters('strPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
             },
             "storageProfile": {
-                "imageReference": "[variables('imageReference')[parameters('strPlatform')]]",
+                "imageReference": "[variables('imageReference')[parameters('strImage')]]",
                 "osdisk": {
                     "name": "[concat(parameters('strVmName'), '-osDisk')]",
                     "diskSizeGB": "[parameters('intVmOSDiskSize')]",
