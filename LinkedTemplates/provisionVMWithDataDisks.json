@@ -597,7 +597,7 @@
         {
           "condition": "[and(parameters('boolUseAutoShutdownExtension'),variables('true'))]",
           "type": "microsoft.devtestlab/schedules",
-          "name": "[concat(parameters('strVmName'),'/','AutoShutdownSchedule')]",
+          "name": "[concat('shutdown-computevm-',parameters('strVmName'))]",
           "apiVersion": "[parameters('strAutoShutdownApiVersion')]",
           "location": "[parameters('strLocation')]",
           "properties": {
