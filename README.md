@@ -23,9 +23,18 @@ This project is designed to host a series of linked deployment templates that ca
     * Complex DSC
     * Generic DSC
 
-**Pre-requisites**
-* It is assumed a pre-existing VNet and subnet await your VM deployment
-* A boot diagnostics storage account to reference
+### Pre-requisites
+
+The following resources are presumed to already exist prior to your deployment:
+* VNet and subnet
+* Storage account for boot diagnostics to reference
+* Load Balancer - if required
+* NSG - if required
+* RSV - if required
+* AD Domain - if using Domain Join extension
+* DSC configurations - if using DSC extension
+* Log Analytics Workspace - if using OMS extension
+* Key Vault (optional - recommended repository for all sensitive input parameters)
 
 >**NOTE:**
 >
@@ -35,7 +44,7 @@ All you will need to get started is to review the sample parameter file and prov
 
 ## Deployment
 
-The azureDeploy.json file can be copied or uploaded into a new Template Deployment resource in the Azure Portal along with your accompanying parameter file and it will reference the publicly published linked templates. Alternatively the following lines can be used to deploy the master template as is using PowerShell (with the Az or AzureRm modele installed) from its current folder location:
+The azureDeploy.json file can be copied or uploaded into a new Template Deployment resource in the Azure Portal along with your accompanying parameter file and it will reference the publicly published linked templates. Alternatively the following lines can be used to deploy the master template as is using PowerShell or [Cloud Shell](https://shell.azure.com/) (with the Az or AzureRm module installed) from its current folder location:
 
 ```PowerShell
 # Deploy a VM from this original published template in GitHub
