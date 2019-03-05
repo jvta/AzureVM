@@ -17,19 +17,22 @@ This project is designed to host a series of linked deployment templates that ca
 * Hybrid Use Benefit option
 * VM Extensions
     * Domain Join
-    * Complex DSC
-    * Generic DSC
     * BGInfo
     * OMS Agent
+    * Auto Shutdown
+    * Complex DSC
+    * Generic DSC
 
 The template assumes a pre-existing VNet awaits your VM deployment, and a boot diagnostics storage account to reference.
 
-You will need to review the sample parameter file and provide your own relevant inputs. It is recommended to reference Key Vault secrets for all protected settings like passwords or storage account keys or SAS tokens if using DSC extension option.
+All you will need to get started is to review the sample parameter file and provide your own relevant inputs. It is recommended to reference Key Vault secrets for all protected settings like passwords, storage account keys or SAS tokens if using the DSC extension options.
 
-The azureDeploy.json file can be copied into a new Template Deployment in the portal along with your accompanying parameter file and it will reference the publicly published linked templates. Alternatively the following script can be used to deploy the master template as is using PowerShell from its current folder location:
+## Deployment
+
+The azureDeploy.json file can be copied or uploaded into a new Template Deployment resource in the Azure Portal along with your accompanying parameter file and it will reference the publicly published linked templates. Alternatively the following lines can be used to deploy the master template as is using PowerShell (with the Az or AzureRm modele installed) from its current folder location:
 
 ```PowerShell
-# Deploy a VM from this master template in GitHub
+# Deploy a VM from this original published template in GitHub
 New-AzDeployment -Location <Azure location> `
                       -ResourceGroupName <Name of your Resource Group> `
                       -Name <A descriptive name for this deployment> `
@@ -40,12 +43,12 @@ New-AzDeployment -Location <Azure location> `
 # instead of the Az module
 ```
 
-If you clone or download this solution locally to insert your own edits you will still need to provide a publicly accessible path to your files e.g. a public GitHub repo of your own. Be sure to also update the templateLink variable in your copy of the azuredeploy.json master template to reflect your updated template collection location.
+If you clone or download this solution locally to customise it further you will still need to provide a publicly accessible path to your linked template files e.g. a public GitHub repo of your own. Be sure to also update the templateLink variable in your copy of the azuredeploy.json master template to reflect your updated template collection location.
 
 ```PowerShell
-# Deploy a VM from your local copy of the azuredeploy.json master template
+# Deploy a VM from a local copy of the azuredeploy.json parent template
 #  Note: you will still need to publish your edited linked templates to a public location
-#  and reference this location in your azuredeploy.json file
+#  and reference this location in your azuredeploy.json file variables section
 New-AzDeployment -Location <Azure location> `
                       -ResourceGroupName <Name of your Resource Group> `
                       -Name <A descriptive name for this deployment> `
@@ -54,10 +57,12 @@ New-AzDeployment -Location <Azure location> `
                       -Verbose
 ```
 
-## Parameter Files
-The solution includes a .gitignore file to prevent unintended upload of any *.param.json files into your public storage
+Additionally, if you clone the repo in GitHub or a similar pulbic repository you can provide a branch parameter (strBranch) to assist in selecting development or master branches during testing. Leave parameter set as "master" if unsure.
 
-Create a local parameter file for each VM to be built and store it as appropriate within your organisation.
+## Parameter File
+Should you clone this solution it includes a .gitignore file to prevent unintended upload of any *.param.json files into your public repository
+
+Create a locally saved parameter file for each VM to be built then store it securely as appropriate within your organisation.
 
 It is recommended to abstract all sensitive data out of parameter files and store as Secrets in Azure Key Vault. For example, the provisionVM templates (either with or without data disks) create a VM that requires two sensitive inputs by default: adminUsername and adminPasswordOrKey. These should be stored in a Key Vault as distinct Secrets and referenced within the parameter file as follows:
 
@@ -81,8 +86,9 @@ It is recommended to abstract all sensitive data out of parameter files and stor
     }
 }
 ```
+
 ### Minimum Mandatory Parameter Requirements
-All VM deployments require the following parameters at a minimum to deploy a valid VM:
+All VM deployments require the following parameters at an absolute minimum to deploy a valid VM:
 * strVmName
 * strAdminUserName
 * sstrAdminPasswordOrKey
@@ -91,7 +97,23 @@ All VM deployments require the following parameters at a minimum to deploy a val
 * strSubnetName
 * strBootDiagnosticsStorage
 
-Other key parameters like VM size and OS selection do have defaults supplied within the template that will produce a vaiable VM, however you should always review all parameters for relevance to your current build. All remaining parameters can be considered as optional.
+Other key parameters, even VM size and OS selection do have defaults supplied within the template that will produce a vaiable VM, however you should always review all parameters for relevance to your current build. All remaining parameters can be considered as optional.
+
+### Image Selection
+
+The template supplies three default options for image selection, and a custom option. Set strPlatform to either 'Windows' or 'Linux' to pass parameters specific to each platform, then set strImage as one of the following options:
+* WindowsServer (default - currently pub:MicrosoftWindowsServer; offer:WindowsServer; sku:2016-Datacenter; version: latest)
+* Windows10     (currently pub:MicrosoftWindowsDesktop; offer:Windows-10; sku:rs5-pro; version: latest)
+* Linux         (currently pub:RedHat; offer:RHEL; sku:7.4; version: latest)
+* Custom        (provide required strPub, strOffer, strSku and strVersion separately)
+
+If your requirement does not match the default options provide the required Publisher, Offer, SKU and Version details to the following parameters:
+* strPub
+* strOffer
+* strSku
+* strVersion
+
+### Data Disks
 
 Data Disks must be entered in an array format per data disk within the template file, and the array object must not be passed in empty as the script logic cannot compute the length of an empty array and may result in an erro, so always leave at least the default data for a single disk in the array object as below:
 
@@ -109,6 +131,16 @@ Data Disks must be entered in an array format per data disk within the template 
 }
 ```
 If you do not need any data disks simply set the Boolean parameter boolAddDataDisks to false.
+
+### Tags
+6 tags are provided in the parameter file which are converted to an array in the azuredeploy file variables. Ideally tags should be provided or not based on inputs to the parameter file and passed accordingly to the linked templates, however it was not feasible to provide an array object as input like with objDataDisks as above and convert this into an array object the tags field could consume. Subsequently, either use the individual named tags provided or clone your own copy of this project to provide more suitable tags for your environment.
+Included tags are:
+* CostCentre     (provide your preferred cost centre or department code for tracking or recharge purposes)
+* Application    (a descriptive name of the application or purpose of this resource collection e.g. AD)
+* ProvisionedBy  (the person or account used to provision this resource)
+* ProvisionDate  (the date or time of provision - in your preferred format)
+* ITOwner        (who is responsible for the resource)
+* Environment    (e.g. Test, Prod)
 
 ## VM Extensions
 The VM provision templates also permit optional VM extensions such as BGInfo, AD domain join or a PowerShell DSC extension. Simply set Boolean parameters e.g. boolUseDomainJoinExtension or boolUseGenericDSCExtension to 'false' if you do not wish to use these. Alternatively, review the parameters required by each extension below and edit your copy of the templates to suit.
@@ -132,6 +164,11 @@ To attach the OMS (Log Analytics) agent to your VM supply the following paramete
 * strOmsWorkspaceId (your unique workspace ID)
 * sstrOmsWorkspaceKey (store this in KeyVault if possible)
 * strOmsProxyUri (optional if you require it, leave as empty e.g. "" if not)
+
+### Auto Shutdown
+To apply the Auto Shutdown extension to your VM supply the following parameters:
+* boolUseAutoShutdownExtension - set to 'true' to use this extension
+* strShutdownStart (Supply at time in 24 hour clock notation e.g. 1900 for 7PM. Timezone will be taken from the VM timezone parameter)
 
 ### PowerShell DSC
 To use either of the PowerShell DSC extensions you will need to write your own DSC config file and publish it to a storage account blob or other publicly accessible URL location then adjust any settings here to provide the appropriate inputs - the parameters for the Customised DSC extension may vary from what you create. Specific DSC content creation is not covered here.
