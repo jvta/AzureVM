@@ -525,7 +525,7 @@
     "vaultApiVersion": "2016-06-01",
     "deploymentApiVersion": "2015-01-01",
     "nestedDeploymentApiVersion": "2017-05-10",
-    "autoShutdownApiVersion": "2016-05-15",
+    "autoShutdownApiVersion": "2018-10-01",
     "mainResourceGroup": "[resourceGroup().name]",
     "true": true,
     "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('strBranch'))]",
