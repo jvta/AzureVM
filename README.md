@@ -23,7 +23,11 @@ This project is designed to host a series of linked deployment templates that ca
     * Complex DSC
     * Generic DSC
 
-The template assumes a pre-existing VNet awaits your VM deployment, and a boot diagnostics storage account to reference.
+**Pre-requisites**
+* It is assumed a pre-existing VNet and subnet await your VM deployment
+* A boot diagnostics storage account to reference
+
+**NOTE:** All disks configured by the template will be Managed Disks only - no support for Unmanaged disks in Storage Accounts.
 
 All you will need to get started is to review the sample parameter file and provide your own relevant inputs. It is recommended to reference Key Vault secrets for all protected settings like passwords, storage account keys or SAS tokens if using the DSC extension options.
 
@@ -115,7 +119,28 @@ If your requirement does not match the default options provide the required Publ
 
 ### Data Disks
 
-Data Disks must be entered in an array format per data disk within the template file, and the array object must not be passed in empty as the script logic cannot compute the length of an empty array and may result in an erro, so always leave at least the default data for a single disk in the array object as below:
+Data Disks must be entered in an array format within the parameter file as per the example below for two different disk types:
+
+```JSON
+"objDataDisks": {
+    "value": {
+        "disks": [
+            {
+                "Cache": "None",
+                "Size": 1024,
+                "StorageAccountType": "Standard_LRS"
+            },
+                        {
+                "Cache": "ReadWrite",
+                "Size": 128,
+                "StorageAccountType": "Premium_LRS"
+            }
+        ]
+    }
+}
+```
+
+**Note** The array object must not be passed in as empty or null as the script logic cannot compute the length of an empty array and will result in an error. For this reason ALWAYS leave at least some default data for a single disk in the array object as below:
 
 ```JSON
 "objDataDisks": {
@@ -130,10 +155,12 @@ Data Disks must be entered in an array format per data disk within the template 
     }
 }
 ```
-If you do not need any data disks simply set the Boolean parameter boolAddDataDisks to false.
+
+If you do not need any data disks simply set the Boolean parameter boolAddDataDisks to false. The dummy data disk inputs will not result in a data disk provision if the Boolean is set to false.
 
 ### Tags
-6 tags are provided in the parameter file which are converted to an array in the azuredeploy file variables. Ideally tags should be provided or not based on inputs to the parameter file and passed accordingly to the linked templates, however it was not feasible to provide an array object as input like with objDataDisks as above and convert this into an array object the tags field could consume. Subsequently, either use the individual named tags provided or clone your own copy of this project to provide more suitable tags for your environment.
+6 tags are provided in the parameter file which are converted to an array in the azuredeploy file variables. Ideally tags should be provided or not based on inputs to the parameter file and passed accordingly to the linked templates, however it was not feasible to provide an array object as input as with objDataDisks as above and convert this into an array object the tags field could consume. Subsequently, either use the individual named tags provided here or clone your own copy of this project to provide more suitable tags for your environment.
+
 Included tags are:
 * CostCentre     (provide your preferred cost centre or department code for tracking or recharge purposes)
 * Application    (a descriptive name of the application or purpose of this resource collection e.g. AD)
@@ -186,10 +213,10 @@ The Customised PowerShell DSC extension requires you specify several configurati
 Common parameters:
 * boolUseCustomisedDSCExtension - set to 'true' to use this extension
 * strDscExtensionUpdateTagVersion (Default '1'. Increment and redeploy to force an updated configuration)
-* strArtifactsLocation (e.g. storage account where your DSC blob is stored e.g. "https://mydscacc.blob.core.windows.net" or a perhaps another GitHub location e.g. https://"https://raw.githubusercontent.com/mygithub")
+* strArtifactsLocation (e.g. storage account where your DSC blob is stored e.g. "https://mydscacc.blob.core.windows.net" or a perhaps another GitHub location e.g. "https://raw.githubusercontent.com/mygithub")
 * strDscFunction (your name for a DSC "configuration" block to apply e.g. 'StandardAzureServer')
 * strDscScript (your DSC configuration script name. Default is configuration.ps1)
-* strDscExtensionArchiveFolder (a folder or container name hosting the configuration file. Will otherwise use a storage blob default of 'windows-powershell-dsc')
+* strDscExtensionArchiveFolder (a folder or container name hosting the configuration file. Will otherwise use the storage container default named 'windows-powershell-dsc')
 * strDscExtensionArchiveFileName (your archive file name. Will otherwise use a default of 'configuration.ps1.zip')
 
 Default variables:
@@ -197,7 +224,7 @@ Default variables:
 
 Example-specific parameters:
 * sstrStorageUserName (e.g. provide a storage account name for use with Azure Files share to store SOE installation files)
-* sstrStoragePassword (storage account password for above - SAS tokens don't work for this)
+* sstrStoragePassword (primary or secondary storage account password for above - SAS tokens don't work for this)
 * strLocalAccountUserName (for creating an additional local account)
 * sstrLocalAccountUserPassword (password for above)
 * sstrArtifactsLocationSasToken (SAS token for accessing configuration.ps1.zip file blob)
@@ -209,10 +236,10 @@ The Generic DSC extension contains only details for accessing a PowerShell DSC c
 Common parameters:
 * boolUseGenericDSCExtension - set to 'true' to use this extension
 * strDscExtensionUpdateTagVersion (Default '1'. Increment and redeploy to force an updated configuration)
-* strArtifactsLocation (e.g. storage account where your DSC blob is stored e.g. "https://mydscacc.blob.core.windows.net" or perhaps another GitHub location e.g. https://"https://raw.githubusercontent.com/mygithub")
+* strArtifactsLocation (e.g. storage account where your DSC blob is stored e.g. "https://mydscacc.blob.core.windows.net" or perhaps another GitHub location e.g. "https://raw.githubusercontent.com/mygithub")
 * strDscFunction (your name for a DSC "configuration" block to apply e.g. 'StandardAzureServer')
 * strDscScript (your DSC configuration script name. Default is configuration.ps1)
-* strDscExtensionArchiveFolder (a folder or container name hosting the configuration file. Will otherwise use a storage blob default of 'windows-powershell-dsc')
+* strDscExtensionArchiveFolder (a folder or container name hosting the configuration file. Will otherwise use the storage container default named 'windows-powershell-dsc')
 * strDscExtensionArchiveFileName (your archive file name. Will otherwise use a default of 'configuration.ps1.zip')
 
 Default variables:
