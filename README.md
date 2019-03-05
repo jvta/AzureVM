@@ -23,7 +23,8 @@ This project is designed to host a series of linked deployment templates that ca
     * Complex DSC
     * Generic DSC
 
-**Pre-requisites**
+### Pre-requisites
+
 The following resources are presumed to already exist prior to your deployment:
 * VNet and subnet
 * Storage account for boot diagnostics to reference
