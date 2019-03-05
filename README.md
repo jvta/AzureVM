@@ -27,7 +27,9 @@ This project is designed to host a series of linked deployment templates that ca
 * It is assumed a pre-existing VNet and subnet await your VM deployment
 * A boot diagnostics storage account to reference
 
-**NOTE:** All disks configured by the template will be Managed Disks only - no support for Unmanaged disks in Storage Accounts.
+>**NOTE:**
+>
+>All disks configured by the template will be Managed Disks only - Unmanaged disks and Storage Accounts are not supported
 
 All you will need to get started is to review the sample parameter file and provide your own relevant inputs. It is recommended to reference Key Vault secrets for all protected settings like passwords, storage account keys or SAS tokens if using the DSC extension options.
 
@@ -140,7 +142,9 @@ Data Disks must be entered in an array format within the parameter file as per t
 }
 ```
 
-**Note** The array object must not be passed in as empty or null as the script logic cannot compute the length of an empty array and will result in an error. For this reason ALWAYS leave at least some default data for a single disk in the array object as below:
+>**NOTE:**
+>
+>The array object must not be passed in as empty or null as the script logic cannot compute the length of an empty array and will result in an error. For this reason ALWAYS leave at least some default data for a single disk in the array object as below:
 
 ```JSON
 "objDataDisks": {
@@ -156,7 +160,7 @@ Data Disks must be entered in an array format within the parameter file as per t
 }
 ```
 
-If you do not need any data disks simply set the Boolean parameter boolAddDataDisks to false. The dummy data disk inputs will not result in a data disk provision if the Boolean is set to false.
+If you do not need any data disks simply set the Boolean parameter boolAddDataDisks to false. The dummy data disk inputs will not result in a data disk provision providing  the Boolean is set to false.
 
 ### Tags
 6 tags are provided in the parameter file which are converted to an array in the azuredeploy file variables. Ideally tags should be provided or not based on inputs to the parameter file and passed accordingly to the linked templates, however it was not feasible to provide an array object as input as with objDataDisks as above and convert this into an array object the tags field could consume. Subsequently, either use the individual named tags provided here or clone your own copy of this project to provide more suitable tags for your environment.
