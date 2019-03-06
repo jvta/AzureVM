@@ -175,7 +175,7 @@
         "description": "OS Admin password or SSH Key depending on value of authentication type"
       }
     },
-    "strBootDiagnosticsStorage": {
+    "strDiagnosticsStorageAccountName": {
       "type": "string",
       "metadata": {
         "description": "Storage Account for storing boot diagnostics data"
@@ -434,7 +434,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
             "enabled": true,
-            "storageUri": "[concat('https://',parameters('strBootDiagnosticsStorage'),'.blob.core.windows.net')]"
+            "storageUri": "[concat('https://',parameters('strDiagnosticsStorageAccountName'),'.blob.core.windows.net')]"
           }
         },
         "licenseType": "[if(parameters('boolUseHybridUseBenefit'), 'Windows_Server', json('null'))]",
