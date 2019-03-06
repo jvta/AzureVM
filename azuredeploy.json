@@ -14,7 +14,7 @@
       "type": "string",
       "metadata": {
         "group": "Infrastructure Configuration",
-        "description": "Specify the name of the VM meeting the Caltex naming standards."
+        "description": "Specify the name of the VM meeting your naming standards."
       }
     },
     "strVmSize": {
