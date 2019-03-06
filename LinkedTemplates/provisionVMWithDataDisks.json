@@ -175,6 +175,13 @@
         "description": "OS Admin password or SSH Key depending on value of authentication type"
       }
     },
+    "boolUseBootDiagnostics": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Whether this server should configure Boot Diagnostics against a storage account"
+      }
+    },
     "strDiagnosticsStorageAccountName": {
       "type": "string",
       "metadata": {
@@ -394,6 +401,12 @@
     },
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('strAvSetName'))]"
+    },
+    "diagnosticsProfile": {
+      "bootDiagnostics": {
+        "enabled": true,
+        "storageUri": "[concat('https://',parameters('strDiagnosticsStorageAccountName'),'.blob.core.windows.net')]"
+      }
     }
   },
   "resources": [
@@ -447,12 +460,7 @@
             }
           ]
         },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": true,
-            "storageUri": "[concat('https://',parameters('strDiagnosticsStorageAccountName'),'.blob.core.windows.net')]"
-          }
-        },
+        "diagnosticsProfile": "[if(parameters('boolUseBootDiagnostics'),variables('diagnosticsProfile'),json('null'))]",
         "licenseType": "[if(parameters('boolUseHybridUseBenefit'), 'Windows_Server', json('null'))]",
         "networkProfile": {
           "networkInterfaces": [
