@@ -42,7 +42,7 @@
             "location": "[parameters('strLocation')]",
             "tags": "[parameters('objTags')]",
             "sku": {
-              "name": "[parameters('strDiagnosticsStorageAccountType')]"
+                "name": "[parameters('strDiagnosticsStorageAccountType')]"
             },
             "kind": "StorageV2"
         }
