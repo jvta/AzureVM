@@ -276,11 +276,33 @@
         "description": "Specify the name of the Subnet"
       }
     },
-    "strBootDiagnosticsStorage": {
+    "boolNewDiagnosticsStorage": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "group": "Infrastructure Configuration",
+        "description": "Whether a new storage account should be created for Diagnostics data"
+      }
+    },
+    "strDiagnosticsStorageAccountName": {
       "type": "string",
       "metadata": {
         "group": "Infrastructure Configuration",
-        "description": "Storage Account for storing boot diagnostics data"
+        "description": "Storage Account name to use for storing boot diagnostics data"
+      }
+    },
+    "strDiagnosticsStorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "StandardSSD_LRS",
+        "Standard_GRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "group": "Infrastructure Configuration",
+        "description": "Storage account type to be used with Diagnostics"
       }
     },
     "boolBackupRequired": {
@@ -526,6 +548,7 @@
     "deploymentApiVersion": "2015-01-01",
     "nestedDeploymentApiVersion": "2017-05-10",
     "autoShutdownApiVersion": "2018-09-15",
+    "strLatestStorageApi": "[providers('Microsoft.Storage','storageAccounts').apiVersions[0]]",
     "mainResourceGroup": "[resourceGroup().name]",
     "true": true,
     "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('strBranch'))]",
@@ -673,12 +696,44 @@
       }
     },
     {
+      "condition": "[and(parameters('boolNewDiagnosticsStorage'),variables('true'))]",
+      "type": "Microsoft.Resources/deployments",
+      "name": "provisionDiagnosticsStorage",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLink'),'/','LinkedTemplates/provisionStorageAccount.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "strLocation": {
+            "value": "[parameters('strLocation')]"
+          },
+          "strApiVersion": {
+            "value": "[variables('strLatestStorageApi')]"
+          },
+          "strDiagnosticsStorageAccountName": {
+            "value": "[parameters('strDiagnosticsStorageAccountName')]"
+          },
+          "strDiagnosticsStorageAccountType": {
+            "value": "[parameters('strDiagnosticsStorageAccountType')]"
+          },
+          "objTags": {
+            "value": "[variables('objTags')]"
+          }
+        }
+      }
+    },
+    {
       "name": "provisionCompute",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "dependsOn": [
-        "Microsoft.Resources/deployments/ProvisionNetworkInterface",
-        "Microsoft.Resources/deployments/ProvisionAvSet"
+        "Microsoft.Resources/deployments/provisionNetworkInterface",
+        "Microsoft.Resources/deployments/provisionAvSet",
+        "Microsoft.Resources/deployments/provisionDiagnosticsStorage"
       ],
       "properties": {
         "mode": "Incremental",
@@ -756,8 +811,8 @@
           "sstrAdminPasswordOrKey": {
             "value": "[parameters('sstrAdminPasswordOrKey')]"
           },
-          "strBootDiagnosticsStorage": {
-            "value": "[parameters('strBootDiagnosticsStorage')]"
+          "strDiagnosticsStorageAccountName": {
+            "value": "[parameters('strDiagnosticsStorageAccountName')]"
           },
           "boolUseDomainJoinExtension": {
             "value": "[parameters('boolUseDomainJoinExtension')]"
