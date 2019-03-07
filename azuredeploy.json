@@ -76,7 +76,6 @@
     "objDataDisks": {
       "type": "object",
       "defaultValue": {
-        "value": {
           "disks": [
             {
               "Cache": "None",
@@ -84,7 +83,6 @@
               "StorageAccountType": "Standard_LRS"
             }
           ]
-        }
       },
       "metadata": {
         "description": "The data disks to attach to the VM"
