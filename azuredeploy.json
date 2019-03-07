@@ -739,10 +739,10 @@
           "boolAttachNetworkSecurityGroup": {
             "value": "[parameters('boolAttachNetworkSecurityGroup')]"
           },
-          "strNetworkSecurityGroup": {
+          "strNetworkSecurityGroupName": {
             "value": "[parameters('strNetworkSecurityGroupName')]"
           },
-          "strNetworkSecurityGroupRG": {
+          "strNetworkSecurityGroupRGName": {
             "value": "[parameters('strNetworkSecurityGroupRGName')]"
           },
           "boolJoinLoadBalancer": {
@@ -751,7 +751,7 @@
           "strLoadBalancerName": {
             "value": "[parameters('strLoadBalancerName')]"
           },
-          "strLoadBalancerRG": {
+          "strLoadBalancerRGName": {
             "value": "[parameters('strLoadBalancerRGName')]"
           },
           "strLoadBalancerBackendPoolName": {
@@ -846,7 +846,7 @@
           "objDataDisks": {
             "value": "[parameters('objDataDisks')]"
           },
-          "strPlatform": {
+          "strOsPlatform": {
             "value": "[parameters('strOsPlatform')]"
           },
           "strImage": {
