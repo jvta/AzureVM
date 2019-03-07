@@ -90,11 +90,11 @@
         "description": "The data disks to attach to the VM"
       }
     },
-    "strPlatform": {
+    "strOsPlatform": {
       "defaultValue": "Windows",
       "type": "string",
       "metadata": {
-        "description": "Select the OS type to be provisioned. Default is Windows"
+        "description": "Select the OS platform type to be provisioned. Options are Windows or Linux. Default is Windows"
       },
       "allowedValues": [
         "Windows",
@@ -105,7 +105,7 @@
       "defaultValue": "WindowsServer",
       "type": "string",
       "metadata": {
-        "description": "Select the OS image to be provisioned. Default is WindowsServer. If you select Custom, also provide publisher, offer, sku and version"
+        "description": "Select either a default OS platform image to be provisioned or choose Custom to provide image details. Default is WindowsServer. If you select Custom, you must also provide strPublisher, strOffer, strSku and strVersion"
       },
       "allowedValues": [
         "WindowsServer",
@@ -204,11 +204,18 @@
         "description": "Specify whether the NIC should have an NSG attached"
       }
     },
-    "strNetworkSecurityGroup": {
+    "strNetworkSecurityGroupName": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
         "description": "Name of an NSG to attach to the NIC"
+      }
+    },
+    "strNetworkSecurityGroupRGName": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Name of the Resource Group containing the NSG to attach to the NIC"
       }
     },
     "boolJoinLoadBalancer": {
@@ -223,6 +230,13 @@
       "defaultValue": "",
       "metadata": {
         "description": "Name of an Azure Load Balancer to attach to the NIC"
+      }
+    },
+    "strLoadBalancerRGName": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Name of the Resource Group containing the Load Balancer to join"
       }
     },
     "strLoadBalancerBackendPoolName": {
@@ -726,13 +740,19 @@
             "value": "[parameters('boolAttachNetworkSecurityGroup')]"
           },
           "strNetworkSecurityGroup": {
-            "value": "[parameters('strNetworkSecurityGroup')]"
+            "value": "[parameters('strNetworkSecurityGroupName')]"
+          },
+          "strNetworkSecurityGroupRG": {
+            "value": "[parameters('strNetworkSecurityGroupRGName')]"
           },
           "boolJoinLoadBalancer": {
             "value": "[parameters('boolJoinLoadBalancer')]"
           },
           "strLoadBalancerName": {
             "value": "[parameters('strLoadBalancerName')]"
+          },
+          "strLoadBalancerRG": {
+            "value": "[parameters('strLoadBalancerRGName')]"
           },
           "strLoadBalancerBackendPoolName": {
             "value": "[parameters('strLoadBalancerBackendPoolName')]"
@@ -827,7 +847,7 @@
             "value": "[parameters('objDataDisks')]"
           },
           "strPlatform": {
-            "value": "[parameters('strPlatform')]"
+            "value": "[parameters('strOsPlatform')]"
           },
           "strImage": {
             "value": "[parameters('strImage')]"
