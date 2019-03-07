@@ -134,7 +134,7 @@ If your requirement does not match the default WindowsServer, Windows10 or Linux
 
 ### Networking
 
-In addition to supplying Subnet Name, Virtual Network Name and associated Resource Group name, also set Booleans for whether Public IP, NSG, Load Balancer or Accelerated Networking are required. Provide details as required for NSG and ALB names, RG's and Backend Pool. Set whether IP addresses should be Static or Dynamic. You can also select SKU type for the Public IP.
+In addition to supplying Subnet Name, Virtual Network Name and associated VNet Resource Group name, also set Booleans for whether Public IP, NSG, Load Balancer or Accelerated Networking are required. Provide details as required for NSG or ALB names, their Resource Groups (even if it is the same as the RG for your VM) and Backend Pool for ALB. Set whether IP addresses should be Static or Dynamic. You can also select SKU type for the Public IP.
 
 ### Other Compute Options
 
