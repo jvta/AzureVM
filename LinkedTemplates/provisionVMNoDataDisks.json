@@ -92,11 +92,11 @@
         "description": "The data disks to attach to the VM"
       }
     },
-    "strPlatform": {
+    "strOsPlatform": {
       "defaultValue": "Windows",
       "type": "string",
       "metadata": {
-        "description": "Select the OS type to be provisioned. Default is Windows"
+        "description": "Select the OS platform type to be provisioned. Options are Windows or Linux. Default is Windows"
       },
       "allowedValues": [
         "Windows",
@@ -107,7 +107,7 @@
       "defaultValue": "WindowsServer",
       "type": "string",
       "metadata": {
-        "description": "Select the OS image to be provisioned. Default is WindowsServer. If you select Custom, also provide publisher, offer, sku and version"
+        "description": "Select either a default OS platform image to be provisioned or choose Custom to provide image details. Default is WindowsServer. If you select Custom, you must also provide strPublisher, strOffer, strSku and strVersion"
       },
       "allowedValues": [
         "WindowsServer",
@@ -430,7 +430,7 @@
           "adminUsername": "[parameters('strAdminUsername')]",
           "adminPassword": "[parameters('sstrAdminPasswordOrKey')]",
           "linuxConfiguration": "[if(equals(parameters('strAuthenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
-          "windowsConfiguration": "[if(equals(parameters('strPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
+          "windowsConfiguration": "[if(equals(parameters('strOsPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
         },
         "storageProfile": {
           "imageReference": "[variables('imageReference')[parameters('strImage')]]",
