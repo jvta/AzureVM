@@ -14,7 +14,7 @@
       "type": "string",
       "metadata": {
         "group": "Infrastructure Configuration",
-        "description": "Specify the name of the VM meeting the Caltex naming standards."
+        "description": "Specify the name of the VM meeting your naming standards."
       }
     },
     "strVmSize": {
@@ -40,10 +40,10 @@
       }
     },
     "strAvSetName": {
-      "defaultValue": "None",
+      "defaultValue": "",
       "type": "string",
       "metadata": {
-        "description": "Specify the name of the Availability Set, if required. Specify None if not required"
+        "description": "Specify the name of the Availability Set, if required"
       }
     },
     "intVmOsDiskSize": {
@@ -75,15 +75,24 @@
     },
     "objDataDisks": {
       "type": "object",
+      "defaultValue": {
+          "disks": [
+            {
+              "Cache": "None",
+              "Size": 1024,
+              "StorageAccountType": "Standard_LRS"
+            }
+          ]
+      },
       "metadata": {
         "description": "The data disks to attach to the VM"
       }
     },
-    "strPlatform": {
+    "strOsPlatform": {
       "defaultValue": "Windows",
       "type": "string",
       "metadata": {
-        "description": "Select the OS type to be provisioned. Default is Windows"
+        "description": "Select the OS platform type to be provisioned. Options are Windows or Linux. Default is Windows"
       },
       "allowedValues": [
         "Windows",
@@ -94,7 +103,7 @@
       "defaultValue": "WindowsServer",
       "type": "string",
       "metadata": {
-        "description": "Select the OS image to be provisioned. Default is WindowsServer. If you select Custom, also provide publisher, offer, sku and version"
+        "description": "Select either a default OS platform image to be provisioned or choose Custom to provide image details. Default is WindowsServer. If you select Custom, you must also provide strPublisher, strOffer, strSku and strVersion"
       },
       "allowedValues": [
         "WindowsServer",
@@ -140,7 +149,7 @@
       }
     },
     "strPublicIpAllocationType": {
-      "defaultValue": "Dynamic",
+      "defaultValue": "Static",
       "type": "string",
       "metadata": {
         "description": "Specify whether the public IP should be Static or Dynamic"
@@ -173,7 +182,7 @@
       ]
     },
     "strPrivateIpAddress": {
-      "defaultValue": "None",
+      "defaultValue": "UsingDynamic",
       "type": "string",
       "metadata": {
         "description": "A static private IP address to be used"
@@ -193,10 +202,18 @@
         "description": "Specify whether the NIC should have an NSG attached"
       }
     },
-    "strNetworkSecurityGroup": {
+    "strNetworkSecurityGroupName": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Name of an NSG to attach to the NIC"
+      }
+    },
+    "strNetworkSecurityGroupRGName": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Name of the Resource Group containing the NSG to attach to the NIC"
       }
     },
     "boolJoinLoadBalancer": {
@@ -208,12 +225,21 @@
     },
     "strLoadBalancerName": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Name of an Azure Load Balancer to attach to the NIC"
       }
     },
+    "strLoadBalancerRGName": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Name of the Resource Group containing the Load Balancer to join"
+      }
+    },
     "strLoadBalancerBackendPoolName": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Name of the Backend Pool of the Load Balancer to join"
       }
@@ -276,11 +302,40 @@
         "description": "Specify the name of the Subnet"
       }
     },
-    "strBootDiagnosticsStorage": {
+    "boolUseBootDiagnostics": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Whether this server should configure Boot Diagnostics against a storage account"
+      }
+    },
+    "boolNewDiagnosticsStorage": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "group": "Infrastructure Configuration",
+        "description": "Whether a new storage account should be created for Diagnostics data"
+      }
+    },
+    "strDiagnosticsStorageAccountName": {
       "type": "string",
       "metadata": {
         "group": "Infrastructure Configuration",
-        "description": "Storage Account for storing boot diagnostics data"
+        "description": "Storage Account name to use for storing boot diagnostics data"
+      }
+    },
+    "strDiagnosticsStorageAccountType": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "StandardSSD_LRS",
+        "Standard_GRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "group": "Infrastructure Configuration",
+        "description": "Storage account type to be used with Diagnostics"
       }
     },
     "boolBackupRequired": {
@@ -292,18 +347,21 @@
     },
     "strVaultName": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The Recovery Services Vault to which this server should be joined"
       }
     },
     "strVaultResourceGroup": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The Resource Group containing the Recovery Services Vault to which this server should be joined"
       }
     },
     "strBackupPolicyName": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The Backup Policy that should be applied to this server"
       }
@@ -317,24 +375,28 @@
     },
     "strDomainToJoin": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The domain to which this server should be joined"
       }
     },
     "strOuPath": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The Organisational Unit into which server should be placed in the chosen domain"
       }
     },
     "strDomainJoinAccount": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The domain account to use for joining the domain"
       }
     },
     "sstrDomainJoinAccountPassword": {
       "type": "securestring",
+      "defaultValue": "",
       "metadata": {
         "description": "The domain account password for domain join"
       }
@@ -355,6 +417,7 @@
     },
     "strArtifactsLocation": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Base URI of DSC artifacts required"
       }
@@ -375,6 +438,7 @@
     },
     "strDscScript": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "The DSC Script filename to use. e.g. configuration.ps1 is normally a default"
       }
@@ -388,36 +452,42 @@
     },
     "strDscFunction": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Calls function to execute within DSC configuration file"
       }
     },
     "sstrArtifactsLocationSasToken": {
       "type": "securestring",
+      "defaultValue": "",
       "metadata": {
         "description": "Azure blob SAS token for access to the DSC extension file. Set to empty if not required e.g. if using public GitHub repository location"
       }
     },
     "sstrStorageUserName": {
       "type": "securestring",
+      "defaultValue": "",
       "metadata": {
         "description": "The storage account where the DSC related tools downloads are saved for this environment"
       }
     },
     "sstrStoragePassword": {
       "type": "securestring",
+      "defaultValue": "",
       "metadata": {
         "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
       }
     },
     "strLocalAccountUserName": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "Name of additional local user account to be added to local Administrators Group"
       }
     },
     "sstrLocalAccountUserPassword": {
       "type": "securestring",
+      "defaultValue": "",
       "metadata": {
         "description": "Password of additional local user account to be added to local Administrators Group"
       }
@@ -438,18 +508,21 @@
     },
     "strOmsWorkspaceId": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "OMS Workspace ID to connect to"
       }
     },
     "sstrOmsWorkspaceKey": {
       "type": "securestring",
+      "defaultValue": "",
       "metadata": {
         "description": "Primary Key of the OMS Workspace selected"
       }
     },
     "strOmsProxyUri": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "description": "OMS Proxy URI if required"
       }
@@ -463,6 +536,7 @@
     },
     "strShutdownStart": {
       "type": "string",
+      "defaultValue": "1900",
       "metadata": {
         "description": "Time to initiate shutdown in 24 hour clock notation e.g. 1900 for 7pm. Extension will use timezone parameter to correct against UTC time"
       }
@@ -476,6 +550,7 @@
     },
     "strTagCostCentre": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "group": "Tags",
         "description": "A tag to apply to all resources in this deployment"
@@ -483,6 +558,7 @@
     },
     "strTagApplication": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "group": "Tags",
         "description": "A tag to apply to all resources in this deployment"
@@ -490,6 +566,7 @@
     },
     "strTagProvisionedBy": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "group": "Tags",
         "description": "A tag to apply to all resources in this deployment"
@@ -497,6 +574,7 @@
     },
     "strTagProvisionDate": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "group": "Tags",
         "description": "A tag to apply to all resources in this deployment"
@@ -504,6 +582,7 @@
     },
     "strTagITOwner": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
         "group": "Tags",
         "description": "A tag to apply to all resources in this deployment"
@@ -526,6 +605,7 @@
     "deploymentApiVersion": "2015-01-01",
     "nestedDeploymentApiVersion": "2017-05-10",
     "autoShutdownApiVersion": "2018-09-15",
+    "strLatestStorageApi": "[providers('Microsoft.Storage','storageAccounts').apiVersions[0]]",
     "mainResourceGroup": "[resourceGroup().name]",
     "true": true,
     "templateLink": "[concat('https://raw.githubusercontent.com/jvta/AzureVM/',parameters('strBranch'))]",
@@ -657,8 +737,11 @@
           "boolAttachNetworkSecurityGroup": {
             "value": "[parameters('boolAttachNetworkSecurityGroup')]"
           },
-          "strNetworkSecurityGroup": {
-            "value": "[parameters('strNetworkSecurityGroup')]"
+          "strNetworkSecurityGroupName": {
+            "value": "[parameters('strNetworkSecurityGroupName')]"
+          },
+          "strNetworkSecurityGroupRGName": {
+            "value": "[parameters('strNetworkSecurityGroupRGName')]"
           },
           "boolJoinLoadBalancer": {
             "value": "[parameters('boolJoinLoadBalancer')]"
@@ -666,8 +749,42 @@
           "strLoadBalancerName": {
             "value": "[parameters('strLoadBalancerName')]"
           },
+          "strLoadBalancerRGName": {
+            "value": "[parameters('strLoadBalancerRGName')]"
+          },
           "strLoadBalancerBackendPoolName": {
             "value": "[parameters('strLoadBalancerBackendPoolName')]"
+          }
+        }
+      }
+    },
+    {
+      "condition": "[and(parameters('boolNewDiagnosticsStorage'),variables('true'))]",
+      "type": "Microsoft.Resources/deployments",
+      "name": "provisionDiagnosticsStorage",
+      "apiVersion": "[variables('deploymentApiVersion')]",
+      "dependsOn": [],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(variables('templateLink'),'/','LinkedTemplates/provisionStorageAccount.json')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "strLocation": {
+            "value": "[parameters('strLocation')]"
+          },
+          "strApiVersion": {
+            "value": "[variables('strLatestStorageApi')]"
+          },
+          "strDiagnosticsStorageAccountName": {
+            "value": "[parameters('strDiagnosticsStorageAccountName')]"
+          },
+          "strDiagnosticsStorageAccountType": {
+            "value": "[parameters('strDiagnosticsStorageAccountType')]"
+          },
+          "objTags": {
+            "value": "[variables('objTags')]"
           }
         }
       }
@@ -677,8 +794,9 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "[variables('deploymentApiVersion')]",
       "dependsOn": [
-        "Microsoft.Resources/deployments/ProvisionNetworkInterface",
-        "Microsoft.Resources/deployments/ProvisionAvSet"
+        "Microsoft.Resources/deployments/provisionNetworkInterface",
+        "Microsoft.Resources/deployments/provisionAvSet",
+        "Microsoft.Resources/deployments/provisionDiagnosticsStorage"
       ],
       "properties": {
         "mode": "Incremental",
@@ -726,8 +844,8 @@
           "objDataDisks": {
             "value": "[parameters('objDataDisks')]"
           },
-          "strPlatform": {
-            "value": "[parameters('strPlatform')]"
+          "strOsPlatform": {
+            "value": "[parameters('strOsPlatform')]"
           },
           "strImage": {
             "value": "[parameters('strImage')]"
@@ -756,8 +874,11 @@
           "sstrAdminPasswordOrKey": {
             "value": "[parameters('sstrAdminPasswordOrKey')]"
           },
-          "strBootDiagnosticsStorage": {
-            "value": "[parameters('strBootDiagnosticsStorage')]"
+          "boolUseBootDiagnostics": {
+            "value": "[parameters('boolUseBootDiagnostics')]"
+          },
+          "strDiagnosticsStorageAccountName": {
+            "value": "[parameters('strDiagnosticsStorageAccountName')]"
           },
           "boolUseDomainJoinExtension": {
             "value": "[parameters('boolUseDomainJoinExtension')]"

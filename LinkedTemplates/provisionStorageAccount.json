@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "strLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "Location to create the resource"
+            }
+        },
+        "strApiVersion": {
+            "type": "string",
+            "metadata": {
+                "description": "API version for this resource"
+            }
+        },
+        "strDiagnosticsStorageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Name of the Storage Account to create"
+            }
+        },
+        "strDiagnosticsStorageAccountType": {
+            "type": "string",
+            "metadata": {
+                "description": "Type of the Storage Account to create"
+            }
+        },
+        "objTags": {
+            "type": "object",
+            "metadata": {
+                "description": "Tags to attach to resource"
+            }
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[toLower(parameters('strDiagnosticsStorageAccountName'))]",
+            "apiVersion": "[parameters('strApiVersion')]",
+            "location": "[parameters('strLocation')]",
+            "tags": "[parameters('objTags')]",
+            "sku": {
+                "name": "[parameters('strDiagnosticsStorageAccountType')]"
+            },
+            "kind": "StorageV2"
+        }
+    ]
+}

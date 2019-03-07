@@ -92,11 +92,11 @@
         "description": "The data disks to attach to the VM"
       }
     },
-    "strPlatform": {
+    "strOsPlatform": {
       "defaultValue": "Windows",
       "type": "string",
       "metadata": {
-        "description": "Select the OS type to be provisioned. Default is Windows"
+        "description": "Select the OS platform type to be provisioned. Options are Windows or Linux. Default is Windows"
       },
       "allowedValues": [
         "Windows",
@@ -107,7 +107,7 @@
       "defaultValue": "WindowsServer",
       "type": "string",
       "metadata": {
-        "description": "Select the OS image to be provisioned. Default is WindowsServer. If you select Custom, also provide publisher, offer, sku and version"
+        "description": "Select either a default OS platform image to be provisioned or choose Custom to provide image details. Default is WindowsServer. If you select Custom, you must also provide strPublisher, strOffer, strSku and strVersion"
       },
       "allowedValues": [
         "WindowsServer",
@@ -175,7 +175,14 @@
         "description": "OS Admin password or SSH Key depending on value of authentication type"
       }
     },
-    "strBootDiagnosticsStorage": {
+    "boolUseBootDiagnostics": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Whether this server should configure Boot Diagnostics against a storage account"
+      }
+    },
+    "strDiagnosticsStorageAccountName": {
       "type": "string",
       "metadata": {
         "description": "Storage Account for storing boot diagnostics data"
@@ -394,6 +401,12 @@
     },
     "availabilitySet": {
       "id": "[resourceId('Microsoft.Compute/availabilitySets',parameters('strAvSetName'))]"
+    },
+    "diagnosticsProfile": {
+      "bootDiagnostics": {
+        "enabled": true,
+        "storageUri": "[concat('https://',parameters('strDiagnosticsStorageAccountName'),'.blob.core.windows.net')]"
+      }
     }
   },
   "resources": [
@@ -417,7 +430,7 @@
           "adminUsername": "[parameters('strAdminUsername')]",
           "adminPassword": "[parameters('sstrAdminPasswordOrKey')]",
           "linuxConfiguration": "[if(equals(parameters('strAuthenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
-          "windowsConfiguration": "[if(equals(parameters('strPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
+          "windowsConfiguration": "[if(equals(parameters('strOsPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
         },
         "storageProfile": {
           "imageReference": "[variables('imageReference')[parameters('strImage')]]",
@@ -447,12 +460,7 @@
             }
           ]
         },
-        "diagnosticsProfile": {
-          "bootDiagnostics": {
-            "enabled": true,
-            "storageUri": "[concat('https://',parameters('strBootDiagnosticsStorage'),'.blob.core.windows.net')]"
-          }
-        },
+        "diagnosticsProfile": "[if(parameters('boolUseBootDiagnostics'),variables('diagnosticsProfile'),json('null'))]",
         "licenseType": "[if(parameters('boolUseHybridUseBenefit'), 'Windows_Server', json('null'))]",
         "networkProfile": {
           "networkInterfaces": [

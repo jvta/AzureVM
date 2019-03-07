@@ -77,10 +77,17 @@
         "description": "Whether the NIC should have an NSG attached"
       }
     },
-    "strNetworkSecurityGroup": {
+    "strNetworkSecurityGroupName": {
       "type": "string",
       "metadata": {
         "description": "Name of an NSG to attach to the NIC"
+      }
+    },
+    "strNetworkSecurityGroupRGName": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Name of the Resource Group containing the NSG to attach to the NIC"
       }
     },
     "boolJoinLoadBalancer": {
@@ -96,6 +103,13 @@
         "description": "Name of an Azure Load Balancer to attach to the NIC"
       }
     },
+    "strLoadBalancerRGName": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]",
+      "metadata": {
+        "description": "Name of the Resource Group containing the Load Balancer to join"
+      }
+    },
     "strLoadBalancerBackendPoolName": {
       "type": "string",
       "metadata": {
@@ -107,11 +121,11 @@
     "vnetID": "[resourceId(parameters('strVirtualNetworkRGName'), 'Microsoft.Network/virtualNetworks', parameters('strVirtualNetworkName'))]",
     "subnetRef": "[concat(variables('vnetID'),'/subnets/', parameters('strSubnetName'))]",
     "networkSecurityGroup": {
-      "id": "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('strNetworkSecurityGroup'))]"
+      "id": "[resourceId(parameters('strNetworkSecurityGroupRGName'),'Microsoft.Network/networkSecurityGroups',parameters('strNetworkSecurityGroupName'))]"
     },
     "loadBalancerBackendAddressPools": [
       {
-        "id": "[concat(resourceId('Microsoft.Network/loadBalancers', parameters('strLoadBalancerName')), '/backendAddressPools/',parameters('strLoadBalancerBackendPoolName'))]"
+        "id": "[concat(resourceId(parameters('strLoadBalancerRGName'),'Microsoft.Network/loadBalancers', parameters('strLoadBalancerName')), '/backendAddressPools/',parameters('strLoadBalancerBackendPoolName'))]"
       }
     ]
   },
