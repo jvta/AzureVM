@@ -27,23 +27,15 @@ This project is designed to host a series of linked deployment templates that ca
 ### Pre-requisites
 
 The following resources are presumed to already exist prior to your deployment:
-<<<<<<< HEAD
 * VNet and subnet
 * Storage account for boot diagnostics to reference
-=======
-* VNet and subnet - mandatory
->>>>>>> Development
 * Load Balancer - if required
 * NSG - if required
 * RSV - if required
 * AD Domain - if using Domain Join extension
 * DSC configurations - if using DSC extension
 * Log Analytics Workspace - if using OMS extension
-<<<<<<< HEAD
 * Key Vault (optional - recommended repository for all sensitive input parameters)
-=======
-* Key Vault - optional but recommended repository for all sensitive input parameters
->>>>>>> Development
 
 >**NOTE:**
 >
