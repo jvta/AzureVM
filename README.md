@@ -48,12 +48,11 @@ The azureDeploy.json file can be copied or uploaded into a new Template Deployme
 
 ```PowerShell
 # Deploy a VM from this original published template in GitHub
-New-AzDeployment -Location <Azure location> `
-                      -ResourceGroupName <Name of your Resource Group> `
-                      -Name <A descriptive name for this deployment> `
-                      -TemplateUri https://raw.githubusercontent.com/jvta/AzureVM/master/azuredeploy.json `
-                      -TemplateParameterFile <path to your local azuredeploy.network.parameters.json file> `
-                      -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName <Name of your Resource Group> `
+                    -Name <A descriptive name for this deployment> `
+                    -TemplateUri https://raw.githubusercontent.com/jvta/AzureVM/master/azuredeploy.json `
+                    -TemplateParameterFile <path to your local azuredeploy.network.parameters.json file> `
+                    -Verbose
 # Substitute New-AzDeployment with New-AzureRmDeployment if you are running the old AzureRm PowerShell module
 # instead of the Az module
 ```
@@ -64,8 +63,7 @@ If you clone or download this solution locally to customise it further you will 
 # Deploy a VM from a local copy of the azuredeploy.json parent template
 #  Note: you will still need to publish your edited linked templates to a public location
 #  and reference this location in your azuredeploy.json file variables section
-New-AzDeployment -Location <Azure location> `
-                      -ResourceGroupName <Name of your Resource Group> `
+New-AzResourceGroupDeployment -ResourceGroupName <Name of your Resource Group> `
                       -Name <A descriptive name for this deployment> `
                       -TemplateFile <path to your local copy of the azuredeploy.json file> `
                       -TemplateParameterFile <path to your local azuredeploy.parameters.json file> `
