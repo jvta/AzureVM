@@ -122,10 +122,10 @@ The template supplies three default options for image selection, and a custom op
 * WindowsServer (Default. Currently pub=MicrosoftWindowsServer; offer=WindowsServer; sku=2016-Datacenter; version=latest)
 * Windows10     (Currently pub=MicrosoftWindowsDesktop; offer=Windows-10; sku=rs5-pro; version=latest)
 * Linux         (Currently pub=RedHat; offer=RHEL; sku=7.4; version=latest)
-* Custom        (Provide required strPub, strOffer, strSku and strVersion separately)
+* Custom        (Provide required strPublisher, strOffer, strSku and strVersion separately)
 
 If your requirement does not match the default WindowsServer, Windows10 or Linux options provide the required Publisher, Offer, SKU and Version details to the following parameters:
-* **strPub**
+* **strPublisher**
 * **strOffer**
 * **strSku**
 * **strVersion**
