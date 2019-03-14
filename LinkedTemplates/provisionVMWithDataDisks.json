@@ -377,7 +377,7 @@
       "Linux": {
         "publisher": "RedHat",
         "offer": "RHEL",
-        "sku": "7.4",
+        "sku": "7.5",
         "version": "latest"
       },
       "WindowsServer": {
