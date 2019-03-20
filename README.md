@@ -45,7 +45,11 @@ All you will need to get started is to review the sample parameter file and prov
 
 ## Deployment
 
-The azureDeploy.json file can be copied or uploaded into a new Template Deployment resource in the Azure Portal along with your accompanying parameter file and it will reference the publicly published linked templates. Alternatively the following lines can be used to deploy the master template as is using PowerShell or [Cloud Shell](https://shell.azure.com/) (with the Az or AzureRm module installed) from its current folder location:
+The azureDeploy.json file can be copied or uploaded into a new Template Deployment resource in the Azure Portal along with your accompanying parameter file and it will reference the publicly published linked templates. You can even use the Deploy to Azure button below to launch the template deployment now:
+
+[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjvta%2FAzureVM%2Fmaster%2Fazuredeploy.json)
+
+Alternatively the following lines can be used to deploy the master template as is using PowerShell or [Cloud Shell](https://shell.azure.com/) (with the Az or AzureRm module installed) from its current folder location:
 
 ```PowerShell
 # Deploy a VM from this original published template in GitHub
