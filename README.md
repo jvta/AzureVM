@@ -41,7 +41,7 @@ The following resources are presumed to already exist prior to your deployment:
 >
 >All disks configured by the template will be Managed Disks only - Unmanaged disks are not supported
 
-All you will need to get started is to review the sample parameter file and provide your own relevant inputs. It is recommended to reference Key Vault secrets for all protected settings like passwords, storage account keys or SAS tokens if using the DSC extension options.
+All you will need to get started is to review the sample parameter file and provide your own relevant inputs. It is recommended to reference Key Vault secrets for all protected settings like local usernames and passwords (or domain usernames/passwords, storage account keys and SAS tokens if using some of the extension options).
 
 ## Deployment
 
@@ -50,6 +50,7 @@ The azureDeploy.json file can be copied or uploaded into a new Template Deployme
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fjvta%2FAzureVM%2Fmaster%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
+
 
 Alternatively the following lines can be used to deploy the master template as is using PowerShell or [Cloud Shell](https://shell.azure.com/) (with the Az or AzureRm module installed) from its current folder location:
 
@@ -61,15 +62,12 @@ New-AzResourceGroupDeployment -ResourceGroupName <Name of your Resource Group> `
                     -TemplateParameterFile <path to your local azuredeploy.network.parameters.json file> `
                     -Verbose
 # Substitute New-AzDeployment with New-AzureRmDeployment if you are running the old AzureRm PowerShell module
-# instead of the Az module
 ```
 
 If you clone or download this solution locally to customise it further you will still need to provide a publicly accessible path to your linked template files e.g. a public GitHub repo of your own. Be sure to also update the templateLink variable in your copy of the azuredeploy.json master template to reflect your updated template collection location.
 
 ```PowerShell
 # Deploy a VM from a local copy of the azuredeploy.json parent template
-#  Note: you will still need to publish your edited linked templates to a public location
-#  and reference this location in your azuredeploy.json file variables section
 New-AzResourceGroupDeployment -ResourceGroupName <Name of your Resource Group> `
                       -Name <A descriptive name for this deployment> `
                       -TemplateFile <path to your local copy of the azuredeploy.json file> `
@@ -195,7 +193,7 @@ Data Disks must be entered in an array format within the parameter file as per t
 If you do not need any data disks simply set the Boolean parameter **boolAddDataDisks** to false. The dummy data disk inputs will not result in a data disk provision providing  the Boolean is set to false. You can also safely just delete all of **objDataDisks** from your parameter file as some dummy data will also be provided by default through the azuredeploy.json file thus avoiding this error.
 
 ### Tags
-6 tags are provided in the parameter file which are converted to an array in the azuredeploy file variables. Ideally tags would be provided or not based on inputs to the parameter file and passed accordingly to the linked templates, however it was not feasible to provide an array object as input as with **objDataDisks** as above and convert this into an array object the tags field could consume. Subsequently, either use the explicitly named tags provided here or clone your own copy of this project to provide more suitable tags for your environment.
+6 predefined tags are provided in the parameter file which are converted to an array object in the azuredeploy file variables. Ideally tags would be provided or not based on inputs to the parameter file and then passed accordingly to the linked templates, however it was not feasible to provide an array object as input (as with **objDataDisks** as above) and convert this into an array object that the tags field could consume. Subsequently, either use the explicitly named tags provided here or clone your own copy of this project to provide more suitable tags for your environment.
 
 Explicit tags are:
 * **CostCentre**     (provide your preferred cost centre or department code for tracking or recharge purposes)
