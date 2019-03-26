@@ -6,14 +6,14 @@
       "type": "string",
       "defaultValue": "[resourceGroup().location]",
       "metadata": {
-        "group": "Infrastructure Configuration",
-        "description": "The region to deploy the resources into. Only change if resources need to be deployed to a different location than the resource group."
+        "group": "VM Configuration",
+        "description": "The region to deploy the resources into. Only change this if resources need to be deployed to a different location than the resource group."
       }
     },
     "strVmName": {
       "type": "string",
       "metadata": {
-        "group": "Infrastructure Configuration",
+        "group": "VM Configuration",
         "description": "Specify the name of the VM meeting your naming standards."
       }
     },
@@ -21,14 +21,15 @@
       "type": "string",
       "defaultValue": "Standard_DS2_v2",
       "metadata": {
-        "group": "Infrastructure Configuration",
-        "description": "Specify the size of the VM required."
+        "group": "VM Configuration",
+        "description": "Specify the size of the VM required. Specify in the format of the supplied default value"
       }
     },
     "boolAvSetRequired": {
       "type": "bool",
       "defaultValue": false,
       "metadata": {
+        "group": "VM Configuration",
         "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
       }
     },
@@ -36,6 +37,7 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
+        "group": "VM Configuration",
         "description": "Whether a new AV Set should be created. Allowed values are true or false"
       }
     },
@@ -43,6 +45,7 @@
       "defaultValue": "",
       "type": "string",
       "metadata": {
+        "group": "VM Configuration",
         "description": "Specify the name of the Availability Set, if required"
       }
     },
@@ -50,14 +53,15 @@
       "defaultValue": 128,
       "type": "int",
       "metadata": {
-        "description": "The size of the VM OS Disk in GB"
+        "group": "VM Configuration",
+        "description": "The size of the VM OS Disk in GB. Windows default of 128GB is provided, otherwise specify an appropriate size for your OS and image"
       }
     },
     "strOsDiskStorageType": {
       "type": "string",
       "defaultValue": "StandardSSD_LRS",
       "metadata": {
-        "group": "Infrastructure Configuration",
+        "group": "VM Configuration",
         "description": "The type of disk storage to use for OS Disk. Accepted values are Standard_LRS, StandardSSD_LRS or Premium_LRS"
       },
       "allowedValues": [
@@ -70,7 +74,8 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Whether the VM will require data disks"
+        "group": "VM Configuration",
+        "description": "Whether the VM will require data disks. If selecting true, add all data disk details required to array in next parameter objDataDisks as needed."
       }
     },
     "objDataDisks": {
@@ -85,13 +90,15 @@
           ]
       },
       "metadata": {
-        "description": "The data disks to attach to the VM"
+        "group": "VM Configuration",
+        "description": "The details of all data disks to attach to the VM in array format. Leave default data if you do not want any data disks and simply select false for boolAddDataDisks"
       }
     },
     "strOsPlatform": {
       "defaultValue": "Windows",
       "type": "string",
       "metadata": {
+        "group": "VM OS & Image Selection",
         "description": "Select the OS platform type to be provisioned. Options are Windows or Linux. Default is Windows"
       },
       "allowedValues": [
@@ -103,6 +110,7 @@
       "defaultValue": "WindowsServer",
       "type": "string",
       "metadata": {
+        "group": "VM OS & Image Selection",
         "description": "Select either a default OS platform image to be provisioned or choose Custom to provide image details. Default is WindowsServer. If you select Custom, you must also provide strPublisher, strOffer, strSku and strVersion"
       },
       "allowedValues": [
@@ -116,6 +124,7 @@
       "type": "string",
       "defaultValue": "MicrosoftWindowsServer",
       "metadata": {
+        "group": "VM OS & Image Selection",
         "description": "The publisher of the image to use"
       }
     },
@@ -123,6 +132,7 @@
       "type": "string",
       "defaultValue": "WindowsServer",
       "metadata": {
+        "group": "VM OS & Image Selection",
         "description": "The offer from the selected publisher to select for image to use"
       }
     },
@@ -130,6 +140,7 @@
       "type": "string",
       "defaultValue": "2016-Datacenter",
       "metadata": {
+        "group": "VM OS & Image Selection",
         "description": "The SKU of the selected offer and publisher to select for image to use"
       }
     },
@@ -137,6 +148,7 @@
       "type": "string",
       "defaultValue": "latest",
       "metadata": {
+        "group": "VM OS & Image Selection",
         "description": "The version of the selected SKU to use"
       }
     },
@@ -152,6 +164,7 @@
       "defaultValue": "Static",
       "type": "string",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Specify whether the public IP should be Static or Dynamic"
       },
       "allowedValues": [
@@ -163,6 +176,7 @@
       "defaultValue": "Standard",
       "type": "string",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Specify the SKU of the public IP address"
       },
       "allowedValues": [
@@ -174,6 +188,7 @@
       "defaultValue": "Dynamic",
       "type": "string",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Specify whether the private IP should be Static or Dynamic"
       },
       "allowedValues": [
@@ -182,9 +197,10 @@
       ]
     },
     "strPrivateIpAddress": {
-      "defaultValue": "UsingDynamic",
+      "defaultValue": "ChangeIfNotUsingDynamic",
       "type": "string",
       "metadata": {
+        "group": "Network Configuration",
         "description": "A static private IP address to be used"
       }
     },
@@ -192,6 +208,7 @@
       "defaultValue": false,
       "type": "bool",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Specify whether the NIC should have Accelerated Networking enabled"
       }
     },
@@ -199,6 +216,7 @@
       "defaultValue": false,
       "type": "bool",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Specify whether the NIC should have an NSG attached"
       }
     },
@@ -206,6 +224,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Name of an NSG to attach to the NIC"
       }
     },
@@ -213,6 +232,7 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Name of the Resource Group containing the NSG to attach to the NIC"
       }
     },
@@ -220,6 +240,7 @@
       "defaultValue": false,
       "type": "bool",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Whether the NIC should belong to a Load Balancer Backend Pool. Default is false"
       }
     },
@@ -227,6 +248,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Name of an Azure Load Balancer to attach to the NIC"
       }
     },
@@ -234,6 +256,7 @@
       "type": "string",
       "defaultValue": "[resourceGroup().name]",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Name of the Resource Group containing the Load Balancer to join"
       }
     },
@@ -241,6 +264,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "Network Configuration",
         "description": "Name of the Backend Pool of the Load Balancer to join"
       }
     },
@@ -248,6 +272,7 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
+        "group": "VM Configuration",
         "description": "Whether this server should use Hybrid Use Benefit licencing. Default is false"
       }
     },
@@ -255,12 +280,14 @@
       "type": "string",
       "defaultValue": "AUS Eastern Standard Time",
       "metadata": {
+        "group": "VM Configuration",
         "description": "Timezone to use for this server. Default is AUS Eastern Standard Time"
       }
     },
     "strAdminUsername": {
       "type": "string",
       "metadata": {
+        "group": "VM Configuration",
         "description": "Specify the username of the Administrator account"
       }
     },
@@ -268,6 +295,7 @@
       "defaultValue": "Password",
       "type": "string",
       "metadata": {
+        "group": "VM Configuration",
         "description": "Authentication type for the deployment"
       },
       "allowedValues": [
@@ -278,6 +306,7 @@
     "sstrAdminPasswordOrKey": {
       "type": "securestring",
       "metadata": {
+        "group": "VM Configuration",
         "description": "OS Admin password or SSH Key depending on value of authentication type"
       }
     },
@@ -306,6 +335,7 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
+        "group": "VM Configuration",
         "description": "Whether this server should configure Boot Diagnostics against a storage account"
       }
     },
@@ -313,14 +343,15 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "group": "Infrastructure Configuration",
+        "group": "VM Configuration",
         "description": "Whether a new storage account should be created for Diagnostics data"
       }
     },
     "strDiagnosticsStorageAccountName": {
       "type": "string",
+      "defaultValue": "",
       "metadata": {
-        "group": "Infrastructure Configuration",
+        "group": "VM Configuration",
         "description": "Storage Account name to use for storing boot diagnostics data"
       }
     },
@@ -334,7 +365,7 @@
         "Premium_LRS"
       ],
       "metadata": {
-        "group": "Infrastructure Configuration",
+        "group": "VM Configuration",
         "description": "Storage account type to be used with Diagnostics"
       }
     },
@@ -342,6 +373,7 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
+        "group": "VM Configuration",
         "description": "Whether this server should be added to a Recovery Services Vault for Azure backup"
       }
     },
@@ -349,6 +381,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "VM Configuration",
         "description": "The Recovery Services Vault to which this server should be joined"
       }
     },
@@ -356,6 +389,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "VM Configuration",
         "description": "The Resource Group containing the Recovery Services Vault to which this server should be joined"
       }
     },
@@ -363,6 +397,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "VM Configuration",
         "description": "The Backup Policy that should be applied to this server"
       }
     },
@@ -370,27 +405,31 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Whether this server should be domain joined"
+        "group": "Extension Configuration",
+        "description": "Whether this server should be Active Directory domain joined"
       }
     },
     "strDomainToJoin": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "The domain to which this server should be joined"
+        "group": "Extension Configuration",
+        "description": "The DNS name of the domain to which this server should be joined"
       }
     },
     "strOuPath": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "The Organisational Unit into which server should be placed in the chosen domain"
+        "group": "Extension Configuration",
+        "description": "The Organisational Unit into which server should be placed in the chosen domain in canonical format. E.g. OU=Servers,DC=domain,DC=local"
       }
     },
     "strDomainJoinAccount": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "The domain account to use for joining the domain"
       }
     },
@@ -398,6 +437,7 @@
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "The domain account password for domain join"
       }
     },
@@ -405,13 +445,15 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
-        "description": "Whether this server should use a customised PowerShell DSC Agent Extension"
+        "group": "Extension Configuration",
+        "description": "Whether this server should use the customised PowerShell DSC Agent Extension"
       }
     },
     "boolUseGenericDSCExtension": {
       "type": "bool",
       "defaultValue": false,
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Whether this server should use the Generic PowerShell DSC Agent Extension"
       }
     },
@@ -419,6 +461,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Base URI of DSC artifacts required"
       }
     },
@@ -426,6 +469,7 @@
       "type": "string",
       "defaultValue": "windows-powershell-dsc",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Container or folder name that hosts the configuration archive file. Default is windows-powershell-dsc"
       }
     },
@@ -433,6 +477,7 @@
       "type": "string",
       "defaultValue": "configuration.ps1.zip",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Name of the Archive file that DSC will reference. E.g. configuration.ps1.zip is default"
       }
     },
@@ -440,13 +485,15 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "The DSC Script filename to use. e.g. configuration.ps1 is normally a default"
+        "group": "Extension Configuration",
+        "description": "The DSC Script filename to use. E.g. configuration.ps1 is default"
       }
     },
     "strDscExtensionUpdateTagVersion": {
       "type": "string",
       "defaultValue": "1",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "The current extension revision number. Increment by one with each update to ensure targets refresh their DSC settings"
       }
     },
@@ -454,13 +501,15 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Calls function to execute within DSC configuration file"
+        "group": "Extension Configuration",
+        "description": "Specify the name of the DSC function to execute within your DSC configuration file"
       }
     },
     "sstrArtifactsLocationSasToken": {
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Azure blob SAS token for access to the DSC extension file. Set to empty if not required e.g. if using public GitHub repository location"
       }
     },
@@ -468,34 +517,39 @@
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
-        "description": "The storage account where the DSC related tools downloads are saved for this environment"
+        "group": "Extension Configuration",
+        "description": "A Customised DSC Extension parameter. The name of a storage account where the DSC related tools downloads are stored for this environment"
       }
     },
     "sstrStoragePassword": {
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
-        "description": "The access key for the storage account where the DSC related tools downloads are saved for this environment"
+        "group": "Extension Configuration",
+        "description": "A Customised DSC Extension parameter. The access key for the storage account where the DSC related tools downloads are saved for this environment"
       }
     },
     "strLocalAccountUserName": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "Name of additional local user account to be added to local Administrators Group"
+        "group": "Extension Configuration",
+        "description": "A Customised DSC Extension parameter. Name of additional local user account to be added to local Administrators Group"
       }
     },
     "sstrLocalAccountUserPassword": {
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
-        "description": "Password of additional local user account to be added to local Administrators Group"
+        "group": "Extension Configuration",
+        "description": "A Customised DSC Extension parameter. Password of additional local user account to be added to local Administrators Group"
       }
     },
     "boolUseBGInfoExtension": {
       "type": "bool",
       "defaultValue": true,
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Whether this server should use the BGInfo Extension"
       }
     },
@@ -503,6 +557,7 @@
       "type": "bool",
       "defaultValue": false,
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Whether this server should use the OMS Agent Extension"
       }
     },
@@ -510,6 +565,7 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "OMS Workspace ID to connect to"
       }
     },
@@ -517,6 +573,7 @@
       "type": "securestring",
       "defaultValue": "",
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Primary Key of the OMS Workspace selected"
       }
     },
@@ -524,13 +581,15 @@
       "type": "string",
       "defaultValue": "",
       "metadata": {
-        "description": "OMS Proxy URI if required"
+        "group": "Extension Configuration",
+        "description": "OMS Proxy URI and port if required. E.g. 10.0.0.100:8080"
       }
     },
     "boolUseAutoShutdownExtension": {
       "type": "bool",
       "defaultValue": true,
       "metadata": {
+        "group": "Extension Configuration",
         "description": "Whether this server should use the Auto Shutdown Extension"
       }
     },
@@ -538,7 +597,8 @@
       "type": "string",
       "defaultValue": "1900",
       "metadata": {
-        "description": "Time to initiate shutdown in 24 hour clock notation e.g. 1900 for 7pm. Extension will use timezone parameter to correct against UTC time"
+        "group": "Extension Configuration",
+        "description": "Time to initiate shutdown in 24 hour clock notation e.g. 1900 for 7pm. Extension will use the timezone parameter to offset against UTC time"
       }
     },
     "strBranch": {
