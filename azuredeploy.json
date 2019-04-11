@@ -661,7 +661,7 @@
     "networkApiVersion": "2018-07-01",
     "computeApiVersion": "2018-04-01",
     "extensionApiVersion": "2015-06-15",
-    "vaultApiVersion": "2016-06-01",
+    "vaultApiVersion": "2017-05-10",
     "deploymentApiVersion": "2015-01-01",
     "nestedDeploymentApiVersion": "2017-05-10",
     "autoShutdownApiVersion": "2018-09-15",
