@@ -193,7 +193,7 @@ Data Disks must be entered in an array format within the parameter file as per t
 If you do not need any data disks simply set the Boolean parameter **boolAddDataDisks** to false. The dummy data disk inputs will not result in a data disk provision providing  the Boolean is set to false. You can also safely just delete all of **objDataDisks** from your parameter file as some dummy data will also be provided by default through the azuredeploy.json file thus avoiding this error.
 
 ### Tags
-Provide your preferred tags to the strTags parameter as a string using "\" characters to escape each double quote character as in example below:
+Provide your preferred tags to the strTags parameter as a string using backslash characters to escape each double quote character as in example below:
  ```JSON
 "strTags": {
     "value" : "{\"Application\":\"Test\",\"CostCentre\":\"MyDept\",\"Environment\":\"Test\"}"
