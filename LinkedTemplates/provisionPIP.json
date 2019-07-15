@@ -33,21 +33,23 @@
                 "description": "SKU of Public IP to create"
             }
         },
-        "objTags": {
-            "type": "object",
+        "strTags": {
+            "type": "string",
             "metadata": {
                 "description": "Tags to attach to resource"
             }
         }
     },
-    "variables": {},
+    "variables": {
+        "tagsBase64": "[base64(parameters('strTags'))]"
+    },
     "resources": [
         {
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[parameters('strName')]",
             "apiVersion": "[parameters('strApiVersion')]",
             "location": "[parameters('strLocation')]",
-            "tags": "[parameters('objTags')]",
+            "tags": "[base64ToJson(variables('tagsBase64'))]",
             "sku": {
                 "name": "[parameters('strPublicIpSku')]"
             },

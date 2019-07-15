@@ -21,8 +21,8 @@
         "description": "Size of the VM"
       }
     },
-    "objTags": {
-      "type": "object",
+    "strTags": {
+      "type": "string",
       "metadata": {
         "description": "Tags to attach to resource"
       }
@@ -407,7 +407,8 @@
         "enabled": true,
         "storageUri": "[concat('https://',parameters('strDiagnosticsStorageAccountName'),'.blob.core.windows.net')]"
       }
-    }
+    },
+    "tagsBase64": "[base64(parameters('strTags'))]"
   },
   "resources": [
     {
@@ -415,7 +416,7 @@
       "name": "[parameters('strVmName')]",
       "apiVersion": "[parameters('strComputeApiVersion')]",
       "location": "[parameters('strLocation')]",
-      "tags": "[parameters('objTags')]",
+      "tags": "[base64ToJson(variables('tagsBase64'))]",
       "identity": {
         "type": "SystemAssigned"
       },

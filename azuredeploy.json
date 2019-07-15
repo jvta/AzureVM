@@ -608,52 +608,11 @@
         "description": "Code branch for template testing. Default is master. Supply alternate development branch name only if required"
       }
     },
-    "strTagCostCentre": {
+    "strTags": {
       "type": "string",
-      "defaultValue": "",
+      "defaultValue": "{\"Appplication\":\"Test\",\"Environment\":\"Test\"}",
       "metadata": {
-        "group": "Tags",
-        "description": "A tag to apply to all resources in this deployment"
-      }
-    },
-    "strTagApplication": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "group": "Tags",
-        "description": "A tag to apply to all resources in this deployment"
-      }
-    },
-    "strTagProvisionedBy": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "group": "Tags",
-        "description": "A tag to apply to all resources in this deployment"
-      }
-    },
-    "strTagProvisionDate": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "group": "Tags",
-        "description": "A tag to apply to all resources in this deployment"
-      }
-    },
-    "strTagITOwner": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "group": "Tags",
-        "description": "A tag to apply to all resources in this deployment"
-      }
-    },
-    "strTagEnvironment": {
-      "type": "string",
-      "defaultValue": "Test",
-      "metadata": {
-        "group": "Tags",
-        "description": "A tag to apply to all resources in this deployment"
+        "description": "List of tag data in string form to be passed to each resource. View Readme for formatting"
       }
     }
   },
@@ -674,15 +633,7 @@
     "backupFabric": "Azure",
     "protectionContainer": "[concat('iaasvmcontainer;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('strVmName'))]",
     "protectedItem": "[concat('vm;iaasvmcontainerv2;', resourceGroup().name, ';', parameters('strVmName'))]",
-    "emptyString": "",
-    "objTags": {
-      "CostCentre": "[parameters('strTagCostCentre')]",
-      "Application": "[parameters('strTagApplication')]",
-      "ProvisionedBy": "[parameters('strTagProvisionedBy')]",
-      "ProvisionDate": "[parameters('strTagProvisionDate')]",
-      "ITOwner": "[parameters('strTagITOwner')]",
-      "Environment": "[parameters('strTagEnvironment')]"
-    }
+    "emptyString": ""
   },
   "resources": [
     {
@@ -707,8 +658,8 @@
           "strAvSetName": {
             "value": "[parameters('strAvSetName')]"
           },
-          "objTags": {
-            "value": "[variables('objTags')]"
+          "strTags": {
+            "value": "[parameters('strTags')]"
           }
         }
       }
@@ -741,8 +692,8 @@
           "strPublicIpSku": {
             "value": "[parameters('strPublicIpSku')]"
           },
-          "objTags": {
-            "value": "[variables('objTags')]"
+          "strTags": {
+            "value": "[parameters('strTags')]"
           }
         }
       }
@@ -764,8 +715,8 @@
           "strLocation": {
             "value": "[parameters('strLocation')]"
           },
-          "objTags": {
-            "value": "[variables('objTags')]"
+          "strTags": {
+            "value": "[parameters('strTags')]"
           },
           "strPipId": {
             "value": "[if(parameters('boolRequirePublicIp'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
@@ -843,8 +794,8 @@
           "strDiagnosticsStorageAccountType": {
             "value": "[parameters('strDiagnosticsStorageAccountType')]"
           },
-          "objTags": {
-            "value": "[variables('objTags')]"
+          "strTags": {
+            "value": "[parameters('strTags')]"
           }
         }
       }
@@ -874,8 +825,8 @@
           "strVmSize": {
             "value": "[parameters('strVmSize')]"
           },
-          "objTags": {
-            "value": "[variables('objTags')]"
+          "strTags": {
+            "value": "[parameters('strTags')]"
           },
           "strNicName": {
             "value": "[variables('nicName')]"
