@@ -193,15 +193,13 @@ Data Disks must be entered in an array format within the parameter file as per t
 If you do not need any data disks simply set the Boolean parameter **boolAddDataDisks** to false. The dummy data disk inputs will not result in a data disk provision providing  the Boolean is set to false. You can also safely just delete all of **objDataDisks** from your parameter file as some dummy data will also be provided by default through the azuredeploy.json file thus avoiding this error.
 
 ### Tags
-6 predefined tags are provided in the parameter file which are converted to an array object in the azuredeploy file variables. Ideally tags would be provided or not based on inputs to the parameter file and then passed accordingly to the linked templates, however it was not feasible to provide an array object as input (as with **objDataDisks** as above) and convert this into an array object that the tags field could consume. Subsequently, either use the explicitly named tags provided here or clone your own copy of this project to provide more suitable tags for your environment.
-
-Explicit tags are:
-* **CostCentre**     (provide your preferred cost centre or department code for tracking or recharge purposes)
-* **Application**    (a descriptive name of the application or purpose of this resource collection e.g. AD)
-* **ProvisionedBy**  (the person or account used to provision this resource)
-* **ProvisionDate**  (the date or time of provision - in your preferred format)
-* **ITOwner**        (who is responsible for the resource)
-* **Environment**    (e.g. Test, Prod)
+Provide your preferred tags to the strTags parameter as a string using "\" characters to escape each double quote character as in example below:
+ ```JSON
+"strTags": {
+    "value" : "{\"Application\":\"Test\",\"CostCentre\":\"MyDept\",\"Environment\":\"Test\"}"
+}
+```
+These tags will be appended to each resource created.
 
 ## VM Extensions
 The VM provision templates also permit optional VM extensions such as BGInfo, AD domain join or a PowerShell DSC extension. Simply set Boolean parameters e.g. **boolUseDomainJoinExtension** or **boolUseGenericDSCExtension** to 'false' if you do not wish to use these. Alternatively, review the parameters required by each extension below and edit your copy of the templates to suit.
