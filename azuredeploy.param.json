@@ -277,22 +277,7 @@
     "strBranch": {
         "value": "master"
     },
-    "strTagCostCentre": {
-        "value": "CC01"
-    },
-    "strTagApplication": {
-        "value": "Provision Test"
-    },
-    "strTagProvisionedBy": {
-        "value": "Me"
-    },
-    "strTagProvisionDate": {
-        "value": "12/02/2019"
-    },
-    "strTagITOwner": {
-        "value": "Me"
-    },
-    "strTagEnvironment": {
-        "value": "Test"
+    "strTags": {
+        "value" : "{\"Application\":\"Test\",\"Environment\":\"Test\"}"
     }
 }
