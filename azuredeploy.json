@@ -481,6 +481,14 @@
         "description": "Registration URL for Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
       }
     },
+    "strAutomationAccountName": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "group": "Extension Configuration",
+        "description": "Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
+      }
+    },
     "strArtifactsLocation": {
       "type": "string",
       "defaultValue": "",
@@ -947,6 +955,9 @@
           },
           "strAutomationAccountRegistrationUrl": {
             "value": "[parameters('strAutomationAccountRegistrationUrl')]"
+          },
+          "strAutomationAccountName": {
+            "value": "[parameters('strAutomationAccountName')]"
           },
           "strArtifactsLocation": {
             "value": "[parameters('strArtifactsLocation')]"
