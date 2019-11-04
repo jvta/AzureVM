@@ -552,7 +552,7 @@
                 },
                 {
                   "Name": "RegistrationUrl",
-                  "Value": "[reference(concat(parameters('strAutomationAccountRGName'),'Microsoft.Automation/automationAccounts', parameters('strAutomationAccountName'))).registrationUrl]",
+                  "Value": "[reference(resourceId(parameters('strAutomationAccountRGName'),'Microsoft.Automation/automationAccounts', parameters('strAutomationAccountName'))).registrationUrl]",
                   "TypeName": "System.String"
                 },
                 {
