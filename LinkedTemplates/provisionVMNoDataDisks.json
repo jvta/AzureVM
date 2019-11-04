@@ -240,8 +240,8 @@
         "description": "Whether this server should use the Generic PowerShell DSC Agent Extension"
       }
     },
-    "strAutomationAccountRegistrationKey": {
-      "type": "string",
+    "sstrAutomationAccountRegistrationKey": {
+      "type": "securestring",
       "defaultValue": "",
       "metadata": {
         "group": "Extension Configuration",
@@ -521,7 +521,7 @@
             "autoUpgradeMinorVersion": true,
             "protectedSettings": {
               "Items": {
-                "registrationKeyPrivate": "[parameters('strAutomationAccountRegistrationKey')]"
+                "registrationKeyPrivate": "[parameters('sstrAutomationAccountRegistrationKey')]"
               }
             },
             "settings": {
