@@ -21,6 +21,7 @@ This project is designed to host a series of linked deployment templates that ca
     * BGInfo
     * OMS Agent
     * Auto Shutdown
+    * Azure Automation DSC
     * Complex DSC
     * Generic DSC
 
@@ -231,13 +232,23 @@ To apply the Auto Shutdown extension to your VM supply the following parameters:
 * **strShutdownStart** (Supply at time in 24 hour clock notation e.g. 1900 for 7PM. Timezone will be taken from the VM timezone parameter)
 
 ### PowerShell DSC
-To use either of the PowerShell DSC extensions you will need to write your own DSC config file and publish it to a storage account blob or other publicly accessible URL location then adjust any settings here to provide the appropriate inputs - the parameters for the Customised DSC extension may vary from what you create. Specific DSC content creation is not covered here.
+To use any of the PowerShell DSC extensions you will need to write your own DSC config file and publish it to an Azure Automation Account, storage account blob or other publicly accessible URL location then adjust any settings here to provide the appropriate inputs - the parameters for the Customised DSC extension may vary from what you create. Specific DSC content creation is not covered here.
 
 For further reference start with:
 * https://docs.microsoft.com/en-us/powershell/dsc/configurations/configurations
 
 For DSC configuration publication to Azure blob storage:
 * https://docs.microsoft.com/en-us/powershell/module/azurerm.compute/publish-azurermvmdscconfiguration?view=azurermps-6.13.0
+
+**Azure Automation State Configuration**
+
+The Azure Automation State Configuration extension references an Azure Automation account and registers the server as a new managed node in State Configuration. Obtain the Primary Access Key and URL for the Automation Account and supply these parameters to the extension.
+
+Common parameters:
+* **boolUseAzureAutomationDSCExtension** - set to 'true' to use this extension
+* **automationAccountRegistrationKey** - (obtain from Automation Account, Account settings. Will be long complex key)
+* **automationAccountRegistrationUrl** - (obtain from Automation Account, Account settings. e.g. https://AE-agentservice-prod-1.azure-automation.net/accounts/<random-GUID>)
+* **strDscFunction** (your name for a DSC "configuration" block to apply e.g. 'StandardAzureServer')
 
 **Customised DSC**
 

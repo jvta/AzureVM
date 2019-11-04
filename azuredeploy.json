@@ -81,13 +81,13 @@
     "objDataDisks": {
       "type": "object",
       "defaultValue": {
-          "disks": [
-            {
-              "Cache": "None",
-              "Size": 1024,
-              "StorageAccountType": "Standard_LRS"
-            }
-          ]
+        "disks": [
+          {
+            "Cache": "None",
+            "Size": 1024,
+            "StorageAccountType": "Standard_LRS"
+          }
+        ]
       },
       "metadata": {
         "group": "VM Configuration",
@@ -441,6 +441,14 @@
         "description": "The domain account password for domain join"
       }
     },
+    "boolUseAzureAutomationDSCExtension": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "group": "Extension Configuration",
+        "description": "Whether this server should use the Azure Automation State Configuration Agent Extension"
+      }
+    },
     "boolUseCustomisedDSCExtension": {
       "type": "bool",
       "defaultValue": false,
@@ -455,6 +463,22 @@
       "metadata": {
         "group": "Extension Configuration",
         "description": "Whether this server should use the Generic PowerShell DSC Agent Extension"
+      }
+    },
+    "strAutomationAccountRegistrationKey": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "group": "Extension Configuration",
+        "description": "Registration Key for Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
+      }
+    },
+    "strAutomationAccountRegistrationUrl": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "group": "Extension Configuration",
+        "description": "Registration URL for Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
       }
     },
     "strArtifactsLocation": {
@@ -641,7 +665,8 @@
       "type": "Microsoft.Resources/deployments",
       "name": "provisionAvSet",
       "apiVersion": "[variables('deploymentApiVersion')]",
-      "dependsOn": [],
+      "dependsOn": [
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -669,7 +694,8 @@
       "type": "Microsoft.Resources/deployments",
       "name": "provisionPublicIp",
       "apiVersion": "[variables('deploymentApiVersion')]",
-      "dependsOn": [],
+      "dependsOn": [
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -774,7 +800,8 @@
       "type": "Microsoft.Resources/deployments",
       "name": "provisionDiagnosticsStorage",
       "apiVersion": "[variables('deploymentApiVersion')]",
-      "dependsOn": [],
+      "dependsOn": [
+      ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -906,11 +933,20 @@
           "sstrDomainJoinAccountPassword": {
             "value": "[parameters('sstrDomainJoinAccountPassword')]"
           },
+          "boolUseAzureAutomationDSCExtension": {
+            "value": "[parameters('boolUseAzureAutomationDSCExtension')]"
+          },
           "boolUseCustomisedDSCExtension": {
             "value": "[parameters('boolUseCustomisedDSCExtension')]"
           },
           "boolUseGenericDSCExtension": {
             "value": "[parameters('boolUseGenericDSCExtension')]"
+          },
+          "strAutomationAccountRegistrationKey": {
+            "value": "[parameters('strAutomationAccountRegistrationKey')]"
+          },
+          "strAutomationAccountRegistrationUrl": {
+            "value": "[parameters('strAutomationAccountRegistrationUrl')]"
           },
           "strArtifactsLocation": {
             "value": "[parameters('strArtifactsLocation')]"
@@ -986,8 +1022,10 @@
         "template": {
           "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
           "contentVersion": "1.0.0.0",
-          "parameters": {},
-          "variables": {},
+          "parameters": {
+          },
+          "variables": {
+          },
           "resources": [
             {
               "type": "Microsoft.RecoveryServices/vaults/backupFabrics/protectionContainers/protectedItems",
@@ -1005,5 +1043,6 @@
       }
     }
   ],
-  "outputs": {}
+  "outputs": {
+  }
 }
