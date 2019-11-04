@@ -553,7 +553,7 @@
             "autoUpgradeMinorVersion": true,
             "protectedSettings": {
               "Items": {
-                "registrationKeyPrivate": "[listKeys(resourceId(parameters('strAutomationAccountRGName'),'/Microsoft.Automation/automationAccounts/', parameters('strAutomationAccountName')), '2018-06-30').Keys[0].value]"
+                "registrationKeyPrivate": "[listKeys(resourceId(parameters('strAutomationAccountRGName'),'/','Microsoft.Automation/automationAccounts/', parameters('strAutomationAccountName')), '2018-06-30').Keys[0].value]"
               }
             },
             "settings": {
@@ -568,7 +568,7 @@
                 },
                 {
                   "Name": "RegistrationUrl",
-                  "Value": "[reference(concat(parameters('strAutomationAccountRGName'),'/Microsoft.Automation/automationAccounts/', parameters('strAutomationAccountName'))).registrationUrl]",
+                  "Value": "[reference(concat(parameters('strAutomationAccountRGName'),'/','Microsoft.Automation/automationAccounts/', parameters('strAutomationAccountName'))).registrationUrl]",
                   "TypeName": "System.String"
                 },
                 {
