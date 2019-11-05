@@ -806,7 +806,7 @@
         },
         {
           "condition": "[and(parameters('boolUseNetworkWatcherExtension'),variables('true'))]",
-          "type": "extensions",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('strVmName'),'/', 'NetworkWatcher')]",
           "apiVersion": "2017-03-30",
           "location": "[parameters('strLocation')]",
