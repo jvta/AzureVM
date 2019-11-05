@@ -537,7 +537,7 @@
             "autoUpgradeMinorVersion": true,
             "protectedSettings": {
               "Items": {
-                "registrationKeyPrivate": "[parameters('strAutomationAccountRegistrationUrl')]"
+                "registrationKeyPrivate": "[parameters('sstrAutomationAccountRegistrationKey')]"
               }
             },
             "settings": {
