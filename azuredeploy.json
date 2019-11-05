@@ -1119,10 +1119,10 @@
           "strAntiMalwareProcessExclusions": {
             "value": "[parameters('strAntiMalwareProcessExclusions')]"
           },
-          "boolAntiMalwareRealtimeProtectionEnabled": {
+          "strAntiMalwareRealtimeProtectionEnabled": {
             "value": "[parameters('strAntiMalwareRealtimeProtectionEnabled')]"
           },
-          "boolAntiMalwareScheduledScanEnabled": {
+          "strAntiMalwareScheduledScanEnabled": {
             "value": "[parameters('strAntiMalwareScheduledScanEnabled')]"
           },
           "strAntiMalwareScanType": {
