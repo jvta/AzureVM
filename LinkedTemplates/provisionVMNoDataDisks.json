@@ -537,7 +537,7 @@
             "autoUpgradeMinorVersion": true,
             "protectedSettings": {
               "Items": {
-                "registrationKeyPrivate": "[listKeys(resourceId(parameters('strAutomationAccountRGName'),'Microsoft.Automation/automationAccounts', parameters('strAutomationAccountName')), '2018-06-30').Keys[0].value]"
+                "registrationKeyPrivate": "[parameters('strAutomationAccountRegistrationUrl')]"
               }
             },
             "settings": {
@@ -552,7 +552,7 @@
                 },
                 {
                   "Name": "RegistrationUrl",
-                  "Value": "[reference(resourceId(parameters('strAutomationAccountRGName'),'Microsoft.Automation/automationAccounts', parameters('strAutomationAccountName'))).registrationUrl]",
+                  "Value": "[parameters('strAutomationAccountRegistrationUrl')]",
                   "TypeName": "System.String"
                 },
                 {
