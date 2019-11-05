@@ -704,7 +704,7 @@
     },
     "intAntiMalwareScanTime": {
       "type": "int",
-      "defaultValue": "",
+      "defaultValue": 0,
       "metadata": {
         "description": "The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM"
       }

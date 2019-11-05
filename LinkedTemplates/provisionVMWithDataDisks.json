@@ -423,8 +423,8 @@
         "description": "Whether this server should conduct Anti Malware Scans"
       }
     },
-    "intAntiMalwareScanType": {
-      "type": "int",
+    "strAntiMalwareScanType": {
+      "type": "string",
       "metadata": {
         "description": "The type of Anti Malware Scan to perform - choose from Quick or Full"
       },
@@ -450,8 +450,8 @@
         7
       ]
     },
-    "strAntiMalwareScanTime": {
-      "type": "string",
+    "intAntiMalwareScanTime": {
+      "type": "int",
       "metadata": {
         "description": "The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM"
       }
@@ -797,9 +797,9 @@
               "RealtimeProtectionEnabled": "[parameters('boolAntiMalwareRealtimeProtectionEnabled')]",
               "ScheduledScanSettings": {
                 "isEnabled": "[parameters('boolAntiMalwareScheduledScanEnabled')]",
-                "scanType": "[parameters('intAntiMalwareScanType')]",
+                "scanType": "[parameters('strAntiMalwareScanType')]",
                 "day": "[parameters('intAntiMalwareScanDay')]",
-                "time": "[parameters('strAntiMalwareScanTime')]"
+                "time": "[parameters('intAntiMalwareScanTime')]"
               }
             },
             "protectedSettings": null
