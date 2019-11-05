@@ -296,6 +296,33 @@
     "strShutdownStart": {
         "value": "1900"
     },
+    "boolUseAntiMalwareExtension": {
+        "value": false
+    },
+    "strAntiMalwarePathExclusions": {
+        "value": "C:\\Temp"
+    },
+    "strAntiMalwareFileExtensionExclusions": {
+        "value": ".ldf;.mdf"
+    },
+    "strAntiMalwareProcessExclusions": {
+        "value": "taskmgr.exe"
+    },
+    "boolAntiMalwareRealtimeProtectionEnabled": {
+        "value": true
+    },
+    "boolAntiMalwareScheduledScanEnabled": {
+        "value": true
+    },
+    "strAntiMalwareScanType": {
+        "value": "Quick"
+    },
+    "intAntiMalwareScanDay": {
+        "value": 1
+    },
+    "intAntiMalwareScanTime": {
+        "value": 60
+    },
     "strBranch": {
         "value": "master"
     },
