@@ -693,7 +693,7 @@
       },
       "defaultValue": 1,
       "allowedValues": [
-        2,
+        1,
         2,
         3,
         4,
