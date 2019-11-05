@@ -525,7 +525,7 @@
           "condition": "[and(parameters('boolUseAzureAutomationDSCExtension'),variables('true'))]",
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('strVmName'),'/AzureAutomationDSC')]",
-          "apiVersion": "2018-09-30",
+          "apiVersion": "2016-08-30",
           "location": "[parameters('strLocation')]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', parameters('strVmName'))]"
