@@ -308,11 +308,11 @@
     "strAntiMalwareProcessExclusions": {
         "value": "taskmgr.exe"
     },
-    "boolAntiMalwareRealtimeProtectionEnabled": {
-        "value": true
+    "strAntiMalwareRealtimeProtectionEnabled": {
+        "value": "true"
     },
-    "boolAntiMalwareScheduledScanEnabled": {
-        "value": true
+    "strAntiMalwareScheduledScanEnabled": {
+        "value": "true"
     },
     "strAntiMalwareScanType": {
         "value": "Quick"
@@ -322,6 +322,9 @@
     },
     "intAntiMalwareScanTime": {
         "value": 60
+    },
+    "boolUseNetworkWatcherExtension": {
+        "value": false
     },
     "strBranch": {
         "value": "master"

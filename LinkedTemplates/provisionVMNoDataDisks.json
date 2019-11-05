@@ -409,19 +409,27 @@
         "description": "The processes to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not supported."
       }
     },
-    "boolAntiMalwareRealtimeProtectionEnabled": {
-      "type": "bool",
-      "defaultValue": true,
+    "strAntiMalwareRealtimeProtectionEnabled": {
+      "type": "string",
+      "defaultValue": "true",
       "metadata": {
         "description": "Whether this server should use Anti Malware Real Time Protection"
-      }
+      },
+      "allowedValues": [
+        "true",
+        "false"
+      ]
     },
-    "boolAntiMalwareScheduledScanEnabled": {
-      "type": "bool",
-      "defaultValue": true,
+    "strAntiMalwareScheduledScanEnabled": {
+      "type": "string",
+      "defaultValue": "true",
       "metadata": {
         "description": "Whether this server should conduct Anti Malware Scans"
-      }
+      },
+      "allowedValues": [
+        "true",
+        "false"
+      ]
     },
     "strAntiMalwareScanType": {
       "type": "string",
@@ -454,6 +462,13 @@
       "type": "int",
       "metadata": {
         "description": "The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM"
+      }
+    },
+    "boolUseNetworkWatcherExtension": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Whether this server should use the Network Watcher Extension"
       }
     }
   },
@@ -762,7 +777,7 @@
           "condition": "[and(parameters('boolUseAntiMalwareExtension'),variables('true'))]",
           "type": "Microsoft.Compute/virtualMachines/extensions",
           "name": "[concat(parameters('strVmName'),'/', 'AntiMalware')]",
-          "apiVersion": "[parameters('strExtensionApiVersion')]",
+          "apiVersion": "2017-03-30",
           "location": "[parameters('strLocation')]",
           "dependsOn": [
             "[concat('Microsoft.Compute/virtualMachines/', parameters('strVmName'))]"
@@ -770,23 +785,39 @@
           "properties": {
             "publisher": "Microsoft.Azure.Security",
             "type": "IaaSAntimalware",
-            "typeHandlerVersion": "1.1",
+            "typeHandlerVersion": "1.5",
             "settings": {
-              "AntimalwareEnabled": "true",
+              "AntimalwareEnabled": true,
               "Exclusions": {
                 "Paths": "[parameters('strAntiMalwarePathExclusions')]",
                 "Extensions": "[parameters('strAntiMalwareFileExtensionExclusions')]",
                 "Processes": "[parameters('strAntiMalwareProcessExclusions')]"
               },
-              "RealtimeProtectionEnabled": "[parameters('boolAntiMalwareRealtimeProtectionEnabled')]",
+              "RealtimeProtectionEnabled": "[parameters('strAntiMalwareRealtimeProtectionEnabled')]",
               "ScheduledScanSettings": {
-                "isEnabled": "[parameters('boolAntiMalwareScheduledScanEnabled')]",
+                "isEnabled": "[parameters('strAntiMalwareScheduledScanEnabled')]",
                 "scanType": "[parameters('strAntiMalwareScanType')]",
                 "day": "[parameters('intAntiMalwareScanDay')]",
                 "time": "[parameters('intAntiMalwareScanTime')]"
               }
             },
             "protectedSettings": null
+          }
+        },
+        {
+          "condition": "[and(parameters('boolUseNetworkWatcherExtension'),variables('true'))]",
+          "type": "extensions",
+          "name": "[concat(parameters('strVmName'),'/', 'NetworkWatcher')]",
+          "apiVersion": "2017-03-30",
+          "location": "[parameters('strLocation')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('strVmName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Azure.NetworkWatcher",
+            "type": "NetworkWatcherAgentWindows",
+            "typeHandlerVersion": "1.4",
+            "autoUpgradeMinorVersion": true
           }
         }
       ]

@@ -22,6 +22,7 @@ This project is designed to host a series of linked deployment templates that ca
     * OMS Agent
     * Auto Shutdown
     * Anti Malware
+    * Network Watcher
     * Azure Automation DSC
     * Complex DSC
     * Generic DSC
@@ -238,11 +239,15 @@ To attach the Anti Malware agent to your VM supply the following parameters:
 * **strAntiMalwarePathExclusions** (The file or folder paths to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised)
 * **strAntiMalwareFileExtensionExclusions** (The file extensions to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised)
 * **strAntiMalwareProcessExclusions** (The processes to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not supported)
-* **boolAntiMalwareRealtimeProtectionEnabled** (Whether this server should use Anti Malware Real Time Protection)
-* **boolAntiMalwareScheduledScanEnabled** (Whether this server should conduct Anti Malware Scans)
+* **strAntiMalwareRealtimeProtectionEnabled** (Whether this server should use Anti Malware Real Time Protection)
+* **strAntiMalwareScheduledScanEnabled** (Whether this server should conduct Anti Malware Scans)
 * **strAntiMalwareScanType** (The type of Anti Malware Scan to perform - choose from Quick or Full)
 * **intAntiMalwareScanDay** (The day on which to run the Anti Malware Scheduled Scan. Sunday=1; Monday=2; Tuesday=3; Wednesday=4; Thursday=5; Friday=6; Saturday=7. Default is Sunday)
 * **intAntiMalwareScanTime** (The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM)
+
+### Network Watcher
+To attach the Network Watcher extension to your VM supply the following parameter:
+* **boolUseNetworkWatcherExtension** - set to 'true' to use this extension
 
 ### PowerShell DSC
 To use any of the PowerShell DSC extensions you will need to write your own DSC config file and publish it to an Azure Automation Account, storage account blob or other publicly accessible URL location then adjust any settings here to provide the appropriate inputs - the parameters for the Customised DSC extension may vary from what you create. Specific DSC content creation is not covered here.

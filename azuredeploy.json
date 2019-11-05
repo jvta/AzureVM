@@ -661,19 +661,27 @@
         "description": "The processes to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not supported."
       }
     },
-    "boolAntiMalwareRealtimeProtectionEnabled": {
-      "type": "bool",
-      "defaultValue": true,
+    "strAntiMalwareRealtimeProtectionEnabled": {
+      "type": "string",
+      "defaultValue": "true",
       "metadata": {
         "description": "Whether this server should use Anti Malware Real Time Protection"
-      }
+      },
+      "allowedValues": [
+        "true",
+        "false"
+      ]
     },
-    "boolAntiMalwareScheduledScanEnabled": {
-      "type": "bool",
-      "defaultValue": true,
+    "strAntiMalwareScheduledScanEnabled": {
+      "type": "string",
+      "defaultValue": "true",
       "metadata": {
         "description": "Whether this server should conduct Anti Malware Scans"
-      }
+      },
+      "allowedValues": [
+        "true",
+        "false"
+      ]
     },
     "strAntiMalwareScanType": {
       "type": "string",
@@ -707,6 +715,13 @@
       "defaultValue": 0,
       "metadata": {
         "description": "The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM"
+      }
+    },
+    "boolUseNetworkWatcherExtension": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Whether this server should use the Network Watcher Extension"
       }
     },
     "strBranch": {
@@ -1105,10 +1120,10 @@
             "value": "[parameters('strAntiMalwareProcessExclusions')]"
           },
           "boolAntiMalwareRealtimeProtectionEnabled": {
-            "value": "[parameters('boolAntiMalwareRealtimeProtectionEnabled')]"
+            "value": "[parameters('strAntiMalwareRealtimeProtectionEnabled')]"
           },
           "boolAntiMalwareScheduledScanEnabled": {
-            "value": "[parameters('boolAntiMalwareScheduledScanEnabled')]"
+            "value": "[parameters('strAntiMalwareScheduledScanEnabled')]"
           },
           "strAntiMalwareScanType": {
             "value": "[parameters('strAntiMalwareScanType')]"
@@ -1118,6 +1133,9 @@
           },
           "intAntiMalwareScanTime": {
             "value": "[parameters('intAntiMalwareScanTime')]"
+          },
+          "boolUseNetworkWatcherExtension": {
+            "value": "[parameters('boolUseNetworkWatcherExtension')]"
           }
         }
       }
