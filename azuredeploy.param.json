@@ -199,6 +199,9 @@
             "secretName": "AzureAutomationDSCRegistrationUrl"
         }
     },
+    "strNodeConfiguration": {
+        "value": "AzureGenericServer.localhost"
+    },
     "strArtifactsLocation": {
         "reference": {
             "keyVault": {

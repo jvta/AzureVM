@@ -256,20 +256,12 @@
         "description": "Registration URL for Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
       }
     },
-    "strAutomationAccountRGName": {
+    "strNodeConfiguration": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
         "group": "Extension Configuration",
-        "description": "RG of the Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
-      }
-    },
-    "strAutomationAccountName": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "group": "Extension Configuration",
-        "description": "Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
+        "description": "Used only with the Azure Automation DSC Extension. Specify the name of the Azure Automation Node Configuration to enrol the VM against. NOTE: it will always be the Configuration followed by a period . and either localhost or a specific computer name."
       }
     },
     "strArtifactsLocation": {
@@ -390,6 +382,78 @@
       "type": "string",
       "metadata": {
         "description": "The API version to use for the Auto-Shutdown extension. Default is 2016-05-15"
+      }
+    },
+    "boolUseAntiMalwareExtension": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Whether this server should use the Anti Malware Extension"
+      }
+    },
+    "strAntiMalwarePathExclusions": {
+      "type": "string",
+      "metadata": {
+        "description": "The file or folder paths to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised."
+      }
+    },
+    "strAntiMalwareFileExtensionExclusions": {
+      "type": "string",
+      "metadata": {
+        "description": "The file extensions to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised."
+      }
+    },
+    "strAntiMalwareProcessExclusions": {
+      "type": "string",
+      "metadata": {
+        "description": "The processes to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not supported."
+      }
+    },
+    "boolAntiMalwareRealtimeProtectionEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether this server should use Anti Malware Real Time Protection"
+      }
+    },
+    "boolAntiMalwareScheduledScanEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether this server should conduct Anti Malware Scans"
+      }
+    },
+    "intAntiMalwareScanType": {
+      "type": "int",
+      "metadata": {
+        "description": "The type of Anti Malware Scan to perform - choose from Quick or Full"
+      },
+      "defaultValue": "Quick",
+      "allowedValues": [
+        "Quick",
+        "Full"
+      ]
+    },
+    "intAntiMalwareScanDay": {
+      "type": "int",
+      "metadata": {
+        "description": "The day on which to run the Anti Malware Scheduled Scan. Sunday = 1; Monday = 2; Tuesday = 3; Wednesday = 4; Thursday = 5; Friday = 6; Saturday = 7. Default is Sunday"
+      },
+      "defaultValue": "1",
+      "allowedValues": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    "strAntiMalwareScanTime": {
+      "type": "string",
+      "metadata": {
+        "description": "The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM"
       }
     }
   },
@@ -557,7 +621,7 @@
                 },
                 {
                   "Name": "NodeConfigurationName",
-                  "Value": "[parameters('strDscFunction')]",
+                  "Value": "[parameters('strNodeConfiguration')]",
                   "TypeName": "System.String"
                 }
               ]
@@ -693,6 +757,37 @@
           "dependsOn": [
             "[resourceId('Microsoft.Compute/virtualMachines', parameters('strVmName'))]"
           ]
+        },
+        {
+          "condition": "[and(parameters('boolUseAntiMalwareExtension'),variables('true'))]",
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('strVmName'),'/', 'AntiMalware')]",
+          "apiVersion": "[parameters('strExtensionApiVersion')]",
+          "location": "[parameters('strLocation')]",
+          "dependsOn": [
+            "[concat('Microsoft.Compute/virtualMachines/', parameters('strVmName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Azure.Security",
+            "type": "IaaSAntimalware",
+            "typeHandlerVersion": "1.1",
+            "settings": {
+              "AntimalwareEnabled": "true",
+              "Exclusions": {
+                "Paths": "[parameters('strAntiMalwarePathExclusions')]",
+                "Extensions": "[parameters('strAntiMalwareFileExtensionExclusions')]",
+                "Processes": "[parameters('strAntiMalwareProcessExclusions')]"
+              },
+              "RealtimeProtectionEnabled": "[parameters('boolAntiMalwareRealtimeProtectionEnabled')]",
+              "ScheduledScanSettings": {
+                "isEnabled": "[parameters('boolAntiMalwareScheduledScanEnabled')]",
+                "scanType": "[parameters('intAntiMalwareScanType')]",
+                "day": "[parameters('intAntiMalwareScanDay')]",
+                "time": "[parameters('strAntiMalwareScanTime')]"
+              }
+            },
+            "protectedSettings": null
+          }
         }
       ]
     }

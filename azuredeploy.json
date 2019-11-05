@@ -481,20 +481,12 @@
         "description": "Registration URL for Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
       }
     },
-     "strAutomationAccountRGName": {
+    "strNodeConfiguration": {
       "type": "string",
       "defaultValue": "",
       "metadata": {
         "group": "Extension Configuration",
-        "description": "RG of the Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
-      }
-    },
-    "strAutomationAccountName": {
-      "type": "string",
-      "defaultValue": "",
-      "metadata": {
-        "group": "Extension Configuration",
-        "description": "Azure Automation Account to enrol against. Use only with Azure Automation DSC extension"
+        "description": "Used only with the Azure Automation DSC Extension. Specify the name of the Azure Automation Node Configuration to enrol the VM against. NOTE: it will always be the Configuration followed by a period . and either localhost or a specific computer name."
       }
     },
     "strArtifactsLocation": {
@@ -639,6 +631,82 @@
       "metadata": {
         "group": "Extension Configuration",
         "description": "Time to initiate shutdown in 24 hour clock notation e.g. 1900 for 7pm. Extension will use the timezone parameter to offset against UTC time"
+      }
+    },
+    "boolUseAntiMalwareExtension": {
+      "type": "bool",
+      "defaultValue": false,
+      "metadata": {
+        "description": "Whether this server should use the Anti Malware Extension"
+      }
+    },
+    "strAntiMalwarePathExclusions": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The file or folder paths to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised."
+      }
+    },
+    "strAntiMalwareFileExtensionExclusions": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The file extensions to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised."
+      }
+    },
+    "strAntiMalwareProcessExclusions": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The processes to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not supported."
+      }
+    },
+    "boolAntiMalwareRealtimeProtectionEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether this server should use Anti Malware Real Time Protection"
+      }
+    },
+    "boolAntiMalwareScheduledScanEnabled": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Whether this server should conduct Anti Malware Scans"
+      }
+    },
+    "strAntiMalwareScanType": {
+      "type": "string",
+      "metadata": {
+        "description": "The type of Anti Malware Scan to perform - choose from Quick or Full"
+      },
+      "defaultValue": "Quick",
+      "allowedValues": [
+        "Quick",
+        "Full"
+      ]
+    },
+    "intAntiMalwareScanDay": {
+      "type": "int",
+      "metadata": {
+        "description": "The day on which to run the Anti Malware Scheduled Scan. Sunday = 1; Monday = 2; Tuesday = 3; Wednesday = 4; Thursday = 5; Friday = 6; Saturday = 7. Default is Sunday"
+      },
+      "defaultValue": "1",
+      "allowedValues": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7"
+      ]
+    },
+    "intAntiMalwareScanTime": {
+      "type": "int",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM"
       }
     },
     "strBranch": {
@@ -964,11 +1032,8 @@
           "strAutomationAccountRegistrationUrl": {
             "value": "[parameters('strAutomationAccountRegistrationUrl')]"
           },
-          "strAutomationAccountRGName": {
-            "value": "[parameters('strAutomationAccountRGName')]"
-          },
-          "strAutomationAccountName": {
-            "value": "[parameters('strAutomationAccountName')]"
+          "strNodeConfiguration": {
+            "value": "[parameters('strNodeConfiguration')]"
           },
           "strArtifactsLocation": {
             "value": "[parameters('strArtifactsLocation')]"
@@ -1026,6 +1091,33 @@
           },
           "strShutdownStart": {
             "value": "[parameters('strShutdownStart')]"
+          },
+          "boolUseAntiMalwareExtension": {
+            "value": "[parameters('boolUseAntiMalwareExtension')]"
+          },
+          "strAntiMalwarePathExclusions": {
+            "value": "[parameters('strAntiMalwarePathExclusions')]"
+          },
+          "strAntiMalwareFileExtensionExclusions": {
+            "value": "[parameters('strAntiMalwareFileExtensionExclusions')]"
+          },
+          "strAntiMalwareProcessExclusions": {
+            "value": "[parameters('strAntiMalwareProcessExclusions')]"
+          },
+          "boolAntiMalwareRealtimeProtectionEnabled": {
+            "value": "[parameters('boolAntiMalwareRealtimeProtectionEnabled')]"
+          },
+          "boolAntiMalwareScheduledScanEnabled": {
+            "value": "[parameters('boolAntiMalwareScheduledScanEnabled')]"
+          },
+          "strAntiMalwareScanType": {
+            "value": "[parameters('strAntiMalwareScanType')]"
+          },
+          "intAntiMalwareScanDay": {
+            "value": "[parameters('intAntiMalwareScanDay')]"
+          },
+          "intAntiMalwareScanTime": {
+            "value": "[parameters('intAntiMalwareScanTime')]"
           }
         }
       }

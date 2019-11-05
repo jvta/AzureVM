@@ -21,6 +21,7 @@ This project is designed to host a series of linked deployment templates that ca
     * BGInfo
     * OMS Agent
     * Auto Shutdown
+    * Anti Malware
     * Azure Automation DSC
     * Complex DSC
     * Generic DSC
@@ -231,6 +232,18 @@ To apply the Auto Shutdown extension to your VM supply the following parameters:
 * **boolUseAutoShutdownExtension** - set to 'true' to use this extension
 * **strShutdownStart** (Supply at time in 24 hour clock notation e.g. 1900 for 7PM. Timezone will be taken from the VM timezone parameter)
 
+### Anti Malware
+To attach the Anti Malware agent to your VM supply the following parameters:
+* **boolUseAntiMalwareExtension** - set to 'true' to use this extension
+* **strAntiMalwarePathExclusions** (The file or folder paths to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised)
+* **strAntiMalwareFileExtensionExclusions** (The file extensions to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not advised)
+* **strAntiMalwareProcessExclusions** (The processes to be excluded from Anti Malware scans. Use a semi-colon separated list. Wildcards not supported)
+* **boolAntiMalwareRealtimeProtectionEnabled** (Whether this server should use Anti Malware Real Time Protection)
+* **boolAntiMalwareScheduledScanEnabled** (Whether this server should conduct Anti Malware Scans)
+* **strAntiMalwareScanType** (The type of Anti Malware Scan to perform - choose from Quick or Full)
+* **intAntiMalwareScanDay** (The day on which to run the Anti Malware Scheduled Scan. Sunday=1; Monday=2; Tuesday=3; Wednesday=4; Thursday=5; Friday=6; Saturday=7. Default is Sunday)
+* **intAntiMalwareScanTime** (The time at which the Anti Malware Scheduled Scan should be run in minutes from midnight. E.g. 60 = 1AM; 360 = 6AM)
+
 ### PowerShell DSC
 To use any of the PowerShell DSC extensions you will need to write your own DSC config file and publish it to an Azure Automation Account, storage account blob or other publicly accessible URL location then adjust any settings here to provide the appropriate inputs - the parameters for the Customised DSC extension may vary from what you create. Specific DSC content creation is not covered here.
 
@@ -248,7 +261,7 @@ Common parameters:
 * **boolUseAzureAutomationDSCExtension** - set to 'true' to use this extension
 * **automationAccountRegistrationKey** - (obtain from Automation Account, Account settings. Will be long complex key)
 * **automationAccountRegistrationUrl** - (obtain from Automation Account, Account settings. e.g. https://AE-agentservice-prod-1.azure-automation.net/accounts/<random-GUID>)
-* **strDscFunction** (your name for a DSC "configuration" block to apply e.g. 'StandardAzureServer')
+* **strNodeConfiguration** (your name for the Azure Automation Node Configuration to apply e.g. 'StandardAzureServer.localhost'. NOTE: it is the name of the Node Configuration, not the Configuration. The name will always be the Configuration followed by a period . and either localhost or a specific computer name)
 
 **Customised DSC**
 
