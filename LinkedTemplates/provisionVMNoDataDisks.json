@@ -144,6 +144,13 @@
         "description": "The version of the selected SKU to use"
       }
     },
+    "strCustomData": {
+      "type": "string",
+      "defaultValue": "null",
+      "metadata": {
+        "description": "Custom Data may contain code passed to Linux VMs upon provision for initial configuration e.g. cloud-init scripts"
+      }
+    },
     "boolUseHybridUseBenefit": {
       "type": "bool",
       "defaultValue": false,
@@ -549,6 +556,7 @@
           "computerName": "[parameters('strVmName')]",
           "adminUsername": "[parameters('strAdminUsername')]",
           "adminPassword": "[parameters('sstrAdminPasswordOrKey')]",
+          "customData": "[if(equals(parameters('strCustomData'),'null'),json('null'),base64(parameters('strCustomData')))]",
           "linuxConfiguration": "[if(equals(parameters('strAuthenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
           "windowsConfiguration": "[if(equals(parameters('strOsPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
         },

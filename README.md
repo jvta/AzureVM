@@ -16,6 +16,7 @@ This project is designed to host a series of linked deployment templates that ca
 * Accelerated Networking option
 * Hybrid Use Benefit option
 * Boot Diagnostics Storage Account creation or reference
+* CustomData parameter for Linux VM builds
 * VM Extensions
     * Domain Join
     * BGInfo
@@ -78,7 +79,7 @@ New-AzResourceGroupDeployment -ResourceGroupName <Name of your Resource Group> `
                       -Verbose
 ```
 
-Additionally, if you clone the repo in GitHub or a similar pulbic repository you can provide a branch parameter (**strBranch**) to assist in selecting development or master branches during testing. Leave parameter set as "master" if unsure.
+Additionally, if you clone the repo in GitHub or a similar public repository you can provide a branch parameter (**strBranch**) to assist in selecting development or master branches during testing. Leave parameter set as "master" if unsure.
 
 Should you clone this solution it includes a .gitignore file to prevent unintended upload of any *.param.json files into your public repository
 
