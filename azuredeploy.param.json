@@ -52,6 +52,9 @@
     "strVersion": {
         "value": "latest"
     },
+    "strCustomData": {
+        "value": "null"
+    },
     "boolRequirePublicIp": {
         "value": false
     },

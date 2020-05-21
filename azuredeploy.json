@@ -152,6 +152,14 @@
         "description": "The version of the selected SKU to use"
       }
     },
+    "strCustomData": {
+      "type": "string",
+      "defaultValue": "null",
+      "metadata": {
+        "group": "VM OS & Image Selection",
+        "description": "Custom Data may contain code passed to Linux VMs upon provision for initial configuration e.g. cloud-init scripts"
+      }
+    },
     "boolRequirePublicIp": {
       "type": "bool",
       "defaultValue": false,
@@ -998,6 +1006,9 @@
           },
           "strVersion": {
             "value": "[parameters('strVersion')]"
+          },
+          "strCustomData": {
+            "value": "[parameters('strCustomData')]"
           },
           "strTimeZone": {
             "value": "[parameters('strTimeZone')]"
