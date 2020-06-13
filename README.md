@@ -1,8 +1,8 @@
 # AzureVM
 
-## Universal Azure VM Deployment Collection
+## Universal Azure VM Deployment
 
-This project is designed to host a series of linked deployment templates that can be referenced manually or by automated provisioning systems to produce a broad range of commonly requested Azure IaaS VM provision options such as:
+This project is a series of linked ARM templates that can be deployed manually when required or via automated provisioning systems to produce a broad range of commonly required Azure IaaS VM configurations utilising features such as:
 
 * Marketplace Image Selection (Windows and Linux/appliance)
 * Data Disk selection from 0 to N disks and properties
@@ -27,6 +27,8 @@ This project is designed to host a series of linked deployment templates that ca
     * Azure Automation DSC
     * Complex DSC
     * Generic DSC
+
+Additionally it can be used to recreate VMs from their existing disks. Simply provide the relevant details of the original VM to recreate it following deletion, e.g. when needing to recreate a VM in an Availability Set.
 
 ### Pre-requisites
 
@@ -82,6 +84,12 @@ New-AzResourceGroupDeployment -ResourceGroupName <Name of your Resource Group> `
 Additionally, if you clone the repo in GitHub or a similar public repository you can provide a branch parameter (**strBranch**) to assist in selecting development or master branches during testing. Leave parameter set as "master" if unsure.
 
 Should you clone this solution it includes a .gitignore file to prevent unintended upload of any *.param.json files into your public repository
+
+## Re-Deployment
+
+To redeploy a VM make sure that all required disks for the VM reside in the Resource Group you intend to use for deployment, that you record the disk names correctly and input them into the OS Disk and Data Disk sections, and that you provide the correct LUN number for each data disk in the order in which it was attached in the original VM.
+
+Set the **boolRebuildFromDisks** parameter to true and provide the names of the OS disk to the **strExistingOSDiskName** parameter and any data disks to the relevant field in the **objDataDisks** array. Ensure LUN numbers match original assignments in this section also, along with size, cache and account type settings.
 
 ## Parameter File
 

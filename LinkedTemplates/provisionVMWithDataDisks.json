@@ -575,7 +575,7 @@
           "windowsConfiguration": "[if(equals(parameters('strOsPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
         },
         "storageProfile": {
-          "imageReference": "[variables('imageReference')[parameters('strImage')]]",
+          "imageReference": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),variables('imageReference')[parameters('strImage')])]",
           "osdisk": {
             "name": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),parameters('strExistingOSDiskName'),concat(parameters('strVmName'), '-osDisk'))]",
             "diskSizeGB": "[parameters('intVmOSDiskSize')]",
