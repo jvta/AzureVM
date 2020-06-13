@@ -14,6 +14,20 @@
         "description": "Specify the name of the VM to be provisioned"
       }
     },
+        "boolRebuildFromDisks": {
+      "defaultValue": false,
+      "type": "bool",
+      "metadata": {
+        "description": "Whether to build this VM from existing disks or create from an image. Default is false which implies build a new VM from an image"
+      }
+    },
+    "strExistingOSDiskName":{
+      "defaultValue": "PreviousOSDiskName-IfRebuildingFromDisks",
+      "type": "string",
+      "metadata": {
+        "description": "If rebuilding a VM from existing disks, provide the OS disk name here. Ensure this disk (and any associated data disks) is present in the Resource Group you are building in"
+      }
+    },
     "strVmSize": {
       "defaultValue": "Standard_DS2_v2",
       "type": "string",
@@ -563,9 +577,9 @@
         "storageProfile": {
           "imageReference": "[variables('imageReference')[parameters('strImage')]]",
           "osdisk": {
-            "name": "[concat(parameters('strVmName'), '-osDisk')]",
+            "name": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),parameters('strExistingOSDiskName'),concat(parameters('strVmName'), '-osDisk'))]",
             "diskSizeGB": "[parameters('intVmOSDiskSize')]",
-            "createOption": "FromImage",
+            "createOption": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),'Attach','fromImage')]",
             "managedDisk": {
               "storageAccountType": "[parameters('strOsDiskStorageType')]"
             },

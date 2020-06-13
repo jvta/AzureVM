@@ -1,6 +1,12 @@
 {
-    "strVmName":{
+    "strVmName": {
         "value": "server1"
+    },
+    "boolRebuildFromDisks": {
+        "value": false
+    },
+    "strExistingOSDiskName": {
+        "value": "PreviousOSDiskName-IfRebuildingFromDisks"
     },
     "strVmSize": {
         "value": "Standard_DS2_v2"
@@ -29,7 +35,9 @@
                 {
                     "Cache": "None",
                     "Size": 1024,
-                    "StorageAccountType": "Standard_LRS"
+                    "StorageAccountType": "Standard_LRS",
+                    "ExistingDiskLun": 0,
+                    "ExistingDiskName": "MyOldDisk-1"
                 }
             ]
         }
