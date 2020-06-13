@@ -575,15 +575,17 @@
           "windowsConfiguration": "[if(equals(parameters('strOsPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
         },
         "storageProfile": {
-          "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),variables('imageReference')[parameters('strImage')])]",
+          "imageReference": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),variables('imageReference')[parameters('strImage')])]",
           "osdisk": {
-            "name": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),parameters('strExistingOSDiskName'),concat(parameters('strVmName'), '-osDisk'))]",
-            "diskSizeGB": "[parameters('intVmOSDiskSize')]",
+            "name": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),concat(parameters('strVmName'), '-osDisk'))]",
+            "diskSizeGB": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),parameters('intVmOSDiskSize'))]",
+            "osType": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),parameters('strOsPlatform'),json('null'))]",
             "createOption": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),'Attach','fromImage')]",
             "managedDisk": {
-              "storageAccountType": "[parameters('strOsDiskStorageType')]"
+              "storageAccountType": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),parameters('strOsDiskStorageType'))]",
+              "id": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),resourceId('Microsoft.Compute/disks',parameters('strExistingOSDiskName')),json('null'))]",
             },
-            "caching": "ReadWrite"
+            "caching": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),'ReadWrite')]",
           }
         },
         "diagnosticsProfile": "[if(parameters('boolUseBootDiagnostics'),variables('diagnosticsProfile'),json('null'))]",
