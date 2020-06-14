@@ -609,13 +609,14 @@
               "name": "dataDisks",
               "count": "[length(parameters('objDataDisks').disks)]",
               "input": {
-                "caching": "[parameters('objDataDisks').disks[copyIndex('dataDisks')].Cache]",
-                "diskSizeGB": "[parameters('objDataDisks').disks[copyIndex('dataDisks')].Size]",
+                "caching": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),parameters('objDataDisks').disks[copyIndex('dataDisks')].Cache)]",
+                "diskSizeGB": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),parameters('objDataDisks').disks[copyIndex('dataDisks')].Size)]",
                 "lun": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),parameters('objDataDisks').disks[copyIndex('dataDisks')].ExistingDiskLun,copyIndex('dataDisks'))]",
-                "name": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),parameters('objDataDisks').disks[copyIndex('dataDisks')].ExistingDiskName,concat(parameters('strVmName'),'-datadisk',copyIndex('dataDisks')))]",
+                "name": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),concat(parameters('strVmName'),'-datadisk',copyIndex('dataDisks')))]",
                 "createOption": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),'Attach','Empty')]",
                 "managedDisk": {
-                  "storageAccountType": "[parameters('objDataDisks').disks[copyIndex('dataDisks')].StorageAccountType]"
+                  "storageAccountType": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),parameters('objDataDisks').disks[copyIndex('dataDisks')].StorageAccountType)]",
+                  "id": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),resourceId('Microsoft.Compute/disks',parameters('objDataDisks').disks[copyIndex('dataDisks')].ExistingDiskName),json('null'))]",
                 }
               }
             }
