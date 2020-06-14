@@ -566,14 +566,23 @@
         "hardwareProfile": {
           "vmSize": "[variables('vmSize')]"
         },
-        "osProfile": {
-          "computerName": "[parameters('strVmName')]",
-          "adminUsername": "[parameters('strAdminUsername')]",
-          "adminPassword": "[parameters('sstrAdminPasswordOrKey')]",
-          "customData": "[if(equals(parameters('strCustomData'),'null'),json('null'),base64(parameters('strCustomData')))]",
-          "linuxConfiguration": "[if(equals(parameters('strAuthenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
-          "windowsConfiguration": "[if(equals(parameters('strOsPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
-        },
+        "osProfile": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),
+            json('null'),
+            if(equals(parameters('strOsPlatform'), 'Windows'),
+                json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\",\"windowsConfiguration\": \"',variables('windowsConfiguration'),'\"}')),
+                    if(and(equals(parameters('strAuthenticationType'),'SSH-Public-Key'),equals(parameters('strCustomData'),'null')),
+                      json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\",\"linuxConfiguration\": \"',variables('linuxConfiguration'),'\"}')),
+                      if(and(equals(parameters('strAuthenticationType'),'Password'),not(equals(parameters('strCustomData'),'null'))),
+                        json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\",\"customData\": \"',base64(parameters('strCustomData')),'\"}')),
+                        if(and(equals(parameters('strAuthenticationType'),'SSH-Public-Key'),not(equals(parameters('strCustomData'),'null'))),
+                          json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\",\"linuxConfiguration\": \"',variables('linuxConfiguration'),'\",\"customData\": \"',base64(parameters('strCustomData')),'\"}')),
+                          json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\"}'))
+                        )
+                      )
+                    )
+                )
+            )
+        ]",
         "storageProfile": {
           "imageReference": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),json('null'),variables('imageReference')[parameters('strImage')])]",
           "osdisk": {
