@@ -498,7 +498,6 @@
     "vmSize": "[parameters('strVmSize')]",
     "true": true,
     "windowsConfiguration": {
-      "provisionVMAgent": true,
       "timeZone": "[parameters('strTimeZone')]"
     },
     "linuxConfiguration": {
