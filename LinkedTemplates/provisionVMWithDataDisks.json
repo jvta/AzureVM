@@ -566,14 +566,6 @@
         "hardwareProfile": {
           "vmSize": "[variables('vmSize')]"
         },
-        "osProfile": {
-          "computerName": "[parameters('strVmName')]",
-          "adminUsername": "[parameters('strAdminUsername')]",
-          "adminPassword": "[parameters('sstrAdminPasswordOrKey')]",
-          "customData": "[if(equals(parameters('strCustomData'),'null'),json('null'),base64(parameters('strCustomData')))]",
-          "linuxConfiguration": "[if(equals(parameters('strAuthenticationType'), 'Password'), json('null'), variables('linuxConfiguration'))]",
-          "windowsConfiguration": "[if(equals(parameters('strOsPlatform'), 'Windows'), variables('windowsConfiguration'), json('null'))]"
-        },
         "osProfile": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),
             json('null'),
             if(equals(parameters('strOsPlatform'), 'Windows'),
