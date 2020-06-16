@@ -568,7 +568,7 @@
         "osProfile": "[if(equals(parameters('boolRebuildFromDisks'),variables('true')),
             json('null'),
             if(equals(parameters('strOsPlatform'), 'Windows'),
-                json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\",\"windowsConfiguration\": \"',variables('windowsConfiguration'),'\"}')),
+                json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\",\"windowsConfiguration\": {\"timeZone\": ',parameters('strTimeZone'),'}\"}')),
                     if(and(equals(parameters('strAuthenticationType'),'SSH-Public-Key'),equals(parameters('strCustomData'),'null')),
                       json(concat('{\"computerName\": \"',parameters('strVmName'),'\",\"adminUsername\": \"',parameters('strAdminUsername'),'\",\"adminPassword\": \"',parameters('sstrAdminPasswordOrKey'),'\",\"linuxConfiguration\": \"',variables('linuxConfiguration'),'\"}')),
                       if(and(equals(parameters('strAuthenticationType'),'Password'),not(equals(parameters('strCustomData'),'null'))),
