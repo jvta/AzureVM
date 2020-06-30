@@ -17,6 +17,22 @@
         "description": "Specify the name of the VM meeting your naming standards."
       }
     },
+    "boolRebuildFromDisks": {
+      "defaultValue": false,
+      "type": "bool",
+      "metadata": {
+        "group": "VM Configuration",
+        "description": "Whether to build this VM from existing disks or create from an image. Default is false which implies build a new VM from an image"
+      }
+    },
+    "strExistingOSDiskName":{
+      "defaultValue": "PreviousOSDiskName-IfRebuildingFromDisks",
+      "type": "string",
+      "metadata": {
+        "group": "VM Configuration",
+        "description": "If rebuilding a VM from existing disks, provide the OS disk name here. Ensure this disk (and any associated data disks) is present in the Resource Group you are building in"
+      }
+    },
     "strVmSize": {
       "type": "string",
       "defaultValue": "Standard_DS2_v2",
@@ -955,6 +971,12 @@
           },
           "strVmName": {
             "value": "[parameters('strVmName')]"
+          },
+          "boolRebuildFromDisks": {
+            "value": "[parameters('boolRebuildFromDisks')]"
+          },
+          "strExistingOSDiskName": {
+            "value": "[parameters('strExistingOSDiskName')]"
           },
           "strVmSize": {
             "value": "[parameters('strVmSize')]"
