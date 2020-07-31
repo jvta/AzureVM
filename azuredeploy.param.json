@@ -194,7 +194,7 @@
     "boolUseGenericDSCExtension": {
         "value": false
     },
-    "strAutomationAccountRegistrationKey": {
+    "sstrAutomationAccountRegistrationKey": {
         "reference": {
             "keyVault": {
                 "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
