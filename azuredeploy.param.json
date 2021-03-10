@@ -11,8 +11,8 @@
     "strVmDeploymentType": {
         "value": "Standalone"
     },
-    "intAvailabilityZoneId": {
-        "value": 1
+    "strAvailabilityZoneId": {
+        "value": "1"
     },
     "strVmSize": {
         "value": "Standard_DS2_v2"
