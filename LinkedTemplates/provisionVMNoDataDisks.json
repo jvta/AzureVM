@@ -569,7 +569,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('strVmName')]",
-      "zones": "[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('strAvailabilityZoneId'), json('null'))]",
+      "zones": ["[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('strAvailabilityZoneId'), json('null'))]"],
       "apiVersion": "[parameters('strComputeApiVersion')]",
       "location": "[parameters('strLocation')]",
       "tags": "[base64ToJson(variables('tagsBase64'))]",
