@@ -45,14 +45,8 @@
         "description": "The availability type of the VM. Choose from AVSet, Standalone or Zonal - default Standalone"
       }
     },
-    "strAvailabilityZoneId": {
-      "type": "string",
-      "defaultValue": "1",
-      "allowedValues": [
-        "1",
-        "2",
-        "3"
-      ],
+    "objAvailabilityZoneId": {
+      "type": "object",
       "metadata": {
         "description": "The availability zone ID for the VM. Choose from 1, 2 or 3 - default 1"
       }
@@ -997,8 +991,8 @@
           "strVmDeploymentType": {
             "value": "[parameters('strVmDeploymentType')]"
           },
-          "strAvailabilityZoneId": {
-            "value": "[parameters('strAvailabilityZoneId')]"
+          "objAvailabilityZoneId": {
+            "value": "[parameters('objAvailabilityZoneId')]"
           },
           "strVmSize": {
             "value": "[parameters('strVmSize')]"

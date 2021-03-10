@@ -563,14 +563,13 @@
         "storageUri": "[concat('https://',parameters('strDiagnosticsStorageAccountName'),'.blob.core.windows.net')]"
       }
     },
-    "tagsBase64": "[base64(parameters('strTags'))]",
-    "emptyString": ""
+    "tagsBase64": "[base64(parameters('strTags'))]"
   },
   "resources": [
     {
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('strVmName')]",
-      "zones": ["[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('strAvailabilityZoneId'), variables('emptyString'))]"],
+      "zones": ["[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('strAvailabilityZoneId'), json('null'))]"],
       "apiVersion": "[parameters('strComputeApiVersion')]",
       "location": "[parameters('strLocation')]",
       "tags": "[base64ToJson(variables('tagsBase64'))]",
