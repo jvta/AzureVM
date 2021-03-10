@@ -46,16 +46,15 @@
       }
     },
     "intAvailabilityZoneId": {
-      "type": "string",
-      "defaultValue": null,
+      "type": "int",
+      "defaultValue": 1,
       "allowedValues": [
         1,
         2,
-        3,
-        null
+        3
       ],
       "metadata": {
-        "description": "The availability zone ID for the VM. Choose from 1, 2, 3 or null if not applicable - default 1"
+        "description": "The availability zone ID for the VM. Choose from 1, 2 or 3 - default 1"
       }
     },
     "strVmSize": {
