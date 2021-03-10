@@ -7,6 +7,7 @@ This project is a series of linked ARM templates that can be deployed manually w
 * Marketplace Image Selection (Windows and Linux/appliance)
 * Data Disk selection from 0 to N disks and properties
 * AV Set creation or reference
+* Availability Zones
 * Tag data
 * Recovery Services Vault and policy selection
 * Load Balancer membership
@@ -33,6 +34,7 @@ Additionally it can be used to recreate VMs from their existing disks. Simply pr
 ### Pre-requisites
 
 The following resources are presumed to already exist prior to your deployment:
+* Resource Group for your deployment
 * VNet and subnet
 * Storage account for boot diagnostics to reference
 * Load Balancer - if required
@@ -131,14 +133,14 @@ All VM deployments require the following parameters at an absolute minimum to de
 
 Other key parameters, even VM size and OS selection do have defaults supplied within the template that will produce a vaiable VM, however you should always review ALL parameters for relevance to your current build. All remaining parameters can be considered as optional.
 
-Parameters are named with prefixes according to input type required, e.g. str = string; int = integer; bool = Boolean; obj = object. Ensure input matches expected data types. Most parameters should be named descriptively such that it is apparent what they signify. E.g. **boolAvSetRequired** indicates whether to attach the VM to an AV Set, whereas **boolAvSetCreateNew** indicates whether to use a new or existing AV Set. Follow the parameter through calls from parent to child templates if unsure of function or format required.
+Parameters are named with prefixes according to input type required, e.g. str = string; int = integer; bool = Boolean; obj = object. Ensure input matches expected data types. Most parameters should be named descriptively such that it is apparent what they signify. E.g. **boolAddDataDisks** indicates whether to add data disks to the VM, whereas **boolAvSetCreateNew** indicates whether to create a new or reference an existing AV Set. Follow the parameter through calls from parent to child templates if unsure of function or format required.
 
 ### Image Selection
 
 The template supplies three default options for image selection, and a custom option. Firstly set **strOsPlatform** to either 'Windows' or 'Linux' to pass parameters specific to each platform, then set **strImage** as one of the following four options:
-* WindowsServer (Default. Currently pub=MicrosoftWindowsServer; offer=WindowsServer; sku=2016-Datacenter; version=latest)
+* WindowsServer (Default. Currently pub=MicrosoftWindowsServer; offer=WindowsServer; sku=2019-Datacenter; version=latest)
 * Windows10     (Currently pub=MicrosoftWindowsDesktop; offer=Windows-10; sku=rs5-pro; version=latest)
-* Linux         (Currently pub=RedHat; offer=RHEL; sku=7.4; version=latest)
+* Linux         (Currently pub=RedHat; offer=RHEL; sku=7.5; version=latest)
 * Custom        (Provide required strPublisher, strOffer, strSku and strVersion separately)
 
 If your requirement does not match the default WindowsServer, Windows10 or Linux options provide the required Publisher, Offer, SKU and Version details to the following parameters:
@@ -155,7 +157,7 @@ In addition to supplying Subnet Name, Virtual Network Name and associated VNet R
 
 In addition to VM Name and Size you can also set:
 * OS disk parameters for size in GB and storage type
-* Availability Set requirement, AV Set name and whether to create new or reference existing
+* Availability Set or Zone requirement, AV Set name and whether to create new or reference existing, AV Zone ID if required
 * The Timezone to set on a Windows VM (defaults to AUS Eastern Standard Time)
 * Whether to enable Hybrid Use Benefit licencing for Windows VM
 * Whether to use Boot Diagnostics; to create a new or use existing storage account; and the account type to create if required
