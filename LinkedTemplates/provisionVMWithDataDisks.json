@@ -40,14 +40,13 @@
         "description": "The availability type of the VM. Choose from AVSet, Standalone or Zonal - default Standalone"
       }
     },
-    "strAvailabilityZoneId": {
-      "type": "string",
-      "defaultValue": "1",
-      "allowedValues": [
-        "1",
-        "2",
-        "3"
-      ],
+    "objAvailabilityZoneId": {
+      "type": "object",
+      "defaultValue": {
+                "availabilityZoneId": [
+                    "1"
+                ]
+            },
       "metadata": {
         "description": "The availability zone ID for the VM. Choose from 1, 2 or 3 - default 1"
       }
@@ -569,7 +568,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('strVmName')]",
-      "zones": ["[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('strAvailabilityZoneId'), json('null'))]"],
+      "zones": "[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('objAvailabilityZoneId').availabilityZoneId, json('null'))]",
       "apiVersion": "[parameters('strComputeApiVersion')]",
       "location": "[parameters('strLocation')]",
       "tags": "[base64ToJson(variables('tagsBase64'))]",
