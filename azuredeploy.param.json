@@ -8,6 +8,16 @@
     "strExistingOSDiskName": {
         "value": "PreviousOSDiskName-IfRebuildingFromDisks"
     },
+    "strVmDeploymentType": {
+        "value": "Standalone"
+    },
+    "objAvailabilityZoneId": {
+        "value": {
+            "availabilityZoneId": [
+                "1"
+            ]
+        }
+    },
     "strVmSize": {
         "value": "Standard_DS2_v2"
     },

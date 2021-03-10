@@ -14,7 +14,7 @@
         "description": "Specify the name of the VM to be provisioned"
       }
     },
-        "boolRebuildFromDisks": {
+    "boolRebuildFromDisks": {
       "defaultValue": false,
       "type": "bool",
       "metadata": {
@@ -26,6 +26,29 @@
       "type": "string",
       "metadata": {
         "description": "If rebuilding a VM from existing disks, provide the OS disk name here. Ensure this disk (and any associated data disks) is present in the Resource Group you are building in"
+      }
+    },
+    "strVmDeploymentType": {
+      "type": "string",
+      "defaultValue": "Standalone",
+      "allowedValues": [
+        "AVSet",
+        "Standalone",
+        "Zonal"
+      ],
+      "metadata": {
+        "description": "The availability type of the VM. Choose from AVSet, Standalone or Zonal - default Standalone"
+      }
+    },
+    "objAvailabilityZoneId": {
+      "type": "object",
+      "defaultValue": {
+                "availabilityZoneId": [
+                    "1"
+                ]
+            },
+      "metadata": {
+        "description": "The availability zone ID for the VM. Choose from 1, 2 or 3 - default 1"
       }
     },
     "strVmSize": {
@@ -65,13 +88,6 @@
       "type": "string",
       "metadata": {
         "description": "Specify the username of the Administrator account"
-      }
-    },
-    "boolAvSetRequired": {
-      "type": "bool",
-      "defaultValue": false,
-      "metadata": {
-        "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
       }
     },
     "strAvSetName": {
@@ -521,7 +537,7 @@
       "WindowsServer": {
         "publisher": "MicrosoftWindowsServer",
         "offer": "WindowsServer",
-        "sku": "2016-Datacenter",
+        "sku": "2019-Datacenter",
         "version": "latest"
       },
       "Windows10": {
@@ -552,6 +568,7 @@
     {
       "type": "Microsoft.Compute/virtualMachines",
       "name": "[parameters('strVmName')]",
+      "zones": "[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('objAvailabilityZoneId').availabilityZoneId, json('null'))]",
       "apiVersion": "[parameters('strComputeApiVersion')]",
       "location": "[parameters('strLocation')]",
       "tags": "[base64ToJson(variables('tagsBase64'))]",
@@ -561,7 +578,7 @@
       "dependsOn": [
       ],
       "properties": {
-        "availabilitySet": "[if(parameters('boolAvSetRequired'), variables('availabilitySet'), json('null'))]",
+        "availabilitySet": "[if(equals(parameters('strVmDeploymentType'),'AVSet'), variables('availabilitySet'), json('null'))]",
         "hardwareProfile": {
           "vmSize": "[variables('vmSize')]"
         },

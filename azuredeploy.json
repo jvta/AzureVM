@@ -33,20 +33,35 @@
         "description": "If rebuilding a VM from existing disks, provide the OS disk name here. Ensure this disk (and any associated data disks) is present in the Resource Group you are building in"
       }
     },
+    "strVmDeploymentType": {
+      "type": "string",
+      "defaultValue": "Standalone",
+      "allowedValues": [
+        "AVSet",
+        "Standalone",
+        "Zonal"
+      ],
+      "metadata": {
+        "description": "The availability type of the VM. Choose from AVSet, Standalone or Zonal - default Standalone"
+      }
+    },
+    "objAvailabilityZoneId": {
+      "type": "object",
+      "defaultValue": {
+                "availabilityZoneId": [
+                    "1"
+                ]
+            },
+      "metadata": {
+        "description": "The availability zone ID for the VM. Choose from 1, 2 or 3 - default 1"
+      }
+    },
     "strVmSize": {
       "type": "string",
       "defaultValue": "Standard_DS2_v2",
       "metadata": {
         "group": "VM Configuration",
         "description": "Specify the size of the VM required. Specify in the format of the supplied default value"
-      }
-    },
-    "boolAvSetRequired": {
-      "type": "bool",
-      "defaultValue": false,
-      "metadata": {
-        "group": "VM Configuration",
-        "description": "Whether this server should belong to an Availability Set. Allowed values are true or false"
       }
     },
     "boolAvSetCreateNew": {
@@ -784,7 +799,7 @@
   },
   "resources": [
     {
-      "condition": "[and(parameters('boolAvSetCreateNew'),parameters('boolAvSetRequired'))]",
+      "condition": "[and(parameters('boolAvSetCreateNew'),equals(parameters('strVmDeploymentType'),'AVSet'))]",
       "type": "Microsoft.Resources/deployments",
       "name": "provisionAvSet",
       "apiVersion": "[variables('deploymentApiVersion')]",
@@ -978,6 +993,12 @@
           "strExistingOSDiskName": {
             "value": "[parameters('strExistingOSDiskName')]"
           },
+          "strVmDeploymentType": {
+            "value": "[parameters('strVmDeploymentType')]"
+          },
+          "objAvailabilityZoneId": {
+            "value": "[parameters('objAvailabilityZoneId')]"
+          },
           "strVmSize": {
             "value": "[parameters('strVmSize')]"
           },
@@ -996,11 +1017,8 @@
           "strAdminUsername": {
             "value": "[parameters('strAdminUsername')]"
           },
-          "boolAvSetRequired": {
-            "value": "[parameters('boolAvSetRequired')]"
-          },
           "strAvSetName": {
-            "value": "[if(parameters('boolAvSetRequired'), parameters('strAvSetName'), variables('emptyString'))]"
+            "value": "[if(equals(parameters('strVmDeploymentType'),'AVSet'), parameters('strAvSetName'), variables('emptyString'))]"
           },
           "intVmOsDiskSize": {
             "value": "[parameters('intVmOsDiskSize')]"
