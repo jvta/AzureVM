@@ -209,11 +209,11 @@ If you do not need any data disks simply set the Boolean parameter **boolAddData
 ### Tags
 Provide your preferred tags to the objTags parameter as an object collection of key/value pairs as in example below:
  ```JSON
-"objTags": {
-    "value": {
-        "Application": "Test",
-        "Environment": "Test"
-    }
+"objTags": {
+    "value": {
+        "Application": "Test",
+        "Environment": "Test"
+    }
 }
 ```
 These tags will be appended to each resource created.
