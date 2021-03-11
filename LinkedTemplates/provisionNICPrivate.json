@@ -8,10 +8,14 @@
         "description": "Location for the deployment"
       }
     },
-    "strTags": {
-      "type": "string",
+    "objTags": {
+      "type": "object",
+      "defaultValue": {
+        "Appplication": "Test",
+        "Environment": "Test"
+      },
       "metadata": {
-        "description": "Tags to attach to resource"
+        "description": "List of tag key-value pairs to be passed to each resource"
       }
     },
     "strPipId": {
@@ -127,8 +131,7 @@
       {
         "id": "[concat(resourceId(parameters('strLoadBalancerRGName'),'Microsoft.Network/loadBalancers', parameters('strLoadBalancerName')), '/backendAddressPools/',parameters('strLoadBalancerBackendPoolName'))]"
       }
-    ],
-    "tagsBase64": "[base64(parameters('strTags'))]"
+    ]
   },
   "resources": [
     {
@@ -136,7 +139,7 @@
       "name": "[parameters('strNicName')]",
       "apiVersion": "[parameters('strNetworkApiVersion')]",
       "location": "[parameters('strLocation')]",
-      "tags": "[base64ToJson(variables('tagsBase64'))]",
+      "tags": "[parameters('objTags')]",
       "properties": {
         "ipConfigurations": [
           {
