@@ -211,7 +211,7 @@ Provide your preferred tags to the objTags parameter as an object collection of 
  ```JSON
 "objTags": {
     "value": {
-        "Application": "Test",
+        "Application": "Test",
         "Environment": "Test"
     }
 }
