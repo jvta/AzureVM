@@ -770,11 +770,14 @@
         "description": "Code branch for template testing. Default is master. Supply alternate development branch name only if required"
       }
     },
-    "strTags": {
-      "type": "string",
-      "defaultValue": "{\"Appplication\":\"Test\",\"Environment\":\"Test\"}",
+    "objTags": {
+      "type": "object",
+      "defaultValue": {
+        "Appplication": "Test",
+        "Environment": "Test"
+      },
       "metadata": {
-        "description": "List of tag data in string form to be passed to each resource. View Readme for formatting"
+        "description": "List of tag key-value pairs to be passed to each resource"
       }
     }
   },
@@ -821,8 +824,8 @@
           "strAvSetName": {
             "value": "[parameters('strAvSetName')]"
           },
-          "strTags": {
-            "value": "[parameters('strTags')]"
+          "objTags": {
+            "value": "[parameters('objTags')]"
           }
         }
       }
@@ -856,8 +859,8 @@
           "strPublicIpSku": {
             "value": "[parameters('strPublicIpSku')]"
           },
-          "strTags": {
-            "value": "[parameters('strTags')]"
+          "objTags": {
+            "value": "[parameters('objTags')]"
           }
         }
       }
@@ -879,8 +882,8 @@
           "strLocation": {
             "value": "[parameters('strLocation')]"
           },
-          "strTags": {
-            "value": "[parameters('strTags')]"
+          "objTags": {
+            "value": "[parameters('objTags')]"
           },
           "strPipId": {
             "value": "[if(parameters('boolRequirePublicIp'), reference('provisionPublicIp').outputs.resourceID.value, 'None')]"
@@ -959,8 +962,8 @@
           "strDiagnosticsStorageAccountType": {
             "value": "[parameters('strDiagnosticsStorageAccountType')]"
           },
-          "strTags": {
-            "value": "[parameters('strTags')]"
+          "objTags": {
+            "value": "[parameters('objTags')]"
           }
         }
       }
@@ -1002,8 +1005,8 @@
           "strVmSize": {
             "value": "[parameters('strVmSize')]"
           },
-          "strTags": {
-            "value": "[parameters('strTags')]"
+          "objTags": {
+            "value": "[parameters('objTags')]"
           },
           "strNicName": {
             "value": "[variables('nicName')]"
