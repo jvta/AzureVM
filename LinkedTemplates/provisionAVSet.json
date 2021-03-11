@@ -20,16 +20,18 @@
                 "description": "Location to create the resource"
             }
         },
-        "strTags": {
-            "type": "string",
+        "objTags": {
+            "type": "object",
+            "defaultValue": {
+                "Appplication": "Test",
+                "Environment": "Test"
+            },
             "metadata": {
-                "description": "Tags to attach to resource"
+                "description": "List of tag key-value pairs to be passed to each resource"
             }
         }
     },
-    "variables": {
-        "tagsBase64": "[base64(parameters('strTags'))]"
-    },
+    "variables": {},
     "resources": [
         {
             "type": "Microsoft.Compute/availabilitySets",
@@ -39,7 +41,7 @@
             "name": "[parameters('strAvSetName')]",
             "apiVersion": "[parameters('strApiVersion')]",
             "location": "[parameters('strLocation')]",
-            "tags": "[base64ToJson(variables('tagsBase64'))]",
+            "tags": "[parameters('objTags')]",
             "properties": {
                 "platformUpdateDomainCount": 5,
                 "platformFaultDomainCount": 2

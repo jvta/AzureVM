@@ -58,10 +58,14 @@
         "description": "Size of the VM"
       }
     },
-    "strTags": {
-      "type": "string",
+    "objTags": {
+      "type": "object",
+      "defaultValue": {
+        "Appplication": "Test",
+        "Environment": "Test"
+      },
       "metadata": {
-        "description": "Tags to attach to resource"
+        "description": "List of tag key-value pairs to be passed to each resource"
       }
     },
     "strNicName": {
@@ -134,10 +138,10 @@
       ]
     },
     "strImage": {
-      "defaultValue": "WindowsServer",
+      "defaultValue": "Custom",
       "type": "string",
       "metadata": {
-        "description": "Select either a default OS platform image to be provisioned or choose Custom to provide image details. Default is WindowsServer. If you select Custom, you must also provide strPublisher, strOffer, strSku and strVersion"
+        "description": "Select either a default OS platform image to be provisioned or choose Custom to provide image details. Default is Custom. If you select Custom, you must also provide strPublisher, strOffer, strSku and strVersion"
       },
       "allowedValues": [
         "WindowsServer",
@@ -561,8 +565,7 @@
         "enabled": true,
         "storageUri": "[concat('https://',parameters('strDiagnosticsStorageAccountName'),'.blob.core.windows.net')]"
       }
-    },
-    "tagsBase64": "[base64(parameters('strTags'))]"
+    }
   },
   "resources": [
     {
@@ -571,7 +574,7 @@
       "zones": "[if(equals(parameters('strVmDeploymentType'),'Zonal'), parameters('objAvailabilityZoneId').availabilityZoneId, json('null'))]",
       "apiVersion": "[parameters('strComputeApiVersion')]",
       "location": "[parameters('strLocation')]",
-      "tags": "[base64ToJson(variables('tagsBase64'))]",
+      "tags": "[parameters('objTags')]",
       "identity": {
         "type": "SystemAssigned"
       },

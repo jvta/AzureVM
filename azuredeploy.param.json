@@ -1,356 +1,363 @@
 {
-    "strVmName": {
-        "value": "server1"
-    },
-    "boolRebuildFromDisks": {
-        "value": false
-    },
-    "strExistingOSDiskName": {
-        "value": "PreviousOSDiskName-IfRebuildingFromDisks"
-    },
-    "strVmDeploymentType": {
-        "value": "Standalone"
-    },
-    "objAvailabilityZoneId": {
-        "value": {
-            "availabilityZoneId": [
-                "1"
-            ]
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "strVmName": {
+            "value": "server1"
+        },
+        "boolRebuildFromDisks": {
+            "value": false
+        },
+        "strExistingOSDiskName": {
+            "value": "PreviousOSDiskName-IfRebuildingFromDisks"
+        },
+        "strVmDeploymentType": {
+            "value": "Standalone"
+        },
+        "objAvailabilityZoneId": {
+            "value": {
+                "availabilityZoneId": [
+                    "1"
+                ]
+            }
+        },
+        "strVmSize": {
+            "value": "Standard_DS2_v2"
+        },
+        "boolAvSetRequired": {
+            "value": true
+        },
+        "boolAvSetCreateNew": {
+            "value": true
+        },
+        "strAvSetName": {
+            "value": "avset1"
+        },
+        "intVmOsDiskSize": {
+            "value": 128
+        },
+        "strOsDiskStorageType": {
+            "value": "Standard_LRS"
+        },
+        "boolAddDataDisks": {
+            "value": true
+        },
+        "objDataDisks": {
+            "value": {
+                "disks": [
+                    {
+                        "Cache": "None",
+                        "Size": 1024,
+                        "StorageAccountType": "Standard_LRS",
+                        "ExistingDiskLun": 0,
+                        "ExistingDiskName": "MyOldDisk-1"
+                    }
+                ]
+            }
+        },
+        "strOsPlatform": {
+            "value": "Windows"
+        },
+        "strImage": {
+            "value": "WindowsServer"
+        },
+        "strPublisher": {
+            "value": "MicrosoftWindowsServer"
+        },
+        "strOffer": {
+            "value": "WindowsServer"
+        },
+        "strSku": {
+            "value": "2016-Datacenter"
+        },
+        "strVersion": {
+            "value": "latest"
+        },
+        "strCustomData": {
+            "value": "null"
+        },
+        "boolRequirePublicIp": {
+            "value": false
+        },
+        "strPublicIpAllocationType": {
+            "value": "Static"
+        },
+        "strPublicIpSku": {
+            "value": "Standard"
+        },
+        "strPrivateIpAllocationType": {
+            "value": "Static"
+        },
+        "strPrivateIpAddress": {
+            "value": "10.0.1.10"
+        },
+        "boolEnableAcceleratedNetworking": {
+            "value": false
+        },
+        "boolAttachNetworkSecurityGroup": {
+            "value": false
+        },
+        "strNetworkSecurityGroup": {
+            "value": "TestNSG"
+        },
+        "strNetworkSecurityGroupRGName": {
+            "value": "MyRG"
+        },
+        "boolJoinLoadBalancer": {
+            "value": false
+        },
+        "strLoadBalancerName": {
+            "value": "TestLoadBalancer"
+        },
+        "strLoadBalancerRGName": {
+            "value": "MyRG"
+        },
+        "strLoadBalancerBackendPoolName": {
+            "value": "BackendPool"
+        },
+        "strTimeZone": {
+            "value": "AUS Eastern Standard Time"
+        },
+        "boolUseHybridUseBenefit": {
+            "value": false
+        },
+        "strAdminUsername": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "LocalAdminUsername"
+            }
+        },
+        "strAuthenticationType": {
+            "value": "Password"
+        },
+        "sstrAdminPasswordOrKey": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "LocalAdminPassword"
+            }
+        },
+        "strVirtualNetworkName": {
+            "value": "MyVnet"
+        },
+        "strVirtualNetworkRGName": {
+            "value": "MyVnetRG"
+        },
+        "strSubnetName": {
+            "value": "Subnet1"
+        },
+        "boolUseBootDiagnostics": {
+            "value": true
+        },
+        "boolNewDiagnosticsStorage": {
+            "value": false
+        },
+        "strDiagnosticsStorageAccountName": {
+            "value": "bootdiagstor1"
+        },
+        "strDiagnosticsStorageAccountType": {
+            "value": "Standard_LRS"
+        },
+        "boolBackupRequired": {
+            "value": false
+        },
+        "strVaultName": {
+            "value": "MyRSV"
+        },
+        "strVaultResourceGroup": {
+            "value": "MyVaultRG"
+        },
+        "strBackupPolicyName": {
+            "value": "TestServers"
+        },
+        "boolUseDomainJoinExtension": {
+            "value": false
+        },
+        "strDomainToJoin": {
+            "value": "domain.local"
+        },
+        "strOuPath": {
+            "value": "OU=Servers,DC=domain,DC=local"
+        },
+        "strDomainJoinAccount": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "domainJoinAccountName"
+            }
+        },
+        "sstrDomainJoinAccountPassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "domainJoinAccountPassword"
+            }
+        },
+        "boolUseAzureAutomationDSCExtension": {
+            "value": false
+        },
+        "boolUseCustomisedDSCExtension": {
+            "value": false
+        },
+        "boolUseGenericDSCExtension": {
+            "value": false
+        },
+        "sstrAutomationAccountRegistrationKey": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "AzureAutomationDSCRegistrationKey"
+            }
+        },
+        "strAutomationAccountRegistrationUrl": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "AzureAutomationDSCRegistrationUrl"
+            }
+        },
+        "strNodeConfiguration": {
+            "value": "AzureGenericServer.localhost"
+        },
+        "strArtifactsLocation": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "AzureDSCStorageAccount"
+            }
+        },
+        "strDscExtensionArchiveFolder": {
+            "value": "windows-powershell-dsc"
+        },
+        "strDscExtensionArchiveFilename": {
+            "value": "configuration.ps1.zip"
+        },
+        "strDscScript": {
+            "value": "configuration.ps1"
+        },
+        "strDscExtensionUpdateTagVersion": {
+            "value": "1"
+        },
+        "strDscFunction": {
+            "value": "AzureGenericServer"
+        },
+        "sstrArtifactsLocationSasToken": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "AzureDSCStorageAccountSasToken"
+            }
+        },
+        "sstrStorageUserName": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "AzureFilesStorageAccount"
+            }
+        },
+        "sstrStoragePassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "AzureFilesStorageAccountPassword"
+            }
+        },
+        "strLocalAccountUserName": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "localAccountUserName"
+            }
+        },
+        "sstrLocalAccountUserPassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "localAccountUserPassword"
+            }
+        },
+        "boolUseBGInfoExtension": {
+            "value": true
+        },
+        "boolUseOMSExtension": {
+            "value": true
+        },
+        "strOmsWorkspaceId": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "omsWorkspaceId"
+            }
+        },
+        "sstrOmsWorkspaceKey": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
+                },
+                "secretName": "omsWorkspaceKey"
+            }
+        },
+        "strOmsProxyUri": {
+            "value": "10.0.0.100:8080"
+        },
+        "boolUseAutoShutdownExtension": {
+            "value": true
+        },
+        "strShutdownStart": {
+            "value": "1900"
+        },
+        "boolUseAntiMalwareExtension": {
+            "value": false
+        },
+        "strAntiMalwarePathExclusions": {
+            "value": "C:\\Temp"
+        },
+        "strAntiMalwareFileExtensionExclusions": {
+            "value": ".ldf;.mdf"
+        },
+        "strAntiMalwareProcessExclusions": {
+            "value": "taskmgr.exe"
+        },
+        "strAntiMalwareRealtimeProtectionEnabled": {
+            "value": "true"
+        },
+        "strAntiMalwareScheduledScanEnabled": {
+            "value": "true"
+        },
+        "strAntiMalwareScanType": {
+            "value": "Quick"
+        },
+        "intAntiMalwareScanDay": {
+            "value": 1
+        },
+        "intAntiMalwareScanTime": {
+            "value": 60
+        },
+        "boolUseNetworkWatcherExtension": {
+            "value": false
+        },
+        "strBranch": {
+            "value": "master"
+        },
+        "objTags": {
+            "value": {
+                "Application": "Test",
+                "Environment": "Test"
+            }
         }
-    },
-    "strVmSize": {
-        "value": "Standard_DS2_v2"
-    },
-    "boolAvSetRequired": {
-        "value": true
-    },
-    "boolAvSetCreateNew": {
-        "value": true
-    },
-    "strAvSetName": {
-        "value": "avset1"
-    },
-    "intVmOsDiskSize": {
-        "value": 128
-    },
-    "strOsDiskStorageType": {
-        "value": "Standard_LRS"
-    },
-    "boolAddDataDisks": {
-        "value": true
-    },
-    "objDataDisks": {
-        "value": {
-            "disks": [
-                {
-                    "Cache": "None",
-                    "Size": 1024,
-                    "StorageAccountType": "Standard_LRS",
-                    "ExistingDiskLun": 0,
-                    "ExistingDiskName": "MyOldDisk-1"
-                }
-            ]
-        }
-    },
-    "strOsPlatform": {
-        "value": "Windows"
-    },
-    "strImage": {
-        "value": "WindowsServer"
-    },
-    "strPublisher": {
-        "value": "MicrosoftWindowsServer"
-    },
-    "strOffer": {
-        "value": "WindowsServer"
-    },
-    "strSku": {
-        "value": "2016-Datacenter"
-    },
-    "strVersion": {
-        "value": "latest"
-    },
-    "strCustomData": {
-        "value": "null"
-    },
-    "boolRequirePublicIp": {
-        "value": false
-    },
-    "strPublicIpAllocationType": {
-        "value": "Static"
-    },
-    "strPublicIpSku": {
-        "value": "Standard"
-    },
-    "strPrivateIpAllocationType": {
-        "value": "Static"
-    },
-    "strPrivateIpAddress": {
-        "value": "10.0.1.10"
-    },
-    "boolEnableAcceleratedNetworking": {
-        "value": false
-    },
-    "boolAttachNetworkSecurityGroup": {
-        "value": false
-    },
-    "strNetworkSecurityGroup": {
-        "value": "TestNSG"
-    },
-    "strNetworkSecurityGroupRGName": {
-        "value": "MyRG"
-    },
-    "boolJoinLoadBalancer": {
-        "value": false
-    },
-    "strLoadBalancerName": {
-        "value": "TestLoadBalancer"
-    },
-    "strLoadBalancerRGName": {
-        "value": "MyRG"
-    },
-    "strLoadBalancerBackendPoolName": {
-        "value": "BackendPool"
-    },
-    "strTimeZone": {
-        "value": "AUS Eastern Standard Time"
-    },
-    "boolUseHybridUseBenefit": {
-        "value": false
-    },
-    "strAdminUsername": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "LocalAdminUsername"
-        }
-    },
-    "strAuthenticationType": {
-        "value": "Password"
-    },
-    "sstrAdminPasswordOrKey": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "LocalAdminPassword"
-        }
-    },
-    "strVirtualNetworkName":{
-        "value": "MyVnet"
-    },
-    "strVirtualNetworkRGName": {
-        "value": "MyVnetRG"
-    },
-    "strSubnetName": {
-        "value": "Subnet1"
-    },
-    "boolUseBootDiagnostics": {
-        "value": true
-    },
-    "boolNewDiagnosticsStorage": {
-        "value": false
-    },
-    "strDiagnosticsStorageAccountName": {
-        "value": "bootdiagstor1"
-    },
-    "strDiagnosticsStorageAccountType": {
-        "value": "Standard_LRS"
-    },
-    "boolBackupRequired": {
-        "value": false
-    },
-    "strVaultName": {
-        "value": "MyRSV"
-    },
-    "strVaultResourceGroup": {
-        "value": "MyVaultRG"
-    },
-    "strBackupPolicyName": {
-        "value": "TestServers"
-    },
-    "boolUseDomainJoinExtension": {
-        "value": false
-    },
-    "strDomainToJoin": {
-        "value": "domain.local"
-    },
-    "strOuPath": {
-        "value": "OU=Servers,DC=domain,DC=local"
-    },
-    "strDomainJoinAccount": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "domainJoinAccountName"
-        }
-    },
-    "sstrDomainJoinAccountPassword": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "domainJoinAccountPassword"
-        }
-    },
-    "boolUseAzureAutomationDSCExtension": {
-        "value": false
-    },
-    "boolUseCustomisedDSCExtension": {
-        "value": false
-    },
-    "boolUseGenericDSCExtension": {
-        "value": false
-    },
-    "sstrAutomationAccountRegistrationKey": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "AzureAutomationDSCRegistrationKey"
-        }
-    },
-    "strAutomationAccountRegistrationUrl": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "AzureAutomationDSCRegistrationUrl"
-        }
-    },
-    "strNodeConfiguration": {
-        "value": "AzureGenericServer.localhost"
-    },
-    "strArtifactsLocation": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "AzureDSCStorageAccount"
-        }
-    },
-    "strDscExtensionArchiveFolder": {
-        "value": "windows-powershell-dsc"
-    },
-    "strDscExtensionArchiveFilename": {
-        "value": "configuration.ps1.zip"
-    },
-    "strDscScript": {
-        "value": "configuration.ps1"
-    },
-    "strDscExtensionUpdateTagVersion":{
-        "value": "1"
-    },
-    "strDscFunction": {
-        "value": "AzureGenericServer"
-    },
-    "sstrArtifactsLocationSasToken": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "AzureDSCStorageAccountSasToken"
-        }
-      },
-    "sstrStorageUserName": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "AzureFilesStorageAccount"
-        }
-    },
-    "sstrStoragePassword": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "AzureFilesStorageAccountPassword"
-        }
-    },
-    "strLocalAccountUserName": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "localAccountUserName"
-        }
-    },
-    "sstrLocalAccountUserPassword":{
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "localAccountUserPassword"
-        }
-    },
-    "boolUseBGInfoExtension": {
-        "value": true
-    },
-    "boolUseOMSExtension": {
-        "value": true
-    },
-    "strOmsWorkspaceId": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "omsWorkspaceId"
-        }
-    },
-    "sstrOmsWorkspaceKey": {
-        "reference": {
-            "keyVault": {
-                "id": "/subscriptions/b4d4cae3-8e5e-bb4a-77ad-19bcdb3352cd/resourceGroups/TestRG/providers/Microsoft.KeyVault/vaults/TestKeyVault"
-            },
-            "secretName": "omsWorkspaceKey"
-        }
-    },
-    "strOmsProxyUri": {
-        "value": "10.0.0.100:8080"
-    },
-    "boolUseAutoShutdownExtension": {
-        "value": true
-    },
-    "strShutdownStart": {
-        "value": "1900"
-    },
-    "boolUseAntiMalwareExtension": {
-        "value": false
-    },
-    "strAntiMalwarePathExclusions": {
-        "value": "C:\\Temp"
-    },
-    "strAntiMalwareFileExtensionExclusions": {
-        "value": ".ldf;.mdf"
-    },
-    "strAntiMalwareProcessExclusions": {
-        "value": "taskmgr.exe"
-    },
-    "strAntiMalwareRealtimeProtectionEnabled": {
-        "value": "true"
-    },
-    "strAntiMalwareScheduledScanEnabled": {
-        "value": "true"
-    },
-    "strAntiMalwareScanType": {
-        "value": "Quick"
-    },
-    "intAntiMalwareScanDay": {
-        "value": 1
-    },
-    "intAntiMalwareScanTime": {
-        "value": 60
-    },
-    "boolUseNetworkWatcherExtension": {
-        "value": false
-    },
-    "strBranch": {
-        "value": "master"
-    },
-    "strTags": {
-        "value" : "{\"Application\":\"Test\",\"Environment\":\"Test\"}"
     }
 }
